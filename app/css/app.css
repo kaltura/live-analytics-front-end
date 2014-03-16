@@ -1,0 +1,97 @@
+/* app css stylesheet */
+
+.clear-both {
+	clear:both;
+}
+
+.full-width {
+	width: 100%;
+}
+
+.page-title {
+	float:left;
+}
+
+.green {
+	color:#7AA5C9;
+}
+
+.date-range {
+	float: right;	
+	margin-top: -32px;
+}
+
+.header {
+	
+}
+
+/* **************************** dashboard *************************** */
+
+.dashboard {
+	margin-right: auto;
+  	margin-left: auto;
+  	max-width: 1200px; 
+}
+
+.row.aggregates {
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
+.aggregate-item {
+	border: 1px solid;
+	border-radius : 5px;
+	margin-right: 20px;
+	text-align:center;
+	padding: 5px 10px 5px 10px;
+}
+.agg-data {
+	font-size: 200%;
+	font-weight: bold;
+}
+.agg-info {
+	font-weight: bold;
+}
+
+.entries-list {
+	clear:both;
+}
+
+.entry {
+	float:left;
+	border: 1px solid;
+	border-radius : 5px;
+	margin-right: 20px;
+	margin-top: 20px;
+ 	width: 420px; 
+	height: 230px;
+	padding: 0px 20px 0px 20px;
+}
+
+.entry-img {
+	float:left;
+	text-align: center;
+}
+
+.entry-img a {
+	margin-top: 10px;
+}
+
+.entry-img img {
+	width: 180px;
+	height: 100px;
+}
+
+.entry-info {
+	float:right;
+	font-weight: bold;
+}
+
+.entry-info p {
+	margin-top: 10px;
+	text-align: center;
+}
+
+.entry-info td {
+	padding: 0px 5px 0px 5px;
+}
