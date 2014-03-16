@@ -4,7 +4,7 @@
 			<h1>Live Content (in past 36 hours)</h1>
 		</div>
 		<div class="clear-both" ></div>
-		<div class="date-range">28 October 00:38:00 - 29 Oct 12:38:00</div>
+		<div class="date-range">{{reportStartTime | date : 'MMM d H:mm:ss'}} - {{nowTime | date : 'MMM d H:mm:ss'}}</div>
 		<div class="clear-both" >
 			<input type="checkbox" name="my-checkbox" > Show <span>Live Now</span> Only
 		</div>

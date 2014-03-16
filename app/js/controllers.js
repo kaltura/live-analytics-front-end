@@ -31,6 +31,14 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 			// [{entryId, name, audience, peakAudience, minutes, bufferTime, bitrate, startTime}, ..]
 		};
 		
+		// set report dates:
+		var d = new Date();
+		$scope.nowTime = d;
+		d = new Date();
+		d.setHours(d.getHours() - 36);
+		$scope.reportStartTime = d;
+		
+		// report data:
 		getAggregates();
 		
     }]);
