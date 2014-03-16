@@ -8,7 +8,8 @@ var analyticsServices = angular.module('analyticsServices', [ 'ngResource' ]);
 analyticsServices.factory('KS',
 		['$location',
 		 	function KSFactory($location) {
-		 		var ks;
+				//TODO remove this!!
+		 		var ks = 'M2Q5M2NjNDM2NDAzNGRiNTFlZTA0ZGUxYjVkNjc3OGZmNjdmYjU4M3wzNDYxNTE7MzQ2MTUxOzM1NDI0NDk4NTI7MjsxMzk0OTY2MjA1LjcwMTQ7YXRhci5zaGFkbWlAa2FsdHVyYS5jb207Ozs=';
 		 		try {
 	                var kmc = window.parent.kmc;
 	                if (kmc && kmc.vars) {
@@ -17,7 +18,7 @@ analyticsServices.factory('KS',
 	                        ks = kmc.vars.ks;
 	                }
 	            } catch (e) {
-	                cl('Could not located parent.kmc: ' + e);
+	                console.log('Could not located parent.kmc: ' + e);
 	            }
 	            
 	            if (!ks) { //navigate to login
@@ -31,8 +32,8 @@ analyticsServices.factory('KS',
 		
 		
 analyticsServices.factory('KApi',
-		['$http', '$q', 'ks',
-		 	function KApiFactory ($http, $q) {
+		['$http', '$q', 'KS',
+		 	function KApiFactory ($http, $q, KS) {
 		 		var KApi = {};
 		 		
 		 		/**
@@ -44,7 +45,7 @@ analyticsServices.factory('KApi',
 		            var deferred = $q.defer();
 		            
 			 		// add required params
-		            request.ks = ks;
+		            request.ks = KS;
 			 		var sParams = this.serializeParams(request);
 			 		$http({
 			 			data: sParams,
@@ -86,3 +87,29 @@ analyticsServices.factory('KApi',
 		 		return KApi;
 		 	}
 		]);
+
+analyticsServices.factory('DashboardSvc',
+		['KApi',
+		 	function DashboardSvcFactory($location) {
+		 		var DashboardSvc = {};
+		 		
+		 		DashboardSvc.getAggregates = function getAggregates() {
+		 			var ar = [{'title': 'audience',
+		 						'value': 36},
+		 					{'title': 'minutes_viewed',
+			 				'value': 512},
+			 				{'title': 'buffertime',
+				 			'value': 2},
+				 			{'title': 'bitrate',
+					 		'value': 10}
+				 	];
+		 			return ar;
+		 		};
+		 		
+		 		return DashboardSvc;
+		 	} 
+	 	]);
+
+
+
+

@@ -12,23 +12,10 @@
 	
 	<!-- Aggregates -->
 	<div class="row aggregates clear-both">
-		<div class="aggregate-item col-xs-2 col-sm-2 col-md-2 col-lg-1">
-			<div class="agg-data green">36</div>
-			<div class="agg-info">Audience</div>
+		<div class="aggregate-item col-md-2" ng-repeat="agg in aggregates">
+			<div class="agg-data green">{{agg | formatValue}}</div>
+			<div class="agg-info">{{agg.title | textify}}</div>
 		</div>
-		<div class="aggregate-item col-xs-2 col-sm-2 col-md-2 col-lg-1">
-			<div class="agg-data green">36</div>
-			<div class="agg-info">Audience</div>
-		</div>
-		<div class="aggregate-item col-xs-2 col-sm-2 col-md-2 col-lg-1">
-			<div class="agg-data green">36</div>
-			<div class="agg-info">Audience</div>
-		</div>
-		<div class="aggregate-item col-xs-2 col-sm-2 col-md-2 col-lg-1">
-			<div class="agg-data green">36</div>
-			<div class="agg-info">Audience</div>
-		</div>
-		
 	</div>
 	
 	<!-- Entries List -->

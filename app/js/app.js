@@ -7,7 +7,8 @@ var liveAnalytics = angular.module('liveAnalytics', [
 	'analyticsFilters',
 	'analyticsServices',
 	'analyticsDirectives',
-	'analyticsControllers'
+	'analyticsControllers',
+	'analyticsFilters'
 ]);
 
 liveAnalytics.config(['$routeProvider', function($routeProvider) {
