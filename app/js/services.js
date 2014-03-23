@@ -55,11 +55,9 @@ analyticsServices.factory('KApi',
 			 			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 		}).success(function (data, status) {
 			 			if (data.objectType === "KalturaAPIException") {
-			 				console.log('reject');
 			 				deferred.reject(data.message);
 			 			}
 			 			else {
-			 				console.log('resolve');
 			 				deferred.resolve(data);
 			 			}
 			 		}).error(function(data, status) {
@@ -90,7 +88,7 @@ analyticsServices.factory('KApi',
 
 analyticsServices.factory('DashboardSvc',
 		['KApi',
-		 	function DashboardSvcFactory($location) {
+		 	function DashboardSvcFactory(KApi) {
 		 		var DashboardSvc = {};
 		 		
 		 		DashboardSvc.getAggregates = function getAggregates() {
@@ -105,6 +103,57 @@ analyticsServices.factory('DashboardSvc',
 				 	];
 		 			return ar;
 		 		};
+		 		
+		 		
+		 		DashboardSvc.errorHandler = function errorHandler(reason) {
+					console.log('error!! ' + reason);
+				};
+		 		
+		 		/**
+				 * get the list of entries to show
+				 * @param liveOnly	if true, only get entries that are currently live
+				 */
+		 		DashboardSvc.getAllEntries = function getAllEntries(liveOnly) {
+		 			console.log ('get all entries');
+					// liveEntry.list to get all entries
+					var postData = {
+			            'filter:orderBy': '-createdAt',
+			            'filter:objectType': 'KalturaLiveStreamEntryFilter',
+			            'ignoreNull': '1',
+			            'page:objectType': 'KalturaFilterPager',
+			            'pager:pageIndex': '1',
+			            'pager:pageSize': '10',
+			            'service': 'livestream',
+			            'action': 'list'
+			        };
+					
+					return KApi.doRequest(postData);
+				};
+				
+				
+				/**
+				 * of the given list, get the entries that are currently live
+				 * @param entryIds		ids of all entries on page
+				 */
+				DashboardSvc.getLiveEntries = function getLiveEntries(entryIds) {
+					console.log ('get live entries');
+					// liveEntry.list by isLive to know which ones are currently live
+					var postData = {
+				            'filter:orderBy': '-createdAt',
+				            'filter:objectType': 'KalturaLiveStreamEntryFilter',
+				            'filter:isLive': '1',
+				            'filter:entryIdsIn': entryIds,
+				            'ignoreNull': '1',
+				            'page:objectType': 'KalturaFilterPager',
+				            'pager:pageIndex': '1',
+				            'pager:pageSize': '10',
+				            'service': 'livestream',
+				            'action': 'list'
+				        };
+					
+					return KApi.doRequest(postData);
+				};
+		 		
 		 		
 		 		return DashboardSvc;
 		 	} 
