@@ -7,8 +7,13 @@ h1 {
 	font-weight: bold;
 }
 
-h2 {
+h2.panel-title  {
 	font-weight: bold;
+	font-size: 150%
+}
+
+hr {
+    border-bottom: 1px solid #DDDDDD;
 }
 
 .clear-both {
@@ -51,12 +56,14 @@ h2 {
 
 .aggregate-item {
 	border: 1px solid #019cfd;
-/* 	border-radius : 5px; */
 	margin-right: 20px;
 	text-align:center;
 	padding: 5px 10px 5px 10px;
+	height: 185px;
+	border-radius: 50%;
 }
 .agg-data {
+	padding-top: 36px;
 	font-size: 300%;
 	font-weight: bold;
 	color: #019cfd;
@@ -71,7 +78,7 @@ h2 {
 }
 
 .entry {
-	margin-right: 20px;
+	margin: 20px;
  	width: 420px; 
 	height: 230px;
 	padding: 0px;
@@ -99,7 +106,6 @@ h2 {
 
 .entry-info {
 	float:right;
-	font-weight: bold;
 }
 
 .entry-info p {
@@ -114,4 +120,4 @@ h2 {
 .entry-time {
 	text-align: right;
 	margin-top: 8px;
-	color: #cacaca;
+	color: #DDDDDD;
