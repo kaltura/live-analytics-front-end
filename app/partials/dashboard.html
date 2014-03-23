@@ -6,29 +6,37 @@
 		<div class="clear-both" ></div>
 		<div class="date-range">{{reportStartTime | date : 'MMM d H:mm:ss'}} - {{nowTime | date : 'MMM d H:mm:ss'}}</div>
 		<div class="clear-both" >
-			<input type="checkbox" name="my-checkbox" > Show <span>Live Now</span> Only
+			<select >
+				<option value="all">Show all entries</option>
+				<option value="liveOnly">Show Live Now Only</option>
+			</select>
 		</div>
 	</div>
+	
+	<hr />
 	
 	<!-- Aggregates -->
 	<div class="row aggregates clear-both">
 		<div class="aggregate-item col-md-2" ng-repeat="agg in aggregates">
-			<div class="agg-data green">{{agg | formatValue}}</div>
+			<div class="agg-data">{{agg | formatValue}}</div>
 			<div class="agg-info">{{agg.title | textify}}</div>
 		</div>
 	</div>
 	
+	<hr />
+	
 	<!-- Entries List -->
-	<div class="entries-list">
+	<div class="entries-list row">
 		<!-- Entry -->
-		<div class="entry">
-			<H2>Live Entry Name</H2>
-			<div>
+		<div class="entry panel panel-default col-md-6" ng-repeat="entry in entries">
+			<div class="panel-heading">
+		    	<h2 class="panel-title">{{entry.name}}</h2>
+		  	</div>
+			<div class="panel-body">
 				<div class="entry-img">
-					<img class="img" src="http://lorempixel.com/400/200/fashion"/><br/>
-					<a class="btn btn-primary" ><span class="glyphicon glyphicon-import"></span> Investigate </a>
+					<img class="img" ng-src="{{entry.thumbnailUrl}}"/><br/>
 				</div>
-				<div class="entry-info">
+				<div class="entry-info" >
 					<table>
 						<tr>
 							<td>Audience:</td>
@@ -51,79 +59,15 @@
 							<td>10mbs</td>
 						</tr>
 					</table>
-					<p>29 Oct 12:09:00</p>
+					
 				</div>
 			</div>
-		</div>
-		
-		<!-- Entry -->
-		<div class="entry">
-			<H2>Live Entry Name</H2>
-			<div>
-				<div class="entry-img">
-					<img class="img" src="http://lorempixel.com/400/200/food"/><br/>
+			<div class="panel-footer col-md-12">
+				<div class="col-md-6">
 					<a class="btn btn-primary" ><span class="glyphicon glyphicon-import"></span> Investigate </a>
 				</div>
-				<div class="entry-info">
-					<table>
-						<tr>
-							<td>Audience:</td>
-							<td>32</td>
-						</tr>
-						<tr>
-							<td>Peak Audience:</td>
-							<td>145</td>
-						</tr>
-						<tr>
-							<td>Minutes Viewed:</td>
-							<td>32</td>
-						</tr>
-						<tr>
-							<td>Buffering Time:</td>
-							<td>00:08</td>
-						</tr>
-						<tr>
-							<td>Average Bitrate:</td>
-							<td>10mbs</td>
-						</tr>
-					</table>
-					<p>29 Oct 12:09:00</p>
-				</div>
-			</div>
-		</div>
-		
-		<!-- Entry -->
-		<div class="entry">
-			<H2>Live Entry Name</H2>
-			<div>
-				<div class="entry-img">
-					<img class="img" src="http://lorempixel.com/400/200/"/><br/>
-					<a class="btn btn-primary" ><span class="glyphicon glyphicon-import"></span> Investigate </a>
-				</div>
-				<div class="entry-info">
-					<table>
-						<tr>
-							<td>Audience:</td>
-							<td>32</td>
-						</tr>
-						<tr>
-							<td>Peak Audience:</td>
-							<td>145</td>
-						</tr>
-						<tr>
-							<td>Minutes Viewed:</td>
-							<td>32</td>
-						</tr>
-						<tr>
-							<td>Buffering Time:</td>
-							<td>00:08</td>
-						</tr>
-						<tr>
-							<td>Average Bitrate:</td>
-							<td>10mbs</td>
-						</tr>
-					</table>
-					<p>29 Oct 12:09:00</p>
+				<div class="col-md-6 entry-time" >
+					<span>29 Oct 12:09:00</span> 
 				</div>
 			</div>
 		</div>

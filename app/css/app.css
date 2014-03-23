@@ -1,4 +1,15 @@
 /* app css stylesheet */
+body {
+	background-color: #f3f2ee;	
+}
+
+h1 {
+	font-weight: bold;
+}
+
+h2 {
+	font-weight: bold;
+}
 
 .clear-both {
 	clear:both;
@@ -13,7 +24,7 @@
 }
 
 .green {
-	color:#7AA5C9;
+	color:#019cfd;
 }
 
 .date-range {
@@ -39,18 +50,20 @@
 }
 
 .aggregate-item {
-	border: 1px solid;
-	border-radius : 5px;
+	border: 1px solid #019cfd;
+/* 	border-radius : 5px; */
 	margin-right: 20px;
 	text-align:center;
 	padding: 5px 10px 5px 10px;
 }
 .agg-data {
-	font-size: 200%;
+	font-size: 300%;
 	font-weight: bold;
+	color: #019cfd;
 }
 .agg-info {
 	font-weight: bold;
+	color: #019cfd;
 }
 
 .entries-list {
@@ -58,15 +71,17 @@
 }
 
 .entry {
-	float:left;
-	border: 1px solid;
-	border-radius : 5px;
 	margin-right: 20px;
-	margin-top: 20px;
  	width: 420px; 
 	height: 230px;
-	padding: 0px 20px 0px 20px;
+	padding: 0px;
 }
+
+.entry .panel-footer {
+	background-color: #ffffff;
+	padding: 10px 0;
+}
+	
 
 .entry-img {
 	float:left;
@@ -95,3 +110,8 @@
 .entry-info td {
 	padding: 0px 5px 0px 5px;
 }
+
+.entry-time {
+	text-align: right;
+	margin-top: 8px;
+	color: #cacaca;
