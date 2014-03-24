@@ -61,8 +61,23 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		};
 		
 		
+		/**
+		 * dummy method to get mock data
+		 */
 		var getDummyEntries = function getDummyEntries(liveOnly, pageNumber) {
 			$scope.entries = DashboardSvc.getDummyEntries(liveOnly, pageNumber).query();
+		};
+		
+		
+		/**
+		 * get entries data by page
+		 * @param e
+		 * @param oldPage
+		 * @param newPage
+		 * 
+		 */
+		var doPaging = function doPaging(e,oldPage,newPage) {
+			getDummyEntries(false, newPage);
 		};
 		
 		// (analytics) entry stats for live entries by ids 
@@ -82,6 +97,15 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		
 		//getAllEntries(false).then(getLiveEntries);
 		getDummyEntries(false, 1);
+		
+		var options = {
+				bootstrapMajorVersion: 3,
+				onPageChanged: doPaging,
+	            currentPage: 1,
+	            totalPages: 4
+	    };
+
+	    $('#pagination').bootstrapPaginator(options);
 		
     }]);
 

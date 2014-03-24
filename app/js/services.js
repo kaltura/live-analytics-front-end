@@ -106,8 +106,8 @@ analyticsServices.factory('DashboardSvc',
 		 		
 		 		
 		 		DashboardSvc.getDummyEntries = function getDummyEntries(liveOnly, pageNumber) {
-		 			return $resource('data/entries1.json', {}, {
-		 			      query: {method:'GET', params:{phoneId:'phones'}, isArray:true}
+		 			return $resource('data/entries:page.json', {}, {
+		 			      query: {method:'GET', params:{page:pageNumber}, isArray:true}
 		 			    });
 				};
 		 		
