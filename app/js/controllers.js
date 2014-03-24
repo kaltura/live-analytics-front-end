@@ -61,6 +61,10 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		};
 		
 		
+		var getDummyEntries = function getDummyEntries(liveOnly, pageNumber) {
+			$scope.entries = DashboardSvc.getDummyEntries(liveOnly, pageNumber).query();
+		};
+		
 		// (analytics) entry stats for live entries by ids 
 		// (analytics) entry stats for not-live entries by ids
 		// return:
@@ -76,7 +80,8 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		// report data:
 		getAggregates();
 		
-		getAllEntries(false).then(getLiveEntries);
+		//getAllEntries(false).then(getLiveEntries);
+		getDummyEntries(false, 1);
 		
     }]);
 

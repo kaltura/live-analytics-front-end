@@ -87,8 +87,8 @@ analyticsServices.factory('KApi',
 		]);
 
 analyticsServices.factory('DashboardSvc',
-		['KApi',
-		 	function DashboardSvcFactory(KApi) {
+		['KApi', '$resource', 
+		 	function DashboardSvcFactory(KApi, $resource) {
 		 		var DashboardSvc = {};
 		 		
 		 		DashboardSvc.getAggregates = function getAggregates() {
@@ -105,8 +105,10 @@ analyticsServices.factory('DashboardSvc',
 		 		};
 		 		
 		 		
-		 		DashboardSvc.errorHandler = function errorHandler(reason) {
-					console.log('error!! ' + reason);
+		 		DashboardSvc.getDummyEntries = function getDummyEntries(liveOnly, pageNumber) {
+		 			return $resource('data/entries1.json', {}, {
+		 			      query: {method:'GET', params:{phoneId:'phones'}, isArray:true}
+		 			    });
 				};
 		 		
 		 		/**
