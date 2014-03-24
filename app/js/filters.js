@@ -2,7 +2,39 @@
 
 /* Filters */
 
+
 var analyticsFilters = angular.module('analyticsFilters', []);
+
+/**
+ * formats a time string without using Flash's Date object
+ * @param secs
+ * @param showHours		if hours is more than 0, show it
+ * @param showSeconds	show seconds (even if 0)
+ * @param forceHours	show hours even if 0
+ * @return given value, formatted as {HH}:MM:{SS }
+ */
+function formatTime(secs, showHours, showSeconds, forceHours) {
+	var h = Math.floor(secs / 3600); // 60 * 60 = 3600
+	var sh = h * 3600;	// hours in seconds
+	var m = Math.floor((secs - sh) / 60);
+	var sm = m * 60;	// minutes in seconds
+	var s = secs - sh - sm;
+	
+	var result = '';
+	if ((showHours && h>0) || forceHours) {
+		result += addZero(h) + ':'; 
+	}
+	result += addZero(m);
+	if (showSeconds) {
+		result += ':' + addZero(s);
+	}
+	return result;
+};
+
+function addZero(n) {
+	return (n<10 ? '0' : '') + n;
+};
+
 
 analyticsFilters.filter('textify', [function() {
 	var textify = function textify(text) {
@@ -24,41 +56,10 @@ analyticsFilters.filter('textify', [function() {
 		return result;
     }; 
     return textify;
-  }]);
+}]);
 
-analyticsFilters.filter('formatValue', [function() {
-	
-	/**
-	 * formats a time string without using Flash's Date object
-	 * @param secs
-	 * @param showHours		if hours is more than 0, show it
-	 * @param showSeconds	show seconds (even if 0)
-	 * @param forceHours	show hours even if 0
-	 * @return given value, formatted as {HH}:MM:{SS }
-	 */
-	function formatTime(secs, showHours, showSeconds, forceHours) {
-		var h = Math.floor(secs / 3600); // 60 * 60 = 3600
-		var sh = h * 3600;	// hours in seconds
-		var m = Math.floor((secs - sh) / 60);
-		var sm = m * 60;	// minutes in seconds
-		var s = secs - sh - sm;
-		
-		var result = '';
-		if ((showHours && h>0) || forceHours) {
-			result += addZero(h) + ':'; 
-		}
-		result += addZero(m);
-		if (showSeconds) {
-			result += ':' + addZero(s);
-		}
-		return result;
-	};
-	
-	function addZero(n) {
-		return (n<10 ? '0' : '') + n;
-	};
-	
-	var formatValue = function formatValue(agg) {
+analyticsFilters.filter('formatAgg', [function() {
+	var formatAgg = function formatAgg(agg) {
 		var result = '';
 		switch (agg.title) {
 		case 'audience':
@@ -75,5 +76,13 @@ analyticsFilters.filter('formatValue', [function() {
 		return result;
 	}; 
 	
-	return formatValue;
+	return formatAgg;
+}]);
+
+analyticsFilters.filter('time', [function() {
+	var time = function time(val) {
+		return formatTime(val, false, true);
+	}; 
+	
+	return time;
 }]);

@@ -18,7 +18,7 @@
 	<!-- Aggregates -->
 	<div class="row aggregates clear-both">
 		<div class="aggregate-item col-md-2" ng-repeat="agg in aggregates">
-			<div class="agg-data">{{agg | formatValue}}</div>
+			<div class="agg-data">{{agg | formatAgg}}</div>
 			<div class="agg-info">{{agg.title | textify}}</div>
 		</div>
 	</div>
@@ -40,23 +40,23 @@
 					<table>
 						<tr>
 							<td>Audience:</td>
-							<td>32</td>
+							<td>{{entry.audience}}</td>
 						</tr>
 						<tr>
 							<td>Peak Audience:</td>
-							<td>145</td>
+							<td>{{entry.peakAudience}}</td>
 						</tr>
 						<tr>
 							<td>Minutes Viewed:</td>
-							<td>32</td>
+							<td>{{entry.minutes}}</td>
 						</tr>
 						<tr>
 							<td>Buffering Time:</td>
-							<td>00:08</td>
+							<td>{{entry.bufferTime | time}}</td>
 						</tr>
 						<tr>
 							<td>Average Bitrate:</td>
-							<td>10mbs</td>
+							<td>{{entry.bitrate}}mbs</td>
 						</tr>
 					</table>
 					
@@ -72,5 +72,16 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- paging -->
+	<ul class="pagination">
+	  <li><a href="#">&laquo;</a></li>
+	  <li><a href="#">1</a></li>
+	  <li><a href="#">2</a></li>
+	  <li><a href="#">3</a></li>
+	  <li><a href="#">4</a></li>
+	  <li><a href="#">5</a></li>
+	  <li><a href="#">&raquo;</a></li>
+	</ul>
 	
 </div>
