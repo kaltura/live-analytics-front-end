@@ -4,7 +4,7 @@
 			<h1>Live Content (in past 36 hours)</h1>
 		</div>
 		<div class="clear-both" ></div>
-		<div class="date-range">{{reportStartTime | date : 'MMM d H:mm:ss'}} - {{nowTime | date : 'MMM d H:mm:ss'}}</div>
+		<div class="date-range">{{reportStartTime | date : 'd MMM H:mm:ss'}} - {{nowTime | date : 'd MMM H:mm:ss'}}</div>
 		<div class="clear-both" >
 			<select >
 				<option value="all">Show all entries</option>
@@ -67,7 +67,7 @@
 					<a class="btn btn-primary" ><span class="glyphicon glyphicon-import"></span> Investigate </a>
 				</div>
 				<div class="col-md-6 entry-time" >
-					<span>29 Oct 12:09:00</span> 
+					<span>{{entry.startTime | date : 'd MMM H:mm:ss'}}</span> 
 				</div>
 			</div>
 		</div>
