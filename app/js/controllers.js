@@ -132,3 +132,35 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		
     }]);
 
+analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', 'EntrySvc', 
+    function($scope, $routeParams, EntrySvc) {
+		$scope.entryId = $routeParams.entryid;
+		
+		
+
+		/**
+		 * get data for the aggregates line
+		 */
+		var getAggregates = function getAggregates() {
+			$scope.aggregates = EntrySvc.getAggregates($scope.entryId);
+		};
+		
+		
+		var getEntry = function getEntry() {
+			return EntrySvc.getEntry($scope.entryId).then(function(entry){
+				$scope.entry = entry;
+				// set report dates:
+				var d = new Date();
+				d.setTime(entry.createdAt);
+				$scope.reportStartTime = d;
+				
+				return entry;
+			});
+		};
+		
+		// report data:
+		getAggregates($scope.entryId);
+		getEntry($scope.entryId);
+
+		
+	}]);

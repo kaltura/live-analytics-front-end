@@ -16,6 +16,10 @@ liveAnalytics.config(['$routeProvider', function($routeProvider) {
 		templateUrl: 'partials/dashboard.html', 
 		controller: 'DashboardCtrl'
 	});
+	$routeProvider.when('/entry/:entryid', {
+		templateUrl: 'partials/entry.html', 
+		controller: 'EntryCtrl'
+	});
 	$routeProvider.when('/login', {
 		template: '<div>Missing KS</div>' 
 	});

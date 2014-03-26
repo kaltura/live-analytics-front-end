@@ -1,0 +1,48 @@
+<div class="entry-details page container">
+	<div class="header">
+		<div class="page-title">
+			<h1>Live Content (in past 36 hours)</h1>
+		</div>
+		<div class="clear-both" ></div>
+		<div class="date-range">{{reportStartTime | date : 'd MMM H:mm:ss'}}</div>
+		<div class="clear-both" ></div>
+	</div>
+	
+	<hr />
+	
+	<!-- Aggregates -->
+	<div class="row aggregates clear-both">
+		<div class="aggregate-item col-md-2" ng-repeat="agg in aggregates">
+			<div class="agg-data">{{agg | formatAgg}}</div>
+			<div class="agg-info">{{agg.title | textify}}</div>
+		</div>
+	</div>
+	
+	<h2>Audience</h2>
+	<hr />
+	
+	<!-- Graph -->
+	<div class="row graphic-content">
+<!-- 		<rgraph graphodata="graphdata" height="275" width="980"></rgraph> -->
+		<div style="width:100%; height:275px; border: 1px solid #019cfd;">Graph</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-6">
+			<h2>{{entry.name}}</h2>
+			<hr />
+			<div style="width:470px; height:265px; border: 1px solid #019cfd;">Player</div>
+		</div>
+		<div class="col-md-6">
+			<h2>Location</h2>
+			<hr />
+			<div style="width:470px; height:265px; border: 1px solid #019cfd;">Map</div>
+		</div>
+	</div>
+	
+	<!-- paging -->
+	<div class="paging-wrapper">
+		<ul id="pagination" ></ul>
+	</div>
+	
+</div>

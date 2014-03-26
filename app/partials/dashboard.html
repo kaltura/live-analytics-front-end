@@ -1,4 +1,4 @@
-<div class="dashboard container">
+<div class="dashboard page container">
 	<div class="header">
 		<div class="page-title">
 			<h1>Live Content (in past 36 hours)</h1>
@@ -17,7 +17,7 @@
 	
 	<!-- Aggregates -->
 	<div class="row aggregates clear-both">
-		<div class="aggregate-item col-md-2" ng-repeat="agg in aggregates">
+		<div class="aggregate-item col-md-3" ng-repeat="agg in aggregates">
 			<div class="agg-data">{{agg | formatAgg}}</div>
 			<div class="agg-info">{{agg.title | textify}}</div>
 		</div>
@@ -28,7 +28,7 @@
 	<!-- Entries List -->
 	<div class="entries-list row">
 		<!-- Entry -->
-		<div class="entry panel panel-default col-md-6" ng-repeat="entry in entries">
+		<div class="entry panel panel-default col-md-6" ng-class-odd="'agg-odd'" ng-repeat="entry in entries">
 			<div class="panel-heading">
 		    	<h2 class="panel-title">{{entry.name}}</h2>
 		  	</div>
@@ -64,7 +64,7 @@
 			</div>
 			<div class="panel-footer col-md-12">
 				<div class="col-md-6">
-					<a class="btn btn-primary" ><span class="glyphicon glyphicon-import"></span> Investigate </a>
+					<a class="btn btn-primary" href="#/entry/{{entry.entryId}}"><span class="glyphicon glyphicon-import"></span> Investigate </a>
 				</div>
 				<div class="col-md-6 entry-time" >
 					<span>{{entry.startTime | date : 'd MMM H:mm:ss'}}</span> 

@@ -162,5 +162,38 @@ analyticsServices.factory('DashboardSvc',
 	 	]);
 
 
+analyticsServices.factory('EntrySvc',
+		['KApi', '$resource', 
+		 	function EntrySvcFactory(KApi, $resource) {
+		 		var EntrySvc = {};
+		 		
+		 		EntrySvc.getAggregates = function getAggregates(entryId) {
+		 			var ar = [{'title': 'audience',
+		 						'value': 36},
+		 					{'title': 'minutes_viewed',
+			 				'value': 512},
+			 				{'title': 'buffertime',
+				 			'value': 2},
+				 			{'title': 'bitrate',
+					 		'value': 10}
+				 	];
+		 			return ar;
+		 		};
+		 		
+		 		EntrySvc.getEntry = function getEntry(entryId) {
+		 			var postData = {
+				            'entryId' : entryId,
+				            'service': 'livestream',
+				            'action': 'get'
+				        };
+					
+					return KApi.doRequest(postData);
+		 		};
+		 		
+		 		return EntrySvc;
+		 	} 
+	 	]);
+
+
 
 

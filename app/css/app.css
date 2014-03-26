@@ -1,8 +1,6 @@
 /* app css stylesheet */
 body {
 	background-color: #f3f2ee;	
-	padding-left: 20px;
-	padding-right: 20px;
 }
 
 h1 {
@@ -43,12 +41,17 @@ hr {
 	
 }
 
+.page {
+	margin-right: auto;
+  	margin-left: auto;
+  	max-width: 980px; 
+}
+
 /* **************************** dashboard *************************** */
 
 .dashboard {
-	margin-right: auto;
-  	margin-left: auto;
-  	max-width: 1200px; 
+	padding-left: 0px;
+	padding-right: 0px;
 }
 
 .row.aggregates {
@@ -65,6 +68,7 @@ hr {
 	width: 215px;
 	border-radius: 50%;
 }
+
 .agg-data {
 	padding-top: 40px;
 	font-size: 400%;
@@ -76,12 +80,21 @@ hr {
 	color: #019cfd;
 }
 
-.entries-list {
-	clear:both;
+.aggregates .aggregate-item:last-child {
+	margin-right:0;
 }
 
+.entries-list {
+	clear:both;
+	margin-left:0px;
+	margin-right:0px;
+}
+
+.entry.agg-odd {
+	margin-right: 40px;
+}
 .entry {
-	margin: 20px;
+/* 	margin: 20px; */
  	width: 470px; 
 	height: 265px;
 	padding: 0px;
@@ -132,6 +145,22 @@ hr {
 	margin-top: -20px;
 	background-color: #f8f8f8;
 }
+
+/* **************************** entry details *************************** */
+
+
+.entry-details {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+
+
+
+
+
+
+
 
 
 
