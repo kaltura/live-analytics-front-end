@@ -15,6 +15,17 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		 */
 		var entries = [];
 		
+		/**
+		 * number of entries in page
+		 */
+		var pageSize = 10;
+		
+		/**
+		 * total number of pages
+		 */
+		var totalPages = 1;
+		
+		
 		
 		/**
 		 * get data for the aggregates line
@@ -35,6 +46,7 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 				entries.forEach(function (entry) {
 					ids += entry.id + ',';
 				});
+				totalPages = Math.ceil(entryListResponse.totalCount/pageSize);
 				return ids;
 			});
 		};
@@ -66,6 +78,7 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		 */
 		var getDummyEntries = function getDummyEntries(liveOnly, pageNumber) {
 			$scope.entries = DashboardSvc.getDummyEntries(liveOnly, pageNumber).query();
+			totalPages = 4;
 		};
 		
 		
@@ -101,8 +114,18 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		var options = {
 				bootstrapMajorVersion: 3,
 				onPageChanged: doPaging,
+				shouldShowPage:function(type, page, current){
+	                switch(type) {
+	                    case "first":
+	                    case "last":
+	                        return false;
+	                    default:
+	                        return true;
+	                }
+	            },
+	            alignment: 'center',
 	            currentPage: 1,
-	            totalPages: 4
+	            totalPages: totalPages
 	    };
 
 	    $('#pagination').bootstrapPaginator(options);
