@@ -1,4 +1,4 @@
-[{
+{"objects" :[{
 "entryId":"1_svrtnkpi",
 "name":"Kaltura_auto_dz",
 "audience":"5",
@@ -67,7 +67,9 @@
 "thumbnailUrl":"http:\/\/cdnbakmi.kaltura.com\/p\/346151\/sp\/34615100\/thumbnail\/entry_id\/0_l156i2rs\/version\/0",
 "recordStatus":"0",
 "recordedEntryId":""
-}]
+}], 
+"totalCount":"20"
+}
 
 
 

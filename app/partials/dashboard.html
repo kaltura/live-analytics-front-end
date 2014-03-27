@@ -6,9 +6,9 @@
 		<div class="clear-both" ></div>
 		<div class="date-range">{{reportStartTime | date : 'd MMM H:mm:ss'}} - {{nowTime | date : 'd MMM H:mm:ss'}}</div>
 		<div class="clear-both" >
-			<select >
-				<option value="all">Show all entries</option>
-				<option value="liveOnly">Show Live Now Only</option>
+			<select ng-model="boardType" >
+				<option value="all">Show All Entries</option>
+				<option value="liveOnly">Show Kaltura Live Now Only</option>
 			</select>
 		</div>
 	</div>

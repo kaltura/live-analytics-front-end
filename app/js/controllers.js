@@ -9,6 +9,8 @@ var analyticsControllers = angular.module('analyticsControllers', []);
  */
 analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSvc', 
     function($scope, KApi, DashboardSvc) {
+		
+		
 	
 		/**
 		 * entries currently on display
@@ -18,28 +20,39 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		/**
 		 * number of entries in page
 		 */
-		var pageSize = 10;
+		var pageSize = 5;
 		
 		/**
 		 * total number of pages
 		 */
 		var totalPages = 1;
 		
+		var updatePagingControlRequired = true;
 		
 		
 		/**
 		 * get data for the aggregates line
 		 */
-		var getAggregates = function getAggregates() {
-			$scope.aggregates = DashboardSvc.getAggregates();
+		var getAggregates = function getAggregates(liveOnly) {
+			$scope.aggregates = DashboardSvc.getAggregates(liveOnly).query();
 		};
 		
 		
 		/**
-		 * get the list of entries to show
-		 * @param liveOnly	if true, only get entries that are currently live
+		 * @param liveOnly	fetch KalturaLive currently live (true) or all live entries (false)
+		 * @param page		index of page to fetch
 		 */
-		var getAllEntries = function getAllEntries(liveOnly) {
+		var getEntries = function getEntries(liveOnly, page) {
+			getDummyEntries(liveOnly, page);
+		}
+		
+		
+		/**
+		 * get a list of all live entries according to required page
+		 * @param pageNumber index of page to fetch
+		 * @todo write to match description
+		 */
+		var getAllEntries = function getAllEntries(pageNumber) {
 			return DashboardSvc.getAllEntries(liveOnly).then(function(entryListResponse){
 				entries = entryListResponse.objects;
 				var ids = '';
@@ -53,8 +66,9 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		
 		
 		/**
-		 * get the entries that are currently live from the given list
-		 * @param ids of entries in question
+		 * get a list of entries that are currently live according to the required page
+		 * @param pageNumber index of page to fetch
+		 * @todo write to match description
 		 */
 		var getLiveEntries = function getLiveEntries(entryIds){
 			return DashboardSvc.getLiveEntries(entryIds).then(function(entryListResponse){
@@ -77,8 +91,15 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		 * dummy method to get mock data
 		 */
 		var getDummyEntries = function getDummyEntries(liveOnly, pageNumber) {
-			$scope.entries = DashboardSvc.getDummyEntries(liveOnly, pageNumber).query();
-			totalPages = 4;
+			var result = DashboardSvc.getDummyEntries(liveOnly, pageNumber).query();
+			result.$promise.then(function(data) {
+				$scope.entries = data.objects;
+				totalPages = Math.ceil(data.totalCount/pageSize);
+				if (updatePagingControlRequired) {
+					updatePagingControl(pageNumber, totalPages);
+					updatePagingControlRequired = false;
+				}
+			});
 		};
 		
 		
@@ -87,48 +108,67 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		 * @param e
 		 * @param oldPage
 		 * @param newPage
-		 * 
 		 */
 		var doPaging = function doPaging(e,oldPage,newPage) {
-			getDummyEntries(false, newPage);
+			getEntries($scope.boardType == "liveOnly", newPage);
 		};
+		
+		
+		/**
+		 * update paging control
+		 * @param current	index of current page
+		 * @param total		total number of pages
+		 */
+		var updatePagingControl = function updatePagingControl(current, total) {
+			var options = {
+	                currentPage: current,
+	                totalPages: total,
+	            }
+	        $('#pagination').bootstrapPaginator(options);
+		}
 		
 		// (analytics) entry stats for live entries by ids 
 		// (analytics) entry stats for not-live entries by ids
 		// return:
 		// [{entryId, name, audience, peakAudience, minutes, bufferTime, bitrate, startTime, isLive, thumbnailUrl}, ..]
 		
-		// set report dates:
-		var d = new Date();
-		$scope.nowTime = d;
-		d = new Date();
-		d.setHours(d.getHours() - 36);
-		$scope.reportStartTime = d;
 		
-		// report data:
-		getAggregates();
+		var screenSetup = function screenSetup() {
+			// set report dates:
+			var d = new Date();
+			$scope.nowTime = d;
+			d = new Date();
+			d.setHours(d.getHours() - 36);
+			$scope.reportStartTime = d;
+			
+			var options = {
+					bootstrapMajorVersion: 3,
+					onPageChanged: doPaging,
+					shouldShowPage:function(type, page, current){
+		                switch(type) {
+		                    case "first":
+		                    case "last":
+		                        return false;
+		                    default:
+		                        return true;
+		                }
+		            },
+		            alignment: 'center',
+		            currentPage: 1,
+		            totalPages: totalPages
+		    };
+	
+		    $('#pagination').bootstrapPaginator(options);
+		    
+		    $scope.boardType = "all";
+			$scope.$watch("boardType", function(newValue, oldValue) {
+				getAggregates(newValue == "liveOnly");
+	    		getEntries(newValue == "liveOnly", 1);
+				updatePagingControlRequired = true;
+			 });
+		}
 		
-		//getAllEntries(false).then(getLiveEntries);
-		getDummyEntries(false, 1);
-		
-		var options = {
-				bootstrapMajorVersion: 3,
-				onPageChanged: doPaging,
-				shouldShowPage:function(type, page, current){
-	                switch(type) {
-	                    case "first":
-	                    case "last":
-	                        return false;
-	                    default:
-	                        return true;
-	                }
-	            },
-	            alignment: 'center',
-	            currentPage: 1,
-	            totalPages: totalPages
-	    };
-
-	    $('#pagination').bootstrapPaginator(options);
+		screenSetup();
 		
     }]);
 

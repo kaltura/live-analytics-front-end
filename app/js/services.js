@@ -91,23 +91,30 @@ analyticsServices.factory('DashboardSvc',
 		 	function DashboardSvcFactory(KApi, $resource) {
 		 		var DashboardSvc = {};
 		 		
-		 		DashboardSvc.getAggregates = function getAggregates() {
-		 			var ar = [{'title': 'audience',
-		 						'value': 36},
-		 					{'title': 'minutes_viewed',
-			 				'value': 512},
-			 				{'title': 'buffertime',
-				 			'value': 2},
-				 			{'title': 'bitrate',
-					 		'value': 10}
-				 	];
-		 			return ar;
+		 		/**
+		 		 * get info for dashboard aggregates line 
+		 		 * @param liveOnly	aggregate only live-now-kaltura entries, or viewed during last 36 hrs all-live entries
+		 		 * @returns {Array}
+		 		 */
+		 		DashboardSvc.getAggregates = function getAggregates(liveOnly) {
+		 			var promise;
+		 			if (liveOnly) {
+		 				promise = $resource('data/dashboardLiveAggs.json', {}, {
+		 			      query: {method:'GET', isArray:true}
+		 			    });
+		 			}
+		 			else {
+		 				promise = $resource('data/dashboardAllAggs.json', {}, {
+		 					query: {method:'GET', isArray:true}
+		 				});
+		 			}
+		 			return promise;
 		 		};
 		 		
 		 		
 		 		DashboardSvc.getDummyEntries = function getDummyEntries(liveOnly, pageNumber) {
 		 			return $resource('data/entries:page.json', {}, {
-		 			      query: {method:'GET', params:{page:pageNumber}, isArray:true}
+		 			      query: {method:'GET', params:{page:pageNumber}}
 		 			    });
 				};
 		 		
