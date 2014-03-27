@@ -18,7 +18,7 @@
 		</div>
 	</div>
 	
-	<h2>Audience</h2>
+	<h2 class="panel-title">Audience</h2>
 	<hr />
 	
 	<!-- Graph -->
@@ -29,20 +29,42 @@
 	
 	<div class="row">
 		<div class="col-md-6">
-			<h2>{{entry.name}}</h2>
+			<h2 class="panel-title">{{entry.name}}</h2>
 			<hr />
+			<!-- player -->
 			<div style="width:470px; height:265px; border: 1px solid #019cfd;">Player</div>
 		</div>
 		<div class="col-md-6">
-			<h2>Location</h2>
+			<h2 class="panel-title">Location</h2>
 			<hr />
+			<!-- map -->
 			<div style="width:470px; height:265px; border: 1px solid #019cfd;">Map</div>
 		</div>
 	</div>
-	
-	<!-- paging -->
-	<div class="paging-wrapper">
-		<ul id="pagination" ></ul>
+
+	<div class="row">
+		<div class="col-md-6">
+			<h2 class="panel-title">Top referals</h2>
+			<hr />
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Domain</th>
+						<th>Visits</th>
+						<th>% of total</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="ref in referals">
+						<td>{{$index}}</td>
+						<td>{{ref.domain}}</td>
+						<td>{{ref.visits}}</td>
+						<td>{{ref.percents}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
-	
+
 </div>

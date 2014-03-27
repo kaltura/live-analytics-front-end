@@ -146,6 +146,14 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', 'EntrySv
 		};
 		
 		
+		/**
+		 * get data for the top referals table
+		 */
+		var getReferals = function getReferals() {
+			$scope.referals = EntrySvc.getReferals($scope.entryId);
+		};
+		
+		
 		var getEntry = function getEntry() {
 			return EntrySvc.getEntry($scope.entryId).then(function(entry){
 				$scope.entry = entry;
@@ -161,6 +169,6 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', 'EntrySv
 		// report data:
 		getAggregates($scope.entryId);
 		getEntry($scope.entryId);
-
+		getReferals($scope.entryId);
 		
 	}]);
