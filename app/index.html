@@ -1,31 +1,42 @@
 <!doctype html>
 <html lang="en" ng-app="liveAnalytics">
 <head>
-  <meta charset="utf-8">
-  <title>Live Anaytics</title>
-  
-  <link rel="stylesheet" href="lib/bootstrap/bootstrap-3.1.1-dist/css/bootstrap.css"/>
-  <link rel="stylesheet" href="css/app.css"/>
-  
+<meta charset="utf-8">
+<title>Live Anaytics</title>
+
+<link type="text/css" rel="stylesheet" href="lib/jquery-ui/jquery-ui-1.10.4/themes/base/jquery-ui.css">
+<link type="text/css" rel="stylesheet" href="lib/bootstrap/bootstrap-3.1.1-dist/css/bootstrap.css" />
+<link type="text/css" rel="stylesheet" href="css/rickshaw/rickshaw.css">
+<link type="text/css" rel="stylesheet" href="css/app.css" />
+
 </head>
-<body class="container" >
+<body class="container">
 
-  <div class="view-container">
-    	<div ng-view ></div>
-  	</div>
+	<div class="view-container">
+		<div ng-view></div>
+	</div>
 
-
-  <script src="lib/jquery/jquery-1.10.2.min.js"></script>
-  <script src="lib/bootstrap/bootstrap-3.1.1-dist/js/bootstrap.min.js"></script>
-  <script src="lib/bootstrap/bootstrap-paginator.js"></script>
-  <script src="lib/angular/angular.js"></script>
-  <script src="lib/angular/angular-resource.js"></script>
-  <script src="lib/angular/angular-route.js"></script>
-  
-  <script src="js/app.js"></script>
-  <script src="js/services.js"></script>
-  <script src="js/controllers.js"></script>
-  <script src="js/filters.js"></script>
-  <script src="js/directives.js"></script>
+	<!-- player -->
+	<script src="http://cdnapi.kaltura.com/p/346151/sp/34615100/embedIframeJs/uiconf_id/22767782/partner_id/346151"></script>
+	
+	<script src="lib/jquery/jquery-1.10.2.min.js"></script>
+	<script src="lib/jquery-ui/jquery-ui-1.10.4/ui/jquery-ui.js"></script>
+	<script src="lib/bootstrap/bootstrap-3.1.1-dist/js/bootstrap.min.js"></script>
+	<script src="lib/bootstrap/bootstrap-paginator.js"></script>
+	<script src="lib/angular/angular.js"></script>
+	<script src="lib/angular/angular-resource.js"></script>
+	<script src="lib/angular/angular-route.js"></script>
+	
+	<!-- graphs -->
+	<script src="lib/rickshaw/rickshaw.js"></script>
+	<script src="lib/rickshaw/d3.v3.js"></script>
+	<script src="lib/rickshaw/d3.layout.min.js"></script>
+	
+	<script src="js/app.js"></script>
+	<script src="js/services.js"></script>
+	<script src="js/controllers.js"></script>
+	<script src="js/filters.js"></script>
+	<script src="js/directives.js"></script>
+	
 </body>
 </html>
