@@ -10,8 +10,6 @@ var analyticsControllers = angular.module('analyticsControllers', []);
 analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSvc', 
     function($scope, KApi, DashboardSvc) {
 		
-		
-	
 		/**
 		 * entries currently on display
 		 */
@@ -34,7 +32,17 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		 * get data for the aggregates line
 		 */
 		var getAggregates = function getAggregates(liveOnly) {
-			$scope.aggregates = DashboardSvc.getAggregates(liveOnly).query();
+			DashboardSvc.getAggregates(liveOnly).then (function(data) {
+				var o = data.objects[0];
+				var results = [
+				           	{"title": "audience", "value": liveOnly ? o.audience : o.plays},
+				        	{"title": "seconds_viewed", "value": o.secondsViewed},
+				        	{"title": "buffertime", "value": o.bufferTime},
+				        	{"title": "bitrate", "value": o.avgBitrate}
+				        ]; 
+				
+				$scope.aggregates = results;
+			});
 		};
 		
 		
@@ -42,57 +50,16 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		 * @param liveOnly	fetch KalturaLive currently live (true) or all live entries (false)
 		 * @param page		index of page to fetch
 		 */
-		var getEntries = function getEntries(liveOnly, page) {
-			getDummyEntries(liveOnly, page);
-		}
-		
-		
-		/**
-		 * get a list of all live entries according to required page
-		 * @param pageNumber index of page to fetch
-		 * @todo write to match description
-		 */
-		var getAllEntries = function getAllEntries(pageNumber) {
-			return DashboardSvc.getAllEntries(liveOnly).then(function(entryListResponse){
-				entries = entryListResponse.objects;
-				var ids = '';
-				entries.forEach(function (entry) {
-					ids += entry.id + ',';
-				});
-				totalPages = Math.ceil(entryListResponse.totalCount/pageSize);
-				return ids;
-			});
-		};
-		
-		
-		/**
-		 * get a list of entries that are currently live according to the required page
-		 * @param pageNumber index of page to fetch
-		 * @todo write to match description
-		 */
-		var getLiveEntries = function getLiveEntries(entryIds){
-			return DashboardSvc.getLiveEntries(entryIds).then(function(entryListResponse){
-				entries.forEach(function (entry) {
-					entry.isLive = false;
-					entryListResponse.objects.forEach(function (liveEntry) {
-						if (entry.id == liveEntry.id) {
-							entry.isLive = true;
-						};
-					});
-				});
-				entries[0].isLive = true;
-				$scope.entries = entries;
-				return entries;
-			});
-		};
-		
-		
-		/**
-		 * dummy method to get mock data
-		 */
-		var getDummyEntries = function getDummyEntries(liveOnly, pageNumber) {
-			var result = DashboardSvc.getDummyEntries(liveOnly, pageNumber).query();
-			result.$promise.then(function(data) {
+		var getEntries = function getEntries(liveOnly, pageNumber) {
+			var result;
+			if (liveOnly) {
+				result = DashboardSvc.getLiveEntries(pageNumber); 
+			}
+			else {
+				result = DashboardSvc.getAllEntries(pageNumber); 
+			}
+			 
+			result.then(function(data) {
 				$scope.entries = data.objects;
 				totalPages = Math.ceil(data.totalCount/pageSize);
 				if (updatePagingControlRequired) {
@@ -100,7 +67,7 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 					updatePagingControlRequired = false;
 				}
 			});
-		};
+		}
 		
 		
 		/**
@@ -172,9 +139,11 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		
     }]);
 
-analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', 'EntrySvc', 
-    function($scope, $routeParams, EntrySvc) {
+analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interval', 'EntrySvc', 
+    function($scope, $routeParams, $interval, EntrySvc) {
 		$scope.entryId = $routeParams.entryid;
+		$scope.graphdata = [];
+		$scope.additionalgraphdata = [];
 		
 		
 
@@ -194,6 +163,9 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', 'EntrySv
 		};
 		
 		
+		/**
+		 * get the entry in question
+		 */
 		var getEntry = function getEntry() {
 			return EntrySvc.getEntry($scope.entryId).then(function(entry){
 				$scope.entry = entry;
@@ -206,9 +178,35 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', 'EntrySv
 			});
 		};
 		
+		
+		/**
+		 * get graph data for the last 36 hrs 
+		 */
+		var getGraph36Hrs = function getGraph36Hrs() {
+			var result = EntrySvc.getGraph($scope.entryId).query();
+			result.$promise.then(function(data) {
+				$scope.graphdata = data.objects;
+			});
+		}
+		
+		
+		/**
+		 * get graph data for the last 30 secs 
+		 */
+		var getGraph30Secs = function getGraph30Secs() {
+//			var result = EntrySvc.updateGraph($scope.entryId).query();
+//			result.$promise.then(function(data) {
+//				$scope.additionalGraphData = data.objects;
+//			});
+			console.log ('tick');
+			$scope.additionalgraphdata = EntrySvc.updateGraph($scope.entryId);
+		}
+		
 		// report data:
 		getAggregates($scope.entryId);
 		getEntry($scope.entryId);
 		getReferals($scope.entryId);
+		getGraph36Hrs($scope.entryId);
+		//$interval(function() {getGraph30Secs($scope.entryId)}, 10000);
 		
 	}]);

@@ -1,74 +1,37 @@
-{"objects" :[{
-"entryId":"1_svrtnkpi",
-"name":"Kaltura_auto_dz",
-"audience":"5",
-"peakAudience":"6",
-"minutes":"3605",
-"bufferTime":"8",
-"bitrate":"10",
-"startTime":"1389791690",
-"isLive":"false",
-"thumbnailUrl":"http:\/\/cdnbakmi.kaltura.com\/p\/346151\/sp\/34615100\/thumbnail\/entry_id\/1_svrtnkpi\/version\/0",
-"recordStatus":"1",
-"recordedEntryId":"0_grq2j6kc"
-},
 {
-"entryId":"1_oeq67tuc",
-"name":"test",
-"audience":"40",
-"peakAudience":"57",
-"minutes":"2500",
-"bufferTime":"80",
-"bitrate":"11",
-"startTime":"1389791690",
-"isLive":"false",
-"thumbnailUrl":"http:\/\/cdnbakmi.kaltura.com\/p\/346151\/sp\/34615100\/thumbnail\/entry_id\/1_oeq67tuc\/version\/0",
-"recordStatus":"1",
-"recordedEntryId":"0_8oln08dl"
-},
-{
-"entryId":"1_ezrsr2bz",
-"name":"testffff",
-"audience":"40",
-"peakAudience":"57",
-"minutes":"2500",
-"bufferTime":"80",
-"bitrate":"11",
-"startTime":"1391943220",
-"isLive":"true",
-"thumbnailUrl":"http:\/\/cdnbakmi.kaltura.com\/p\/346151\/sp\/34615100\/thumbnail\/entry_id\/1_ezrsr2bz\/version\/0",
-"recordStatus":"1",
-"recordedEntryId":"0_8oln08dl"
-},
-{
-"entryId":"0_qnqownnl",
-"name":"test54",
-"audience":"46",
-"peakAudience":"53",
-"minutes":"2540",
-"bufferTime":"3",
-"bitrate":"12",
-"startTime":"1391943220",
-"isLive":"false",
-"thumbnailUrl":"http:\/\/cdnbakmi.kaltura.com\/p\/346151\/sp\/34615100\/thumbnail\/entry_id\/0_qnqownnl\/version\/0",
-"recordStatus":"0",
-"recordedEntryId":""
-},
-{
-"entryId":"0_l156i2rs",
-"name":"livestream_akamai",
-"audience":"46",
-"peakAudience":"53",
-"minutes":"2540",
-"bufferTime":"3",
-"bitrate":"12",
-"startTime":"1388504166",
-"isLive":"false",
-"thumbnailUrl":"http:\/\/cdnbakmi.kaltura.com\/p\/346151\/sp\/34615100\/thumbnail\/entry_id\/0_l156i2rs\/version\/0",
-"recordStatus":"0",
-"recordedEntryId":""
-}], 
-"totalCount":"20"
+	"objectType" : "KalturaLiveStatsListResponse",
+	"objects" :[{
+		"objectType" : "KalturaEntryLiveStats",
+		"entryId":"1_g2p9n0bo",
+		"plays" : "53",
+		"audience" : "",
+		"secondsViewed" : "547",
+		"bufferTime" : "5",
+		"avgBitrate" : "14",
+		"timestamp" : ""
+	},
+	{
+		"objectType" : "KalturaEntryLiveStats",
+		"entryId":"1_5tttebz2",
+		"plays" : "960",
+		"audience" : "",
+		"secondsViewed" : "6650",
+		"bufferTime" : "24",
+		"avgBitrate" : "11",
+		"timestamp" : ""
+	},
+	{
+		"objectType" : "KalturaEntryLiveStats",
+		"entryId":"1_ugsxuoay",
+		"plays" : "459",
+		"audience" : "",
+		"secondsViewed" : "1085",
+		"bufferTime" : "8",
+		"avgBitrate" : "15",
+		"timestamp" : ""
+	}
+	], 
+	"totalCount":"18"
 }
 
 

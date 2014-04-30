@@ -40,7 +40,7 @@
 					<table>
 						<tr>
 							<td>Audience:</td>
-							<td>{{entry.audience}}</td>
+							<td>{{entry.audience ? entry.audience : entry.plays}}</td>
 						</tr>
 						<tr>
 							<td>Peak Audience:</td>
@@ -48,7 +48,7 @@
 						</tr>
 						<tr>
 							<td>Minutes Viewed:</td>
-							<td>{{entry.minutes}}</td>
+							<td>{{entry.secondsViewed | minutes}}</td>
 						</tr>
 						<tr>
 							<td>Buffering Time:</td>
@@ -56,7 +56,7 @@
 						</tr>
 						<tr>
 							<td>Average Bitrate:</td>
-							<td>{{entry.bitrate}}mbs</td>
+							<td>{{entry.avgBitrate}}mbs</td>
 						</tr>
 					</table>
 					

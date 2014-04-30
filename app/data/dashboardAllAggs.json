@@ -1,6 +1,15 @@
-[
-	{"title": "audience", "value": 36},
-	{"title": "minutes_viewed", "value": 512},
-	{"title": "buffertime", "value": 2},
-	{"title": "bitrate", "value": 10}
-]
+{
+	"objectType" : "KalturaLiveStatsListResponse",
+	"objects" : [
+		{
+			"objectType" : "KalturaLiveStats",
+			"plays" : "190",
+			"audience" : "",
+			"secondsViewed" : "43482",
+			"bufferTime" : "20",
+			"avgBitrate" : "35",
+			"timestamp" : ""
+		}
+	],
+	"totalCount" : "1"
+}

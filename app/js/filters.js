@@ -43,7 +43,7 @@ analyticsFilters.filter('textify', [function() {
 		case 'audience':
 			result = 'Audience';
 			break;
-		case 'minutes_viewed':
+		case 'seconds_viewed':
 			result = 'Minutes Viewed';
 			break;
 		case 'buffertime':
@@ -63,8 +63,10 @@ analyticsFilters.filter('formatAgg', [function() {
 		var result = '';
 		switch (agg.title) {
 		case 'audience':
-		case 'minutes_viewed':
 			result = agg.value;
+			break;
+		case 'seconds_viewed':
+			result = Math.floor(agg.value/60);
 			break;
 		case 'buffertime':
 			result = formatTime(agg.value, false, true);
@@ -85,4 +87,12 @@ analyticsFilters.filter('time', [function() {
 	}; 
 	
 	return time;
+}]);
+
+analyticsFilters.filter('minutes', [function() {
+	var minutes = function minutes(val) {
+		return Math.floor(val/60);
+	}; 
+	
+	return minutes;
 }]);

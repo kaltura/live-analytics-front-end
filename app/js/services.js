@@ -87,81 +87,123 @@ analyticsServices.factory('KApi',
 		]);
 
 analyticsServices.factory('DashboardSvc',
-		['KApi', '$resource', 
-		 	function DashboardSvcFactory(KApi, $resource) {
+		['KApi', '$resource', '$q', 'DashboardDummySvc', 
+		 	function DashboardSvcFactory(KApi, $resource, $q, DashboardDummySvc) {
 		 		var DashboardSvc = {};
 		 		
 		 		/**
 		 		 * get info for dashboard aggregates line 
 		 		 * @param liveOnly	aggregate only live-now-kaltura entries, or viewed during last 36 hrs all-live entries
-		 		 * @returns {Array}
+		 		 * @returns promise
 		 		 */
 		 		DashboardSvc.getAggregates = function getAggregates(liveOnly) {
-		 			var promise;
-		 			if (liveOnly) {
-		 				promise = $resource('data/dashboardLiveAggs.json', {}, {
-		 			      query: {method:'GET', isArray:true}
-		 			    });
-		 			}
-		 			else {
-		 				promise = $resource('data/dashboardAllAggs.json', {}, {
-		 					query: {method:'GET', isArray:true}
-		 				});
-		 			}
-		 			return promise;
+		 			// liveReportInputFilter = KalturaLiveReportsInputFilter
+		 			// liveReportInputFilter.hoursBefore = 36;
+		 			// liveReportInputFilter.isLive = liveOnly;
+		 			// KalturaFilterPager = null;
+		 			// LiveReports.getReport(LiveReportType.PARTNER_TOTAL, liveReportInputFilter, KalturaFilterPager) 
+		 			return DashboardDummySvc.getAggregates(liveOnly);
 		 		};
 		 		
 		 		
-		 		DashboardSvc.getDummyEntries = function getDummyEntries(liveOnly, pageNumber) {
-		 			return $resource('data/entries:page.json', {}, {
-		 			      query: {method:'GET', params:{page:pageNumber}}
-		 			    });
-				};
+		 		/**
+		 		 * @private
+		 		 * for all live entries - get stats
+		 		 */
+		 		DashboardSvc._getAllEntriesStats = function _getAllEntriesStats(pageNumber) {
+		 			return DashboardDummySvc._getAllEntriesStats(pageNumber).query().$promise;
+//					var postData = {
+//						'ignoreNull': '1',
+//						'filter:objectType': 'KalturaLiveReportsInputFilter',
+//			            'filter:orderBy': '-createdAt',
+//			            'page:objectType': 'KalturaFilterPager',
+//			            'pager:pageIndex': pageNumber,
+//			            'pager:pageSize': '10',
+//			            'service': 'livereports',
+//			            'action': 'getreport'
+//			        };
+//					
+//					return KApi.doRequest(postData);
+		 		};
 		 		
 		 		/**
-				 * get the list of entries to show
-				 * @param liveOnly	if true, only get entries that are currently live
-				 */
-		 		DashboardSvc.getAllEntries = function getAllEntries(liveOnly) {
-		 			console.log ('get all entries');
-					// liveEntry.list to get all entries
-					var postData = {
-			            'filter:orderBy': '-createdAt',
-			            'filter:objectType': 'KalturaLiveStreamEntryFilter',
-			            'ignoreNull': '1',
-			            'page:objectType': 'KalturaFilterPager',
-			            'pager:pageIndex': '1',
-			            'pager:pageSize': '10',
-			            'service': 'livestream',
-			            'action': 'list'
-			        };
-					
-					return KApi.doRequest(postData);
-				};
-				
-				
-				/**
-				 * of the given list, get the entries that are currently live
-				 * @param entryIds		ids of all entries on page
-				 */
-				DashboardSvc.getLiveEntries = function getLiveEntries(entryIds) {
-					console.log ('get live entries');
-					// liveEntry.list by isLive to know which ones are currently live
-					var postData = {
+		 		 * @private
+		 		 * for all live entries - get entry objects (by ids)
+		 		 */
+		 		DashboardSvc._getAllEntriesEntries = function _getAllEntriesEntries(entryIds) {
+		 			console.log (entryIds);
+		 			var postData = {
+							'ignoreNull': '1',
+							'filter:objectType': 'KalturaLiveStreamEntryFilter',
+							'filter:entryIdsIn': entryIds,
 				            'filter:orderBy': '-createdAt',
-				            'filter:objectType': 'KalturaLiveStreamEntryFilter',
-				            'filter:isLive': '1',
-				            'filter:entryIdsIn': entryIds,
-				            'ignoreNull': '1',
 				            'page:objectType': 'KalturaFilterPager',
-				            'pager:pageIndex': '1',
-				            'pager:pageSize': '10',
 				            'service': 'livestream',
 				            'action': 'list'
 				        };
-					
 					return KApi.doRequest(postData);
+		 		};
+		 		
+		 		/**
+				 * get the list of entries to show
+				 * @param pageNumber
+				 */
+		 		DashboardSvc.getAllEntries = function getAllEntries(pageNumber) {
+		 			// get page from reports API, then use entry ids to get entry names from API
+		 			
+		 			// Creating a deferred object
+		            var deferred = $q.defer();
+		            
+		            DashboardSvc._getAllEntriesStats(pageNumber).then(function (entryStats) {
+						// entryStats is KalturaLiveStatsListResponse
+						var ids = '';
+						entryStats.objects.forEach(function(entry) {
+							ids += entry.entryId + ","; 
+						}); 
+						DashboardSvc._getAllEntriesEntries(ids).then(function(entries) {
+							console.log(entries);
+							// entries is LiveStreamListResponse
+							entryStats.objects.forEach(function (entryStat) {
+								// add entry name to stats object
+								entries.objects.every(function (entry) {
+									if (entryStat.entryId == entry.id) {
+										entryStat.name = entry.name;
+										entryStat.thumbnailUrl = entry.thumbnailUrl;
+										return false;
+									}
+									return true;
+								});
+							});
+							console.log(entryStats);
+							deferred.resolve(entryStats);
+						});
+					});
+			 		
+			 		// Returning the promise object
+		            return deferred.promise;
 				};
+				
+				
+//				/**
+//				 * of the given list, get the entries that are currently live
+//				 */
+//				DashboardSvc.getLiveEntries = function getLiveEntries(pageNumber) {
+//					// liveEntry.list by isLive to know which ones are currently live, then use entry ids in reports API
+//					var postData = {
+//				            'filter:orderBy': '-createdAt',
+//				            'filter:objectType': 'KalturaLiveStreamEntryFilter',
+//				            'filter:isLive': '1',
+//				            'filter:entryIdsIn': entryIds,
+//				            'ignoreNull': '1',
+//				            'page:objectType': 'KalturaFilterPager',
+//				            'pager:pageIndex': '1',
+//				            'pager:pageSize': '10',
+//				            'service': 'livestream',
+//				            'action': 'list'
+//				        };
+//					
+//					return KApi.doRequest(postData);
+//				};
 		 		
 		 		
 		 		return DashboardSvc;
@@ -212,6 +254,28 @@ analyticsServices.factory('EntrySvc',
 				        };
 					
 					return KApi.doRequest(postData);
+		 		};
+		 		
+		 		
+		 		EntrySvc.getGraph = function getGraph(entryId) {
+		 			return $resource('data/graph.json', {}, {
+	 					query: {method:'GET'}
+	 				});
+		 		};
+		 		
+		 		EntrySvc.updateGraph = function updateGraph(entryId) {
+		 			var d = new Date();
+		 			var s = String(d.getTime());
+		 			s = s.substr(0, s.length - 4);
+		 			s += "0";
+		 			var s1 = parseInt(s) + 10;
+		 			var s2 = parseInt(s1) + 10;
+		 			var ar = [
+		 			          {"x" : s, "y" : Math.floor(Math.random()*100)},
+		 			          {"x" : s1, "y" : Math.floor(Math.random()*100)},
+		 			          {"x" : s2, "y" : Math.floor(Math.random()*100)},
+		 			          ];
+		 			return ar;
 		 		};
 		 		
 		 		return EntrySvc;
