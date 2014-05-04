@@ -3,8 +3,8 @@
 /* Services */
 
 analyticsServices.factory('DashboardDummySvc',
-		['KApi', '$resource', 
-		 	function DashboardDummySvc(KApi, $resource) {
+		['KApi', '$resource', '$q',
+		 	function DashboardDummySvc(KApi, $resource, $q) {
 		 		var DashboardDummySvc = {};
 		 		
 		 		/**
@@ -29,11 +29,6 @@ analyticsServices.factory('DashboardDummySvc',
 		 		};
 		 		
 		 		
-//		 		DashboardDummySvc.getDummyEntries = function getDummyEntries(liveOnly, pageNumber) {
-//		 			return $resource('data/entries:page.json', {}, {
-//		 			      query: {method:'GET', params:{page:pageNumber}}
-//		 			    });
-//				};
 		 		
 		 		/**
 		 		 * @private
@@ -44,29 +39,43 @@ analyticsServices.factory('DashboardDummySvc',
 		 			      query: {method:'GET', params:{page:pageNumber}}
 		 			});
 		 		};
-//				
-//				/**
-//				 * of the given list, get the entries that are currently live
-//				 * @param entryIds		ids of all entries on page
-//				 */
-//				DashboardDummySvc.getLiveEntries = function getLiveEntries(entryIds) {
-//					console.log ('get live entries');
-//					// liveEntry.list by isLive to know which ones are currently live
-//					var postData = {
-//				            'filter:orderBy': '-createdAt',
-//				            'filter:objectType': 'KalturaLiveStreamEntryFilter',
-//				            'filter:isLive': '1',
-//				            'filter:entryIdsIn': entryIds,
-//				            'ignoreNull': '1',
-//				            'page:objectType': 'KalturaFilterPager',
-//				            'pager:pageIndex': '1',
-//				            'pager:pageSize': '10',
-//				            'service': 'livestream',
-//				            'action': 'list'
-//				        };
-//					
-//					return KApi.doRequest(postData);
-//				};
+
+		 		
+		 		DashboardDummySvc._getLiveEntriesStats = function _getLiveEntriesStats(entryIds) {
+		 			var dfd = $q.defer();
+
+                    // Mock entry stats
+		 			var ids = entryIds.split(',');
+		 			var objects = new Array();
+		 			var stat;
+		 			ids.forEach(function(entryId) {
+		 				if (entryId) {
+			 				var t = new Date();
+			 				t = t.time - Math.floor(Math.random() * 12960000);
+			 				stat = {
+			 						"objectType" : "KalturaEntryLiveStats",
+			 						"entryId" : entryId,
+			 						"plays" : "",
+			 						"audience" : Math.floor(Math.random() * 500),
+			 						"secondsViewed" : Math.floor(Math.random() * 3600),
+			 						"bufferTime" : Math.floor(Math.random() * 60),
+			 						"avgBitrate" : Math.floor(Math.random() * 15),
+			 						"startTime" : t,
+			 						"timestamp" : ""
+			 				};
+			 				objects.push(stat);
+		 				}
+		 			});
+		 			
+		 			
+                    dfd.resolve({
+                        "objectType" : "KalturaLiveStatsListResponse",
+                        "objects" : objects,
+                        "totalCount" : ids.length
+                    });
+
+                    return dfd.promise;
+		 		};
 		 		
 		 		
 		 		return DashboardDummySvc;
