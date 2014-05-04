@@ -7,27 +7,13 @@ var analyticsDirectives = angular.module('analyticsDirectives', []);
 
 analyticsDirectives.directive('kplayer', function() {
 	return {
-		
 		restrict : 'E',
-		scope: {
-			entryid: '@',
-			uiconf: '=',	
-			pid: '='	
-		},
-		//replace : true,
+		controller: 'KPlayerController',
+		replace : true,
 		template: '<div id="kplayer" style="width:100%; height:100%;"></div>',
-		link: function($scope, element, attrs) {
-			kWidget.embed({
-            	"targetId": "kplayer", 
-            	"wid": "_" +$scope.pid, 
-              	"uiconf_id": $scope.uiconf, 
-              	"flashvars": { 
-              		"streamerType": "auto" 
-              	}, 
-              	"cache_st": 1395933525, 
-              	"entry_id": $scope.entryid 
-              });
+		link: function($scope, element, attrs, KPlayerController) {
 			
+			KPlayerController.init(element);
 		}
 	};
 });
@@ -39,36 +25,76 @@ analyticsDirectives.directive('rgraph', function() {
 		replace : true,
 		link : function(scope, element, attrs) {
 			var graph = null;
-			var series = [ {
+			var d = new Date();
+			var series = [ 
+			    {
 					color : 'steelblue',
-					data : [ {x:0, y:0}, {x:1, y:3}, { x:2, y:2}, {x:3, y:4} ],
+					data : [ {x:d.getTime(), y:0} ],
 					name : "Line 1"
-				}, {
-					color : 'lightblue',
-					data : [ {x:0, y:1}, {x:1, y:2}, {x:2, y:5}, {x:4, y:3} ],
-					name : "Line 2"
 				}
 			];
 
-			var replaceGraphContent = function replaceGraphContent(value) {
-				while (graph.series.length > 0) {
-					graph.series.pop();
+			
+			/**
+			 * remove all previous data and set new 
+			 * @param value
+			 */
+			var resetGraphContent = function resetGraphContent(value) {
+				var ar = series[0].data;
+				while (ar.length > 0) {
+					ar.pop();
 				}
 				for ( var i = 0; i < value.length; i++) {
-					graph.series.push(value[i]);
+					ar.push(value[i]);
 				}
+				graph.update();
+			};
+			
+			
+			/**
+			 * add new data and purge oldest so we keep only 36 hrs
+			 * @param value
+			 */
+			var updateGraphContent = function updateGraphContent(value) {
+				var ar = series[0].data;
+				// find matching point in 'ar'
+				var lastX = ar[ar.length-1].x;
+				for (var i = value.length-1; i>0; i--) {
+					if (value[i].x == lastX) {
+						break;
+					}
+				}
+				// now i+1 is the index of the first element in 'value' that needs to be inserted to 'ar'
+				// add required elements from value to ar, while removing elements from tail
+				i++;
+				while(i<value.length) {
+					ar.shift();
+					ar.push(value[i]);
+					i++;
+				}
+				graph.update();
 			};
 
+			/**
+			 * set graph data as attribute
+			 */
+			scope.$watch(attrs.additionalgraphdata, function(value) {
+				console.log('changed' );
+				if (graph != null && Array.isArray(value) && value.length > 0) {
+					updateGraphContent(value);
+					
+				}
+			});
 			
 			/**
 			 * set graph data as attribute
 			 */
 			scope.$watch(attrs.graphdata, function(value) {
-				if (graph != null && Array.isArray(value)) {
-					replaceGraphContent(value);
-					graph.update();
+				if (graph != null && Array.isArray(value) && value.length > 0) {
+					resetGraphContent(value);
 				}
 			});
+			
 
 			graph = new Rickshaw.Graph({
 				element : element[0].children[0],

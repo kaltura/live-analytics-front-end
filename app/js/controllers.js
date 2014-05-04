@@ -142,6 +142,9 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interval', 'EntrySvc', 
     function($scope, $routeParams, $interval, EntrySvc) {
 		$scope.entryId = $routeParams.entryid;
+		$scope.pid = 346151;
+		$scope.uiconfId = 22767782;
+		$scope.playerEntryId = '';
 		$scope.graphdata = [];
 		$scope.additionalgraphdata = [];
 		
@@ -194,6 +197,18 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 		var getEntry = function getEntry() {
 			return EntrySvc.getEntry($scope.entryId).then(function(entry){
 				$scope.entry = entry;
+				if (entry.isLive) {
+					// live session - show live entry
+					$scope.playerEntryId = entry.id;
+				}
+				else if (entry.recordedEntryId && entry.recordedEntryId != '') {
+					// session ended, got recording - show recorded entry
+					$scope.playerEntryId = entry.recordedEntryId;
+				}
+				else {
+					// show "no recording"
+					$scope.playerEntryId = -1;
+				}
 				// set report dates:
 				var d = new Date();
 				d.setTime(entry.createdAt);
@@ -229,9 +244,40 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 		var screenSetup = function screenSetup() {
 			// report data:
 			getEntry();
-			getGraph36Hrs($scope.entryId);
+//			getGraph36Hrs($scope.entryId);
 			//$interval(function() {getGraph30Secs($scope.entryId)}, 10000);
 		}
 		
 		screenSetup();
+	}]);
+
+
+
+analyticsControllers.controller('KPlayerController', ['$scope', '$attrs',  
+    function($scope, $attrs) {
+		var self = this;
+		this.playerElement = null;
+  		
+  		this.init = function init (element) {
+  			self.playerElement = element;
+  		};
+
+
+  		$scope.$watch('playerEntryId', function( value ) {
+  			if (value) {
+  				if (value != -1) {
+		  			kWidget.embed({
+		            	"targetId": "kplayer", 
+		            	"wid": "_" + $scope.pid, 
+		              	"uiconf_id": $scope.uiconfId, 
+		              	"entry_id": value, 
+		              	"flashvars": { 
+		              		"streamerType": "auto" 
+		              	} 
+		            });
+  				} else {
+  					self.playerElement.html('<h3>Live Session Was Not Recorded</h3>');
+  				}
+	  		}
+  		});
 	}]);
