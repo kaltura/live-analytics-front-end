@@ -96,3 +96,12 @@ analyticsFilters.filter('minutes', [function() {
 	
 	return minutes;
 }]);
+
+analyticsFilters.filter('percents', [function() {
+	// val is expected to be 0-1, return value has 2 digits after dec. (65.44)
+	var percents = function percents(val) {
+		return Math.floor(val * 10000) / 100;
+	}; 
+	
+	return percents;
+}]);

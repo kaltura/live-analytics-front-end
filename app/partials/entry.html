@@ -23,8 +23,7 @@
 	
 	<!-- Graph -->
 	<div class="row graphic-content graphi">
-		<rgraph graphdata="graphdata" ></rgraph>
-<!-- 		<div style="width:100%; height:275px; border: 1px solid #019cfd;">Graph</div> -->
+<!-- 		<rgraph graphdata="graphdata" additionalgraphdata="additionalgraphdata"></rgraph> -->
 	</div>
 	
 	<div class="row">
@@ -63,7 +62,7 @@
 						<td>{{$index}}.</td>
 						<td>{{ref.domain}}</td>
 						<td>{{ref.visits}}</td>
-						<td>{{ref.percents}}</td>
+						<td>{{ref.percents | percents}} %</td>
 					</tr>
 				</tbody>
 			</table>

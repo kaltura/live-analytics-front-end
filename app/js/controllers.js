@@ -162,15 +162,29 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 				        ]; 
 				
 				$scope.aggregates = results;
+				getReferrers(isLive ? o.audience : o.plays);
 			});
 		};
 		
 		
 		/**
-		 * get data for the top referals table
+		 * get data for the top referrals table
 		 */
-		var getReferals = function getReferals() {
-			$scope.referals = EntrySvc.getReferals($scope.entryId);
+		var getReferrers = function getReferrers(totalPlays) {
+			EntrySvc.getReferrers($scope.entryId).then (function(data) {
+				var objects = data.objects;
+				var results = new Array();
+				var o;
+				for (var i = 0; i<objects.length; i++) {
+					o = {
+							'domain': objects[i].referrer, 
+							'visits': objects[i].plays, 
+							'percents' : objects[i].plays / totalPlays
+						}; 
+					results.push(o);
+				}
+				$scope.referals = results;
+			});
 		};
 		
 		
@@ -215,8 +229,6 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 		var screenSetup = function screenSetup() {
 			// report data:
 			getEntry();
-			
-			getReferals($scope.entryId);
 			getGraph36Hrs($scope.entryId);
 			//$interval(function() {getGraph30Secs($scope.entryId)}, 10000);
 		}

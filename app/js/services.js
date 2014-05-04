@@ -304,37 +304,23 @@ analyticsServices.factory('EntrySvc',
 		 			// KalturaFilterPager = null;
 		 			// LiveReports.getReport(LiveReportType.ENTRY_TOTAL, liveReportInputFilter, KalturaFilterPager) 
 		 			return EntryDummySvc.getAggregates(entryId, isLive);
-		 			
-		 			
-		 			
-		 			
-//		 			var ar = [{'title': 'audience',
-//		 						'value': 36},
-//		 					{'title': 'minutes_viewed',
-//			 				'value': 512},
-//			 				{'title': 'buffertime',
-//				 			'value': 2},
-//				 			{'title': 'bitrate',
-//					 		'value': 10}
-//				 	];
-//		 			return ar;
 		 		};
 		 		
-		 		EntrySvc.getReferals = function getReferals(entryId) {
-		 			var ar = [
-		 			          {'domain': 'www.domain1.com', 'visits': '36', 'percents' : '5.57'},
-		 			          {'domain': 'www.domain2.com', 'visits': '12', 'percents' : '5.7'},
-		 			          {'domain': 'www.domain3.com', 'visits': '45', 'percents' : '3.47'},
-		 			          {'domain': 'www.domain4.com', 'visits': '76', 'percents' : '5.3'},
-		 			          {'domain': 'www.domain5.com', 'visits': '12', 'percents' : '6.26'},
-		 			          {'domain': 'www.domain6.com', 'visits': '65', 'percents' : '7.76'},
-		 			          {'domain': 'www.domain7.com', 'visits': '87', 'percents' : '8.12'},
-		 			          {'domain': 'www.domain8.com', 'visits': '23', 'percents' : '1.12'},
-		 			          {'domain': 'www.domain9.com', 'visits': '76', 'percents' : '9.45'},
-		 			          {'domain': 'www.domain10.com', 'visits': '34', 'percents' : '0.57'},
-		 				
-		 						];
-		 			return ar;
+		 		
+		 		/**
+		 		 * 
+		 		 * @param entryId
+		 		 * @returns
+		 		 */
+		 		EntrySvc.getReferrers = function getReferrers(entryId) {
+		 			// liveReportInputFilter = KalturaLiveReportsInputFilter
+		 			// liveReportInputFilter.hoursBefore = 36;
+		 			// liveReportInputFilter.entryIds = entryId;
+		 			// liveReportInputFilter.orderBy = ???;
+		 			// KalturaFilterPager.pageSize = 10;
+		 			// KalturaFilterPager.pageIndex = 1;
+		 			// LiveReports.getReport(LiveReportType.ENTRY_SYNDICATION_TOTAL, liveReportInputFilter, KalturaFilterPager) 
+		 			return EntryDummySvc.getReferrers(entryId);
 		 		};
 		 		
 		 		

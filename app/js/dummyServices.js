@@ -116,21 +116,30 @@ analyticsServices.factory('EntryDummySvc',
 		 		};
 		 		
 		 		
-		 		EntryDummySvc.getReferals = function getReferals(entryId) {
-		 			var ar = [
-		 			          {'domain': 'www.domain1.com', 'visits': '36', 'percents' : '5.57'},
-		 			          {'domain': 'www.domain2.com', 'visits': '12', 'percents' : '5.7'},
-		 			          {'domain': 'www.domain3.com', 'visits': '45', 'percents' : '3.47'},
-		 			          {'domain': 'www.domain4.com', 'visits': '76', 'percents' : '5.3'},
-		 			          {'domain': 'www.domain5.com', 'visits': '12', 'percents' : '6.26'},
-		 			          {'domain': 'www.domain6.com', 'visits': '65', 'percents' : '7.76'},
-		 			          {'domain': 'www.domain7.com', 'visits': '87', 'percents' : '8.12'},
-		 			          {'domain': 'www.domain8.com', 'visits': '23', 'percents' : '1.12'},
-		 			          {'domain': 'www.domain9.com', 'visits': '76', 'percents' : '9.45'},
-		 			          {'domain': 'www.domain10.com', 'visits': '34', 'percents' : '0.57'},
-		 				
-		 						];
-		 			return ar;
+		 		EntryDummySvc.getReferrers = function getReferrers(entryId) {
+		 			var dfd = $q.defer();
+		 			
+		 			var ar = new Array();
+		 			var stats;
+		 			for (var i = 0; i<10; i++) {
+		 				stats = {
+	 						"objectType" : "KalturaEntryReferrerLiveStats",
+	 						"plays" : Math.floor(Math.random() * 500),
+	 						"audience" : "",
+	 						"secondsViewed" : Math.floor(Math.random() * 3600),
+	 						"bufferTime" : Math.floor(Math.random() * 60),
+	 						"avgBitrate" : Math.floor(Math.random() * 15),
+	 						"referrer" : "www.domain" + i + ".com"
+	 					};
+		 				ar.push(stats);
+		 			}
+		 			
+		 			dfd.resolve({
+		 				"objectType" : "KalturaLiveStatsListResponse",
+		 				"objects" : ar,
+		 				"totalCount" : "1"
+		 			});
+		 			return dfd.promise;
 		 		};
 
 		 		
