@@ -149,9 +149,20 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 
 		/**
 		 * get data for the aggregates line
+		 * @param isLive is the entry currently broadcasting
 		 */
-		var getAggregates = function getAggregates() {
-			$scope.aggregates = EntrySvc.getAggregates($scope.entryId);
+		var getAggregates = function getAggregates(isLive) {
+			EntrySvc.getAggregates($scope.entryId, isLive).then (function(data) {
+				var o = data.objects[0];
+				var results = [
+				           	{"title": "audience", "value": isLive ? o.audience : o.plays},
+				        	{"title": "seconds_viewed", "value": o.secondsViewed},
+				        	{"title": "buffertime", "value": o.bufferTime},
+				        	{"title": "bitrate", "value": o.avgBitrate}
+				        ]; 
+				
+				$scope.aggregates = results;
+			});
 		};
 		
 		
@@ -173,8 +184,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 				var d = new Date();
 				d.setTime(entry.createdAt);
 				$scope.reportStartTime = d;
-				
-				return entry;
+				getAggregates(entry.isLive);
 			});
 		};
 		
@@ -202,11 +212,14 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 			$scope.additionalgraphdata = EntrySvc.updateGraph($scope.entryId);
 		}
 		
-		// report data:
-		getAggregates($scope.entryId);
-		getEntry($scope.entryId);
-		getReferals($scope.entryId);
-		getGraph36Hrs($scope.entryId);
-		//$interval(function() {getGraph30Secs($scope.entryId)}, 10000);
+		var screenSetup = function screenSetup() {
+			// report data:
+			getEntry();
+			
+			getReferals($scope.entryId);
+			getGraph36Hrs($scope.entryId);
+			//$interval(function() {getGraph30Secs($scope.entryId)}, 10000);
+		}
 		
+		screenSetup();
 	}]);

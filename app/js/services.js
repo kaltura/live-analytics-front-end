@@ -260,21 +260,64 @@ analyticsServices.factory('DashboardSvc',
 
 
 analyticsServices.factory('EntrySvc',
-		['KApi', '$resource', 
-		 	function EntrySvcFactory(KApi, $resource) {
+		['KApi', '$resource', '$q', 'EntryDummySvc',
+		 	function EntrySvcFactory(KApi, $resource, $q, EntryDummySvc) {
 		 		var EntrySvc = {};
 		 		
-		 		EntrySvc.getAggregates = function getAggregates(entryId) {
-		 			var ar = [{'title': 'audience',
-		 						'value': 36},
-		 					{'title': 'minutes_viewed',
-			 				'value': 512},
-			 				{'title': 'buffertime',
-				 			'value': 2},
-				 			{'title': 'bitrate',
-					 		'value': 10}
-				 	];
-		 			return ar;
+		 		/**
+		 		 * get the entry, add isLive info
+		 		 * @param entryId
+		 		 */
+		 		EntrySvc.getEntry = function getEntry(entryId) {
+		 			var dfd = $q.defer();
+		 			var postData = {
+		 					'service': 'multirequest',
+		 					'1:service': 'liveStream',
+				            '1:entryId' : entryId,
+				            '1:action': 'get',
+				            '2:service': 'liveStream',
+				            '2:action': 'islive',
+				            '2:id': '{1:result:id}',
+				            '2:protocol': 'hds'
+				        };
+					
+		 			KApi.doRequest(postData).then(function (mr) {
+		 				mr[0].isLive = mr[1];
+		 				dfd.resolve(mr[0]);
+		 			});
+		 			
+					return dfd.promise;
+		 		};
+		 		
+		 		
+		 		/**
+		 		 * get aggregated stats data for this entry
+		 		 * @param entryId
+		 		 * @param isLive	is this entry currently broadcasting
+		 		 * @returns KalturaEntryLiveStats 
+		 		 */
+		 		EntrySvc.getAggregates = function getAggregates(entryId, isLive) {
+		 			// liveReportInputFilter = KalturaLiveReportsInputFilter
+		 			// liveReportInputFilter.hoursBefore = 36;
+		 			// liveReportInputFilter.isLive = isLive;
+		 			// liveReportInputFilter.entryIds = entryId;
+		 			// KalturaFilterPager = null;
+		 			// LiveReports.getReport(LiveReportType.ENTRY_TOTAL, liveReportInputFilter, KalturaFilterPager) 
+		 			return EntryDummySvc.getAggregates(entryId, isLive);
+		 			
+		 			
+		 			
+		 			
+//		 			var ar = [{'title': 'audience',
+//		 						'value': 36},
+//		 					{'title': 'minutes_viewed',
+//			 				'value': 512},
+//			 				{'title': 'buffertime',
+//				 			'value': 2},
+//				 			{'title': 'bitrate',
+//					 		'value': 10}
+//				 	];
+//		 			return ar;
 		 		};
 		 		
 		 		EntrySvc.getReferals = function getReferals(entryId) {
@@ -294,15 +337,7 @@ analyticsServices.factory('EntrySvc',
 		 			return ar;
 		 		};
 		 		
-		 		EntrySvc.getEntry = function getEntry(entryId) {
-		 			var postData = {
-				            'entryId' : entryId,
-				            'service': 'livestream',
-				            'action': 'get'
-				        };
-					
-					return KApi.doRequest(postData);
-		 		};
+		 		
 		 		
 		 		
 		 		EntrySvc.getGraph = function getGraph(entryId) {
