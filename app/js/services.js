@@ -328,9 +328,11 @@ analyticsServices.factory('EntrySvc',
 		 		/**
 		 		 * get graph data for base 36 hours
 		 		 * @param entryId
+		 		 * @param fromDate (timestamp)
+		 		 * @param toDate (timestamp)
 		 		 * @returns
 		 		 */
-		 		EntrySvc.getGraph = function getGraph(entryId) {
+		 		EntrySvc.getGraph = function getGraph(entryId, fromDate, toDate) {
 		 			// liveReportInputFilter = KalturaLiveReportsInputFilter
 		 			// liveReportInputFilter.fromDate = ??;
 		 			// liveReportInputFilter.toDate = ???;
@@ -338,24 +340,9 @@ analyticsServices.factory('EntrySvc',
 		 			// KalturaFilterPager.pageSize = 12960;	// 6 per minute * 60 minutes per hour * 36 hours  
 		 			// KalturaFilterPager.pageIndex = 1;
 		 			// LiveReports.getReport(LiveReportType.ENTRY_TIME_LINE, liveReportInputFilter, KalturaFilterPager) 
-		 			return EntryDummySvc.getGraph(entryId);
+		 			return EntryDummySvc.getGraph(entryId, fromDate, toDate);
 		 		};
 		 		
-		 		
-		 		EntrySvc.updateGraph = function updateGraph(entryId) {
-		 			var d = new Date();
-		 			var s = String(d.getTime());
-		 			s = s.substr(0, s.length - 4);
-		 			s += "0";
-		 			var s1 = parseInt(s) + 10;
-		 			var s2 = parseInt(s1) + 10;
-		 			var ar = [
-		 			          {"x" : s, "y" : Math.floor(Math.random()*100)},
-		 			          {"x" : s1, "y" : Math.floor(Math.random()*100)},
-		 			          {"x" : s2, "y" : Math.floor(Math.random()*100)},
-		 			          ];
-		 			return ar;
-		 		};
 		 		
 		 		return EntrySvc;
 		 	} 

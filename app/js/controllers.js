@@ -198,16 +198,21 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 			return EntrySvc.getEntry($scope.entryId).then(function(entry){
 				$scope.entry = entry;
 				if (entry.isLive) {
-					// live session - show live entry
+					// live session - show live entry in player
 					$scope.playerEntryId = entry.id;
+					// set 30 secs update interval
+					$interval(function() {screenUpdate()}, 30000);
 				}
 				else if (entry.recordedEntryId && entry.recordedEntryId != '') {
-					// session ended, got recording - show recorded entry
+					// session ended, got recording - show recorded entry in player
 					$scope.playerEntryId = entry.recordedEntryId;
+					//TODO in graph, only show recorded duration (how ??)
 				}
 				else {
-					// show "no recording"
+					// show "no recording" in player
 					$scope.playerEntryId = -1;
+					// set 30 secs update interval
+					$interval(function() {screenUpdate()}, 30000);
 				}
 				// set report dates:
 				var d = new Date();
@@ -222,7 +227,10 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 		 * get graph data for the last 36 hrs 
 		 */
 		var getGraph36Hrs = function getGraph36Hrs() {
-			EntrySvc.getGraph($scope.entryId).then(function(data) {
+			var d = new Date();
+			var toDate = d.getTime();
+			var fromDate = toDate - 129600000; // 60000 ms per minute * 60 minutes per hour * 36 hrs 
+			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
 				var objects = data.objects;
 				objects.forEach(function (stat) {
 					// re-shape data so rickshaw can understand it
@@ -238,19 +246,28 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 		 * get graph data for the last 30 secs 
 		 */
 		var getGraph30Secs = function getGraph30Secs() {
-//			var result = EntrySvc.updateGraph($scope.entryId).query();
-//			result.$promise.then(function(data) {
-//				$scope.additionalGraphData = data.objects;
-//			});
-			console.log ('tick');
-			$scope.additionalgraphdata = EntrySvc.updateGraph($scope.entryId);
+			var d = new Date();
+			var toDate = d.getTime();
+			var fromDate = toDate - 40000;
+			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
+				var objects = data.objects;
+				objects.forEach(function (stat) {
+					// re-shape data so rickshaw can understand it
+					stat.y = stat.audience;
+					stat.x = stat.timestamp;
+				});
+				$scope.additionalgraphdata = objects;
+			});
 		}
 		
 		var screenSetup = function screenSetup() {
 			// report data:
 			getEntry();
-			getGraph36Hrs($scope.entryId);
-			//$interval(function() {getGraph30Secs($scope.entryId)}, 10000);
+			getGraph36Hrs();
+		}
+		
+		var screenUpdate = function screenUpdate() {
+			getGraph30Secs();
 		}
 		
 		screenSetup();

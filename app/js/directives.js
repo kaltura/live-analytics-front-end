@@ -79,10 +79,8 @@ analyticsDirectives.directive('rgraph', function() {
 			 * set graph data as attribute
 			 */
 			scope.$watch(attrs.additionalgraphdata, function(value) {
-				console.log('changed' );
 				if (graph != null && Array.isArray(value) && value.length > 0) {
 					updateGraphContent(value);
-					
 				}
 			});
 			
