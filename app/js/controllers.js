@@ -222,9 +222,14 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 		 * get graph data for the last 36 hrs 
 		 */
 		var getGraph36Hrs = function getGraph36Hrs() {
-			var result = EntrySvc.getGraph($scope.entryId).query();
-			result.$promise.then(function(data) {
-				$scope.graphdata = data.objects;
+			EntrySvc.getGraph($scope.entryId).then(function(data) {
+				var objects = data.objects;
+				objects.forEach(function (stat) {
+					// re-shape data so rickshaw can understand it
+					stat.y = stat.audience;
+					stat.x = stat.timestamp;
+				});
+				$scope.graphdata = objects;
 			});
 		}
 		
@@ -244,7 +249,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 		var screenSetup = function screenSetup() {
 			// report data:
 			getEntry();
-//			getGraph36Hrs($scope.entryId);
+			getGraph36Hrs($scope.entryId);
 			//$interval(function() {getGraph30Secs($scope.entryId)}, 10000);
 		}
 		

@@ -145,9 +145,57 @@ analyticsServices.factory('EntryDummySvc',
 		 		
 		 		
 		 		EntryDummySvc.getGraph = function getGraph(entryId) {
-		 			return $resource('data/graph.json', {}, {
-	 					query: {method:'GET'}
-	 				});
+		 			var dfd = $q.defer();
+		 			
+		 			var d = new Date();
+		 			var t = d.getTime();
+		 			t -= 12960000000;
+		 			var ar = new Array();
+		 			var stats;
+		 			var au = Math.floor(Math.random() * 500);
+		 			for (var i = 0; i<12960; i++) {
+		 				au += Math.floor(Math.random() * 10) - 5;
+		 				au = Math.max(au, 0);
+		 				stats = {
+	 						"objectType" : "KalturaEntryLiveStats",
+	 						"plays" : "",
+	 						"audience" : au,
+	 						"secondsViewed" : "",
+	 						"bufferTime" : "",
+	 						"avgBitrate" : "",
+	 						"timestamp" : t / 1000
+	 							
+	 					};
+		 				ar.push(stats);
+		 				t += 10000;
+		 			}
+		 			
+		 			dfd.resolve({
+		 				"objectType" : "KalturaLiveStatsListResponse",
+		 				"objects" : ar,
+		 				"totalCount" : ar.length
+		 			});
+		 			return dfd.promise;
+		 			
+		 			
+//		 			return $resource('data/graph.json', {}, {
+//	 					query: {method:'GET'}
+//	 				});
+		 		};
+		 		
+		 		EntryDummySvc.updateGraph = function updateGraph(entryId) {
+		 			var d = new Date();
+		 			var s = String(d.getTime());
+		 			s = s.substr(0, s.length - 4);
+		 			s += "0";
+		 			var s1 = parseInt(s) + 10;
+		 			var s2 = parseInt(s1) + 10;
+		 			var ar = [
+		 			          {"x" : s, "y" : Math.floor(Math.random()*100)},
+		 			          {"x" : s1, "y" : Math.floor(Math.random()*100)},
+		 			          {"x" : s2, "y" : Math.floor(Math.random()*100)},
+		 			          ];
+		 			return ar;
 		 		};
 		 		
 		 		

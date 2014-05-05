@@ -325,12 +325,22 @@ analyticsServices.factory('EntrySvc',
 		 		
 		 		
 		 		
-		 		
+		 		/**
+		 		 * get graph data for base 36 hours
+		 		 * @param entryId
+		 		 * @returns
+		 		 */
 		 		EntrySvc.getGraph = function getGraph(entryId) {
-		 			return $resource('data/graph.json', {}, {
-	 					query: {method:'GET'}
-	 				});
+		 			// liveReportInputFilter = KalturaLiveReportsInputFilter
+		 			// liveReportInputFilter.fromDate = ??;
+		 			// liveReportInputFilter.toDate = ???;
+		 			// liveReportInputFilter.entryIds = entryId;
+		 			// KalturaFilterPager.pageSize = 12960;	// 6 per minute * 60 minutes per hour * 36 hours  
+		 			// KalturaFilterPager.pageIndex = 1;
+		 			// LiveReports.getReport(LiveReportType.ENTRY_TIME_LINE, liveReportInputFilter, KalturaFilterPager) 
+		 			return EntryDummySvc.getGraph(entryId);
 		 		};
+		 		
 		 		
 		 		EntrySvc.updateGraph = function updateGraph(entryId) {
 		 			var d = new Date();
