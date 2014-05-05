@@ -303,3 +303,93 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs',
 	  		}
   		});
 	}]);
+
+analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  
+    function($scope, $attrs) {
+		var self = this;
+		this.mapElement = null;
+		
+		this.init = function init (element) {
+			self.mapElement = element;
+			
+			// create map
+			var map = new OpenLayers.Map('map');
+	
+			// create OSM layer
+			var osm = new OpenLayers.Layer.OSM();
+			
+			
+			
+			// style
+			var style = new OpenLayers.Style({
+				pointRadius: "${radius}",
+				fillColor: "#ffcc66",
+				fillOpacity: 0.8,
+				strokeColor: "#cc6633",
+				strokeWidth: 2,
+				strokeOpacity: 0.8
+			},
+			{
+				context: {
+					radius: function(feature) {
+						return feature.attributes.type;
+					}
+				}
+			}
+			);
+			
+			
+			// create a styleMap with a custom default symbolizer
+			var styleMap = new OpenLayers.StyleMap({
+				"default": style,
+				"select": {
+					fillColor: "#8aeeef",
+					strokeColor: "#32a8a9"
+				}
+			});
+			// http://gis.stackexchange.com/questions/24987/different-level-of-detaillayers-on-different-zoom-level-at-openlayers-map
+			
+			// create 20 random features with a random type attribute.
+			var features = new Array();
+			var point;
+			for ( var i = 0; i < 200; i++) {
+				point = new OpenLayers.Geometry.Point(Math.random() * 360 - 180, Math.random() * 180 - 90).transform('EPSG:4326', 'EPSG:3857');
+				features[i] = new OpenLayers.Feature.Vector(
+						point, 
+						{
+							"type" : parseInt(Math.random() * 10)+2
+						}
+						);
+			}
+			
+			var layer = new OpenLayers.Layer.Vector('Points', {
+				"projection": "EPSG:3857",
+				//"strategies": [new OpenLayers.Strategy.Cluster()], 
+				"styleMap" : styleMap
+			});
+			layer.addFeatures(features);
+			map.addLayers([osm, layer]);
+			map.zoomToMaxExtent();
+			layer.refresh();
+			
+		};
+		
+		
+//		$scope.$watch('playerEntryId', function( value ) {
+//			if (value) {
+//				if (value != -1) {
+//					kWidget.embed({
+//						"targetId": "kplayer", 
+//						"wid": "_" + $scope.pid, 
+//						"uiconf_id": $scope.uiconfId, 
+//						"entry_id": value, 
+//						"flashvars": { 
+//							"streamerType": "auto" 
+//						} 
+//					});
+//				} else {
+//					self.playerElement.html('<h3>Live Session Was Not Recorded</h3>');
+//				}
+//			}
+//		});
+}]);

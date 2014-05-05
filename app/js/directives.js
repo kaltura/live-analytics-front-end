@@ -132,76 +132,11 @@ analyticsDirectives.directive('rgraph', function() {
 analyticsDirectives.directive('olmap', function() {
 	return {
 		restrict : 'E',
+		controller : 'OLMapController',
 		template : '<div id="map"></div>',
 		replace : true,
-		link : function(scope, elem, attrs) {
-			
-			// create map
-			var map = new OpenLayers.Map('map');
-
-			// create OSM layer
-			var osm = new OpenLayers.Layer.OSM();
-			
-			
-			
-			// style
-			var style = new OpenLayers.Style({
-				pointRadius: "${radius}",
-				fillColor: "#ffcc66",
-				fillOpacity: 0.8,
-				strokeColor: "#cc6633",
-				strokeWidth: 2,
-				strokeOpacity: 0.8
-			},
-			{
-				context: {
-					radius: function(feature) {
-						return feature.attributes.type;
-					}
-				}
-			}
-			);
-			
-			
-			// create a styleMap with a custom default symbolizer
-			var styleMap = new OpenLayers.StyleMap({
-				"default": style,
-				"select": {
-					fillColor: "#8aeeef",
-					strokeColor: "#32a8a9"
-				}
-			});
-			
-			// create 20 random features with a random type attribute.
-			var features = new Array(201);
-			var point;
-			for ( var i = 0; i < 200; i++) {
-				point = new OpenLayers.Geometry.Point(Math.random() * 360 - 180, Math.random() * 180 - 90).transform('EPSG:4326', 'EPSG:3857');
-				features[i] = new OpenLayers.Feature.Vector(
-						point, 
-						{
-							"type" : parseInt(Math.random() * 10)+2
-						}
-						);
-			}
-			// jerusalem - test case
-			point = new OpenLayers.Geometry.Point(35.2330372, 31.7818734).transform('EPSG:4326', 'EPSG:3857');
-			features[200] = new OpenLayers.Feature.Vector(
-					point, 
-					{
-						"type" : parseInt(Math.random() * 10)
-					}
-					);
-			
-			var layer = new OpenLayers.Layer.Vector('Points', {
-				"projection": "EPSG:3857",
-				"strategies": [new OpenLayers.Strategy.Cluster()], 
-				"styleMap" : styleMap
-			});
-			layer.addFeatures(features);
-			map.addLayers([osm, layer]);
-			map.zoomToMaxExtent();
-			layer.refresh();
+		link : function(scope, element, attrs, OLMapController) {
+			OLMapController.init(element);
 		}
 	};
 });
