@@ -344,6 +344,25 @@ analyticsServices.factory('EntrySvc',
 		 		};
 		 		
 		 		
+		 		
+		 		/**
+		 		 * get map data for required time
+		 		 * @param entryId
+		 		 * @param time
+		 		 * @returns
+		 		 */
+		 		EntrySvc.getMap = function getMap(entryId, time) {
+		 			// liveReportInputFilter = KalturaLiveReportsInputFilter
+		 			// liveReportInputFilter.fromDate = time;
+		 			// liveReportInputFilter.toDate = time; 	// use same value to get a single point
+		 			// liveReportInputFilter.entryIds = entryId;
+		 			// KalturaFilterPager.pageSize = ??;  
+		 			// KalturaFilterPager.pageIndex = 1;
+		 			// LiveReports.getReport(LiveReportType.ENTRY_GEO_TIME_LINE, liveReportInputFilter, KalturaFilterPager) 
+		 			return EntryDummySvc.getMap(entryId, time);
+		 		};
+		 		
+		 		
 		 		return EntrySvc;
 		 	} 
 	 	]);

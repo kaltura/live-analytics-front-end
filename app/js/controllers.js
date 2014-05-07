@@ -220,6 +220,8 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 				d.setTime(entry.createdAt);
 				$scope.reportStartTime = d;
 				getAggregates(entry.isLive);
+				
+				getMapData(d.getTime());
 			});
 		};
 		
@@ -260,6 +262,25 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 				$scope.additionalgraphdata = objects;
 			});
 		}
+		
+		
+		/**
+		 * get data to display on map
+		 * @param time unix timestamp. if null, current time is used.
+		 */
+		var getMapData = function getMapData(time) {
+			EntrySvc.getMap($scope.entryId, time).then(function(data) {
+//				var objects = data.objects;
+//				objects.forEach(function (stat) {
+//					// re-shape data so rickshaw can understand it
+//					stat.y = stat.audience;
+//					stat.x = stat.timestamp;
+//				});
+				$scope.mapData = data.objects;
+			});
+		}
+		
+		
 		
 		var screenSetup = function screenSetup() {
 			// report data:
@@ -341,7 +362,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',
 			{
 				context: {
 					radius: function(feature) {
-						return feature.attributes.type;
+						return feature.attributes.type / 100;
 					}
 				}
 			}
@@ -360,16 +381,15 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',
 		}
 		
 		$scope.$watch('mapData', function( value ) {
-			if (value) {
-				// create 20 random features with a random type attribute.
+			if (value) { // value is array of KalturaGeoTimeLiveStats
 				var features = new Array();
 				var point;
-				for ( var i = 0; i < 200; i++) {
-					point = new OpenLayers.Geometry.Point(Math.random() * 360 - 180, Math.random() * 180 - 90).transform('EPSG:4326', 'EPSG:3857');
+				for ( var i = 0; i < value.length; i++) {
+					point = new OpenLayers.Geometry.Point(value[i].country.longitude, value[i].country.latitude).transform('EPSG:4326', 'EPSG:3857');
 					features[i] = new OpenLayers.Feature.Vector(
 							point, 
 							{
-								"type" : parseInt(Math.random() * 10)+2
+								"type" : value[i].audience
 							}
 							);
 				}
