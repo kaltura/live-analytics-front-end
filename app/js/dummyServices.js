@@ -276,11 +276,13 @@ analyticsServices.factory('EntryDummySvc',
 		 						"timestamp" : time,
 		 						"country" : {
 		 							"objectType" : "KalturaGeoCoordinates",
+		 							"name" : ct[0],
 		 							"latitude" : ct[5], //Math.random() * 180 - 90, 
 		 							"longitude" : ct[6] //Math.random() * 360 - 180
 		 						},
 		 						"city" : {
 		 							"objectType" : "KalturaGeoCoordinates",
+		 							"name" : ctry[1],
 		 							"latitude" : ctry[5], 
 		 							"longitude" : ctry[6] 
 		 						}

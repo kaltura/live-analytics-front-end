@@ -331,6 +331,8 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',
 		var self = this;
 		this.mapElement = null;
 		this.map = null;
+		this.citiesLayer = null;
+		this.countriesLayer = null;
 		
 		this.init = function init (element) {
 			self.mapElement = element;
@@ -341,10 +343,25 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',
 			// create OSM layer
 			var osm = new OpenLayers.Layer.OSM();
 			
-			// http://gis.stackexchange.com/questions/24987/different-level-of-detaillayers-on-different-zoom-level-at-openlayers-map
 			
 			self.map.addLayer(osm);
 			self.map.zoomToMaxExtent();
+			
+			self.map.events.register('zoomend', this, function (event) {
+		        var zLevel = self.map.getZoom();     
+		        if( zLevel < 5)
+		        {
+		        	// show countries
+		            self.citiesLayer.setVisibility(false);
+		            self.countriesLayer.setVisibility(true);
+		        }
+		        else {
+		        	// show cities
+		        	self.citiesLayer.setVisibility(true);
+		            self.countriesLayer.setVisibility(false);
+		        }
+
+		    });
 			
 		};
 		
@@ -382,9 +399,19 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',
 		
 		$scope.$watch('mapData', function( value ) {
 			if (value) { // value is array of KalturaGeoTimeLiveStats
+				var countriesData = {};
 				var features = new Array();
 				var point;
 				for ( var i = 0; i < value.length; i++) {
+					// accumulate data for country-level layer
+					if (!countriesData[value[i].country.name]) { //TODO property name???
+						// init - keep whole value for lat/long
+						countriesData[value[i].country.name] = value[i];  
+					}
+					else {
+						// sum audience
+						countriesData[value[i].country.name]['audience'] += value[i].audience;
+					}
 					point = new OpenLayers.Geometry.Point(value[i].country.longitude, value[i].country.latitude).transform('EPSG:4326', 'EPSG:3857');
 					features[i] = new OpenLayers.Feature.Vector(
 							point, 
@@ -394,13 +421,38 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',
 							);
 				}
 				
-				var layer = new OpenLayers.Layer.Vector('Points', {
+				// create cities layer
+				var layer = self.citiesLayer = new OpenLayers.Layer.Vector('Cities', {
 					"projection": "EPSG:3857",
-					//"strategies": [new OpenLayers.Strategy.Cluster()], 
+					"visibility" : false,
 					"styleMap" : self.createStyleMap()
 				});
 				layer.addFeatures(features);
 				self.map.addLayer(layer);
+				
+				// create countries layer
+				features = new Array();
+				for (var key in countriesData) {
+					point = new OpenLayers.Geometry.Point(countriesData[key].country.longitude, countriesData[key].country.latitude).transform('EPSG:4326', 'EPSG:3857');
+					features.push(new OpenLayers.Feature.Vector(
+							point, 
+							{
+								"type" : countriesData[key].audience / 10
+							}
+							));
+				}
+				
+				console.log(countriesData);
+				// create countries layer
+				layer = self.countriesLayer = new OpenLayers.Layer.Vector('Countries', {
+					"projection": "EPSG:3857",
+					"styleMap" : self.createStyleMap()
+				});
+				layer.addFeatures(features);
+				self.map.addLayer(layer);
+				
+				
+				console.log('numZoomLevels', self.map.numZoomLevels);
 				layer.refresh();
 			}
 		});
