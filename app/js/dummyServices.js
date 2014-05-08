@@ -179,7 +179,7 @@ analyticsServices.factory('EntryDummySvc',
 		 		                        ["zw","zimbabwe","Zimbabwe","07","","-20.2666667","30.9166667"],
 		 		                       ["zw","zimre park","Zimre Park","04","","-17.8661111","31.2136111"],
 		 		                       ["ye","subayrah","Subayrah","04","","15.2491667","48.3438889"],
-		 		                       ["ye","subayrah","Subayrah","13","","13.84","44.5875"],
+		 		                       ["ye","subayrahlll","Subayrahlll","13","","13.84","44.5875"],
 		 		                       ["ye","subleiha","Subleiha","17","","13.6833333","43.9666667"],
 		 		                       ["us","leeds","Leeds","ME","","44.3033333","-70.1200000"],
 		 		                       ["us","leeds junction","Leeds Junction","ME","","44.2063889","-70.0794444"],
@@ -243,7 +243,7 @@ analyticsServices.factory('EntryDummySvc',
 		 		
 		 		EntryDummySvc._getCityCoord = function _getCityCoord() {
 		 			var n = Math.floor(Math.random() * EntryDummySvc.ctLatlong.length);
-		 			return EntryDummySvc.ctLatlong[n];
+		 			return EntryDummySvc.ctLatlong.splice(n, 1)[0];
 		 		};
 		 		
 		 		
@@ -276,15 +276,15 @@ analyticsServices.factory('EntryDummySvc',
 		 						"timestamp" : time,
 		 						"country" : {
 		 							"objectType" : "KalturaGeoCoordinates",
-		 							"name" : ct[0],
-		 							"latitude" : ct[5], //Math.random() * 180 - 90, 
-		 							"longitude" : ct[6] //Math.random() * 360 - 180
+		 							"name" : ctry[0],
+		 							"latitude" : ctry[5], //Math.random() * 180 - 90, 
+		 							"longitude" : ctry[6] //Math.random() * 360 - 180
 		 						},
 		 						"city" : {
 		 							"objectType" : "KalturaGeoCoordinates",
-		 							"name" : ctry[1],
-		 							"latitude" : ctry[5], 
-		 							"longitude" : ctry[6] 
+		 							"name" : ct[2],
+		 							"latitude" : ct[5], 
+		 							"longitude" : ct[6] 
 		 						}
 		 				};
 		 				ar.push(stats);

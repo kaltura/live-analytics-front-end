@@ -374,12 +374,16 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',
 				fillOpacity: 0.8,
 				strokeColor: "#cc6633",
 				strokeWidth: 2,
-				strokeOpacity: 0.8
+				strokeOpacity: 0.8,
+				title : "${tooltip}"
 			},
 			{
 				context: {
 					radius: function(feature) {
-						return feature.attributes.type / 100;
+						return feature.attributes.data / 100;
+					},
+					tooltip: function(feature) {
+						return feature.attributes.text+ " " + feature.attributes.data;
 					}
 				}
 			}
@@ -404,7 +408,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',
 				var point;
 				for ( var i = 0; i < value.length; i++) {
 					// accumulate data for country-level layer
-					if (!countriesData[value[i].country.name]) { //TODO property name???
+					if (!countriesData[value[i].country.name]) { 
 						// init - keep whole value for lat/long
 						countriesData[value[i].country.name] = value[i];  
 					}
@@ -412,11 +416,12 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',
 						// sum audience
 						countriesData[value[i].country.name]['audience'] += value[i].audience;
 					}
-					point = new OpenLayers.Geometry.Point(value[i].country.longitude, value[i].country.latitude).transform('EPSG:4326', 'EPSG:3857');
+					point = new OpenLayers.Geometry.Point(value[i].city.longitude, value[i].city.latitude).transform('EPSG:4326', 'EPSG:3857');
 					features[i] = new OpenLayers.Feature.Vector(
 							point, 
 							{
-								"type" : value[i].audience
+								"data" : value[i].audience,
+								"text" : value[i].city.name
 							}
 							);
 				}
@@ -437,12 +442,12 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',
 					features.push(new OpenLayers.Feature.Vector(
 							point, 
 							{
-								"type" : countriesData[key].audience / 10
+								"data" : countriesData[key].audience,
+								"text" : countriesData[key].country.name
 							}
 							));
 				}
 				
-				console.log(countriesData);
 				// create countries layer
 				layer = self.countriesLayer = new OpenLayers.Layer.Vector('Countries', {
 					"projection": "EPSG:3857",
