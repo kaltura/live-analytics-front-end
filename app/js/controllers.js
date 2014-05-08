@@ -217,11 +217,11 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 				}
 				// set report dates:
 				var d = new Date();
+				getMapData(d.getTime());
 				d.setTime(entry.createdAt);
 				$scope.reportStartTime = d;
 				getAggregates(entry.isLive);
 				
-				getMapData(d.getTime());
 			});
 		};
 		
@@ -247,10 +247,10 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 		
 		/**
 		 * get graph data for the last 30 secs 
+		 * @param endTime (timestamp) get graph data for 30 secs up to this time
 		 */
-		var getGraph30Secs = function getGraph30Secs() {
-			var d = new Date();
-			var toDate = d.getTime();
+		var getGraph30Secs = function getGraph30Secs(endTime) {
+			var toDate = endTime;
 			var fromDate = toDate - 40000;
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
 				var objects = data.objects;
@@ -270,12 +270,6 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 		 */
 		var getMapData = function getMapData(time) {
 			EntrySvc.getMap($scope.entryId, time).then(function(data) {
-//				var objects = data.objects;
-//				objects.forEach(function (stat) {
-//					// re-shape data so rickshaw can understand it
-//					stat.y = stat.audience;
-//					stat.x = stat.timestamp;
-//				});
 				$scope.mapData = data.objects;
 			});
 		}
@@ -289,7 +283,10 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 		}
 		
 		var screenUpdate = function screenUpdate() {
-			getGraph30Secs();
+			var d = new Date();
+			var t = d.getTime();
+			getGraph30Secs(t);
+			getMapData(t);
 		}
 		
 		screenSetup();
@@ -403,6 +400,15 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',
 		
 		$scope.$watch('mapData', function( value ) {
 			if (value) { // value is array of KalturaGeoTimeLiveStats
+				// remove existing layers
+				if (self.citiesLayer) {
+					self.map.removeLayer(self.citiesLayer);
+				}
+				if (self.countriesLayer) {
+					self.map.removeLayer(self.countriesLayer);
+				}
+				
+				// process data to create new layers
 				var countriesData = {};
 				var features = new Array();
 				var point;
@@ -456,8 +462,6 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',
 				layer.addFeatures(features);
 				self.map.addLayer(layer);
 				
-				
-				console.log('numZoomLevels', self.map.numZoomLevels);
 				layer.refresh();
 			}
 		});

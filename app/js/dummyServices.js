@@ -175,6 +175,8 @@ analyticsServices.factory('EntryDummySvc',
 		 			return dfd.promise;
 		 		};
 		 		
+		 		EntryDummySvc.ctLatlongCpy = null;
+		 		
 		 		EntryDummySvc.ctLatlong = [["zw","zikamanas village","Zikamanas Village","00","","-18.2166667","27.95"],
 		 		                        ["zw","zimbabwe","Zimbabwe","07","","-20.2666667","30.9166667"],
 		 		                       ["zw","zimre park","Zimre Park","04","","-17.8661111","31.2136111"],
@@ -242,8 +244,8 @@ analyticsServices.factory('EntryDummySvc',
 					 		                       ["ad","certers","Certers","06","","42.4666667","1.5"]];
 		 		
 		 		EntryDummySvc._getCityCoord = function _getCityCoord() {
-		 			var n = Math.floor(Math.random() * EntryDummySvc.ctLatlong.length);
-		 			return EntryDummySvc.ctLatlong.splice(n, 1)[0];
+		 			var n = Math.floor(Math.random() * EntryDummySvc.ctLatlongCpy.length);
+		 			return EntryDummySvc.ctLatlongCpy.splice(n, 1)[0];
 		 		};
 		 		
 		 		
@@ -262,7 +264,7 @@ analyticsServices.factory('EntryDummySvc',
 		 			var t = 49; //Math.floor(Math.random() * 500); // number of dots
 		 			var ar = new Array();
 		 			var stats, ct, ctry;
-		 			
+		 			EntryDummySvc.ctLatlongCpy = EntryDummySvc.ctLatlong.concat();
 		 			while (t > 0) {
 		 				ct = EntryDummySvc._getCityCoord();
 		 				ctry = EntryDummySvc._getCountryCoord(ct);
