@@ -123,6 +123,14 @@ analyticsDirectives.directive('rgraph', function() {
 			});
 
 			yAxis.render();
+			
+			var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+			    graph: graph,
+			    formatter: function(series, x, y) {
+			    	return y + ' views'; 
+			    }
+			} );
+
 
 		}
 	};
