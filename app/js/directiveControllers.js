@@ -388,13 +388,11 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs',
 					
 					// add click handler if required
 					if (typeof this.onClick == 'function') {
-						console.log("registering click");
 						this.graph.element.addEventListener(
 								'click',
 								function(e) {
 									// use data-time to go to correct time in player
 									var time = this.element.getAttribute('data-time');
-									console.log("executing onClick ", time);
 									this.onClick(time);
 								}.bind(this),
 								false
@@ -436,7 +434,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs',
 		 * @param value
 		 */
 		this.updateGraphContent = function updateGraphContent(value) {
-			var ar = series[0].data;
+			var ar = self.series[0].data;
 			// find matching point in 'ar'
 			var lastX = ar[ar.length-1].x;
 			for (var i = value.length-1; i>0; i--) {
