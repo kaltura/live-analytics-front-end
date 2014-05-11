@@ -160,7 +160,7 @@ analyticsServices.factory('EntryDummySvc',
 	 						"secondsViewed" : "",
 	 						"bufferTime" : "",
 	 						"avgBitrate" : "",
-	 						"timestamp" : t /1000
+	 						"timestamp" : Math.floor(t /1000)
 	 							
 	 					};
 		 				ar.push(stats);
