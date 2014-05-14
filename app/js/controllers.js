@@ -139,14 +139,15 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		
     }]);
 
-analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interval', 'EntrySvc', 
-    function($scope, $routeParams, $interval, EntrySvc) {
-		$scope.entryId = $routeParams.entryid;
+analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routeParams', '$interval', 'EntrySvc', 
+    function($scope, $rootScope, $routeParams, $interval, EntrySvc) {
+		$scope.intervalPromise = null; 			// use this to hold update interval
+		$scope.entryId = $routeParams.entryid;	// current entry
 		$scope.pid = 346151;
 		$scope.uiconfId = 22767782;
-		$scope.playerEntryId = '';
-		$scope.graphdata = [];
-		$scope.additionalgraphdata = [];
+		$scope.playerEntryId = '';				// entry that should be shown in player (live / vod)
+		$scope.graphdata = [];					// 36 hours graph data
+		$scope.additionalgraphdata = [];		// graph data from latest update call
 		
 		
 
@@ -202,7 +203,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 					// live session - show live entry in player
 					$scope.playerEntryId = entry.id;
 					// set 30 secs update interval
-					$interval(function() {screenUpdate()}, 30000);
+					$scope.intervalPromise = $interval(function() {screenUpdate()}, 30000);
 				}
 				else if (entry.recordedEntryId && entry.recordedEntryId != '') {
 					// session ended, got recording - show recorded entry in player
@@ -213,11 +214,11 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 					// show "no recording" in player
 					$scope.playerEntryId = -1;
 					// set 30 secs update interval
-					$interval(function() {screenUpdate()}, 30000);
+					$scope.intervalPromise = $interval(function() {screenUpdate()}, 30000);
 				}
 				// set report dates:
 				var d = new Date();
-				getMapData(d.getTime());
+				$rootScope.$broadcast('updateScreen', d.getTime());
 				d.setTime(entry.createdAt);
 				$scope.reportStartTime = d;
 				getAggregates(entry.isLive);
@@ -260,17 +261,6 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$routeParams', '$interv
 					stat.x = stat.timestamp;
 				});
 				$scope.additionalgraphdata = objects;
-			});
-		}
-		
-		
-		/**
-		 * get data to display on map
-		 * @param time unix timestamp. if null, current time is used.
-		 */
-		var getMapData = function getMapData(time) {
-			EntrySvc.getMap($scope.entryId, time).then(function(data) {
-				$scope.mapData = data.objects;
 			});
 		}
 		

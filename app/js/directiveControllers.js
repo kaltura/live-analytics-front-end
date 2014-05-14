@@ -40,10 +40,11 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs',
 /**
  * controller for map on entry page
  */
-analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  
-    function($scope, $attrs) {
+analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntrySvc',
+    function($scope, $attrs, EntrySvc) {
 		var self = this;
 		this.mapElement = null;
+		this.slider = null;
 		this.map = null;
 		this.citiesLayer = null;
 		this.countriesLayer = null;
@@ -75,7 +76,12 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',
 		            self.countriesLayer.setVisibility(false);
 		        }
 		    });
+			
+			// create slider
+			this.slider = angular.element('#mapslider');
+			this.slider.slider({ max: 50 , min: 5});
 		};
+		
 		
 		
 		this.createStyleMap = function createStyleMap() {
@@ -113,73 +119,88 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',
 			return styleMap;
 		};
 		
-		$scope.$watch('mapData', function( value ) {
-			if (value) { // value is array of KalturaGeoTimeLiveStats
-				// remove existing layers
-				if (self.citiesLayer) {
-					self.map.removeLayer(self.citiesLayer);
-				}
-				if (self.countriesLayer) {
-					self.map.removeLayer(self.countriesLayer);
-				}
-				
-				// process data to create new layers
-				var countriesData = {};
-				var features = new Array();
-				var point;
-				for ( var i = 0; i < value.length; i++) {
-					// accumulate data for country-level layer
-					if (!countriesData[value[i].country.name]) { 
-						// init - keep whole value for lat/long
-						countriesData[value[i].country.name] = value[i];  
+		
+		/**
+		 * get data to display on map
+		 * @param time unix timestamp. if null, current time is used.
+		 */
+		this.getMapData = function getMapData(time) {
+			EntrySvc.getMap($scope.entryId, time).then(function(data) {
+				var value = data.objects;
+				if (value) { // value is array of KalturaGeoTimeLiveStats
+					// remove existing layers
+					if (self.citiesLayer) {
+						self.map.removeLayer(self.citiesLayer);
 					}
-					else {
-						// sum audience
-						countriesData[value[i].country.name]['audience'] += value[i].audience;
+					if (self.countriesLayer) {
+						self.map.removeLayer(self.countriesLayer);
 					}
-					point = new OpenLayers.Geometry.Point(value[i].city.longitude, value[i].city.latitude).transform('EPSG:4326', 'EPSG:3857');
-					features[i] = new OpenLayers.Feature.Vector(
-							point, 
-							{
-								"data" : value[i].audience,
-								"text" : value[i].city.name
-							}
-							);
+					
+					// process data to create new layers
+					var countriesData = {};
+					var features = new Array();
+					var point;
+					for ( var i = 0; i < value.length; i++) {
+						// accumulate data for country-level layer
+						if (!countriesData[value[i].country.name]) { 
+							// init - keep whole value for lat/long
+							countriesData[value[i].country.name] = value[i];  
+						}
+						else {
+							// sum audience
+							countriesData[value[i].country.name]['audience'] += value[i].audience;
+						}
+						point = new OpenLayers.Geometry.Point(value[i].city.longitude, value[i].city.latitude).transform('EPSG:4326', 'EPSG:3857');
+						features[i] = new OpenLayers.Feature.Vector(
+								point, 
+								{
+									"data" : value[i].audience,
+									"text" : value[i].city.name
+								}
+								);
+					}
+					
+					// create cities layer
+					var layer = self.citiesLayer = new OpenLayers.Layer.Vector('Cities', {
+						"projection": "EPSG:3857",
+						"visibility" : false,
+						"styleMap" : self.createStyleMap()
+					});
+					layer.addFeatures(features);
+					self.map.addLayer(layer);
+					
+					// create countries layer
+					features = new Array();
+					for (var key in countriesData) {
+						point = new OpenLayers.Geometry.Point(countriesData[key].country.longitude, countriesData[key].country.latitude).transform('EPSG:4326', 'EPSG:3857');
+						features.push(new OpenLayers.Feature.Vector(
+								point, 
+								{
+									"data" : countriesData[key].audience,
+									"text" : countriesData[key].country.name
+								}
+								));
+					}
+					
+					// create countries layer
+					layer = self.countriesLayer = new OpenLayers.Layer.Vector('Countries', {
+						"projection": "EPSG:3857",
+						"styleMap" : self.createStyleMap()
+					});
+					layer.addFeatures(features);
+					self.map.addLayer(layer);
+					
+					layer.refresh();
 				}
-				
-				// create cities layer
-				var layer = self.citiesLayer = new OpenLayers.Layer.Vector('Cities', {
-					"projection": "EPSG:3857",
-					"visibility" : false,
-					"styleMap" : self.createStyleMap()
-				});
-				layer.addFeatures(features);
-				self.map.addLayer(layer);
-				
-				// create countries layer
-				features = new Array();
-				for (var key in countriesData) {
-					point = new OpenLayers.Geometry.Point(countriesData[key].country.longitude, countriesData[key].country.latitude).transform('EPSG:4326', 'EPSG:3857');
-					features.push(new OpenLayers.Feature.Vector(
-							point, 
-							{
-								"data" : countriesData[key].audience,
-								"text" : countriesData[key].country.name
-							}
-							));
-				}
-				
-				// create countries layer
-				layer = self.countriesLayer = new OpenLayers.Layer.Vector('Countries', {
-					"projection": "EPSG:3857",
-					"styleMap" : self.createStyleMap()
-				});
-				layer.addFeatures(features);
-				self.map.addLayer(layer);
-				
-				layer.refresh();
-			}
-		});
+			});
+		};
+		
+		this.updateMap = function updateMap(event, time) {
+			self.getMapData(time);
+		};
+		
+		$scope.$on('updateScreen', self.updateMap);
+		
 }]);
 
 
