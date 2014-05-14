@@ -78,11 +78,25 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 		    });
 			
 			// create slider
-			this.slider = angular.element('#mapslider');
-			this.slider.slider({ max: 50 , min: 5});
+			var d = new Date();
+			var t = d.getTime();
+			self.slider = angular.element('#mapslider');
+			self.slider.slider({
+				max: t, 
+				min: t - 129600000, 
+				value: t, 
+				step: 10000,
+				change: self.sliderChangeHandler
+			});
 		};
 		
 		
+		/**
+		 * event handler for the slider drag
+		 */
+		this.sliderChangeHandler = function sliderChangeHandler(event, ui) {
+			self.getMapData(ui.value);
+		};
 		
 		this.createStyleMap = function createStyleMap() {
 			// style
@@ -126,81 +140,116 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 		 */
 		this.getMapData = function getMapData(time) {
 			EntrySvc.getMap($scope.entryId, time).then(function(data) {
-				var value = data.objects;
-				if (value) { // value is array of KalturaGeoTimeLiveStats
-					// remove existing layers
-					if (self.citiesLayer) {
-						self.map.removeLayer(self.citiesLayer);
-					}
-					if (self.countriesLayer) {
-						self.map.removeLayer(self.countriesLayer);
-					}
-					
-					// process data to create new layers
-					var countriesData = {};
-					var features = new Array();
-					var point;
-					for ( var i = 0; i < value.length; i++) {
-						// accumulate data for country-level layer
-						if (!countriesData[value[i].country.name]) { 
-							// init - keep whole value for lat/long
-							countriesData[value[i].country.name] = value[i];  
-						}
-						else {
-							// sum audience
-							countriesData[value[i].country.name]['audience'] += value[i].audience;
-						}
-						point = new OpenLayers.Geometry.Point(value[i].city.longitude, value[i].city.latitude).transform('EPSG:4326', 'EPSG:3857');
-						features[i] = new OpenLayers.Feature.Vector(
-								point, 
-								{
-									"data" : value[i].audience,
-									"text" : value[i].city.name
-								}
-								);
-					}
-					
-					// create cities layer
-					var layer = self.citiesLayer = new OpenLayers.Layer.Vector('Cities', {
-						"projection": "EPSG:3857",
-						"visibility" : self.map.zoom > 3,
-						"styleMap" : self.createStyleMap()
-					});
-					layer.addFeatures(features);
-					self.map.addLayer(layer);
-					
-					// create countries layer
-					features = new Array();
-					for (var key in countriesData) {
-						point = new OpenLayers.Geometry.Point(countriesData[key].country.longitude, countriesData[key].country.latitude).transform('EPSG:4326', 'EPSG:3857');
-						features.push(new OpenLayers.Feature.Vector(
-								point, 
-								{
-									"data" : countriesData[key].audience,
-									"text" : countriesData[key].country.name
-								}
-								));
-					}
-					
-					// create countries layer
-					layer = self.countriesLayer = new OpenLayers.Layer.Vector('Countries', {
-						"projection": "EPSG:3857",
-						"visibility" : self.map.zoom < 4,
-						"styleMap" : self.createStyleMap()
-					});
-					layer.addFeatures(features);
-					self.map.addLayer(layer);
-					
-					layer.refresh();
-				}
+				self.displayData(data.objects);
 			});
+			
 		};
 		
-		this.updateMap = function updateMap(event, time) {
-			self.getMapData(time);
+		
+		/**
+		 * recreate data layers on map
+		 * @param value array of KalturaGeoTimeLiveStats
+		 */
+		this.displayData = function displayData(value) {
+			if (value) { 
+				// remove existing layers
+				if (self.citiesLayer) {
+					self.map.removeLayer(self.citiesLayer);
+				}
+				if (self.countriesLayer) {
+					self.map.removeLayer(self.countriesLayer);
+				}
+				
+				// process data to create new layers
+				var countriesData = {};
+				var features = new Array();
+				var point;
+				for ( var i = 0; i < value.length; i++) {
+					// accumulate data for country-level layer
+					if (!countriesData[value[i].country.name]) { 
+						// init - keep whole value for lat/long
+						countriesData[value[i].country.name] = value[i];  
+					}
+					else {
+						// sum audience
+						countriesData[value[i].country.name]['audience'] += value[i].audience;
+					}
+					point = new OpenLayers.Geometry.Point(value[i].city.longitude, value[i].city.latitude).transform('EPSG:4326', 'EPSG:3857');
+					features[i] = new OpenLayers.Feature.Vector(
+							point, 
+							{
+								"data" : value[i].audience,
+								"text" : value[i].city.name
+							}
+							);
+				}
+				
+				// create cities layer
+				var layer = self.citiesLayer = new OpenLayers.Layer.Vector('Cities', {
+					"projection": "EPSG:3857",
+					"visibility" : self.map.zoom > 3,
+					"styleMap" : self.createStyleMap()
+				});
+				layer.addFeatures(features);
+				self.map.addLayer(layer);
+				
+				// create countries layer
+				features = new Array();
+				for (var key in countriesData) {
+					point = new OpenLayers.Geometry.Point(countriesData[key].country.longitude, countriesData[key].country.latitude).transform('EPSG:4326', 'EPSG:3857');
+					features.push(new OpenLayers.Feature.Vector(
+							point, 
+							{
+								"data" : countriesData[key].audience,
+								"text" : countriesData[key].country.name
+							}
+							));
+				}
+				
+				// create countries layer
+				layer = self.countriesLayer = new OpenLayers.Layer.Vector('Countries', {
+					"projection": "EPSG:3857",
+					"visibility" : self.map.zoom < 4,
+					"styleMap" : self.createStyleMap()
+				});
+				layer.addFeatures(features);
+				self.map.addLayer(layer);
+				
+				layer.refresh();
+			}
 		};
 		
-		$scope.$on('updateScreen', self.updateMap);
+		
+		this.adjustSlider = function adjustSlider(oldmax, newmax, val) {
+			var n = newmax - oldmax;
+			var min = self.slider.slider("option", "min");
+			self.slider.slider("option", "max", newmax);
+			self.slider.slider("option", "min", min + n);
+			if (val) {
+				self.slider.slider("option", "value", val);
+			}
+		};
+		
+		
+		/**
+		 * event handler for main screen update interval
+		 */
+		this.updateScreenHandler = function updateScreenHandler(event, time) {
+			var val = self.slider.slider("option", "value"); // current slider value 
+			var max = self.slider.slider("option", "max"); // max slider value
+			if (val == max) {
+				// we are at the right edge, auto update
+				self.getMapData(time);
+				// update scrollbar and handle (keep handle on right edge)
+				self.adjustSlider(max, time, time);
+			}
+			else {
+				// update range 
+				self.adjustSlider(max, time);
+			}
+		};
+		
+		$scope.$on('updateScreen', self.updateScreenHandler);
 		
 }]);
 

@@ -198,7 +198,6 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		var getEntry = function getEntry() {
 			return EntrySvc.getEntry($scope.entryId).then(function(entry){
 				$scope.entry = entry;
-				$scope.mapData = 'lll'; 
 				if (entry.isLive) {
 					// live session - show live entry in player
 					$scope.playerEntryId = entry.id;
@@ -276,7 +275,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 			var d = new Date();
 			var t = d.getTime();
 			getGraph30Secs(t);
-			getMapData(t);
+			$rootScope.$broadcast('updateScreen', t);
 		}
 		
 		screenSetup();
