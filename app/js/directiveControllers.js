@@ -64,7 +64,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 			
 			self.map.events.register('zoomend', this, function (event) {
 		        var zLevel = self.map.getZoom();     
-		        if( zLevel < 5)
+		        if( zLevel < 4)
 		        {
 		        	// show countries
 		            self.citiesLayer.setVisibility(false);
@@ -163,7 +163,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 					// create cities layer
 					var layer = self.citiesLayer = new OpenLayers.Layer.Vector('Cities', {
 						"projection": "EPSG:3857",
-						"visibility" : false,
+						"visibility" : self.map.zoom > 3,
 						"styleMap" : self.createStyleMap()
 					});
 					layer.addFeatures(features);
@@ -185,6 +185,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 					// create countries layer
 					layer = self.countriesLayer = new OpenLayers.Layer.Vector('Countries', {
 						"projection": "EPSG:3857",
+						"visibility" : self.map.zoom < 4,
 						"styleMap" : self.createStyleMap()
 					});
 					layer.addFeatures(features);
