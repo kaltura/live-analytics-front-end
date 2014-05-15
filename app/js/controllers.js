@@ -25,6 +25,7 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		 */
 		var totalPages = 1;
 		
+		
 		var updatePagingControlRequired = true;
 		
 		
@@ -48,7 +49,7 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		
 		/**
 		 * @param liveOnly	fetch KalturaLive currently live (true) or all live entries (false)
-		 * @param page		index of page to fetch
+		 * @param pageNumber index of page to fetch
 		 */
 		var getEntries = function getEntries(liveOnly, pageNumber) {
 			var result;
@@ -99,7 +100,9 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		// return:
 		// [{entryId, name, audience, peakAudience, minutes, bufferTime, bitrate, startTime, isLive, thumbnailUrl}, ..]
 		
-		
+		/**
+		 * initial screen set up
+		 */
 		var screenSetup = function screenSetup() {
 			// set report dates:
 			var d = new Date();
@@ -139,6 +142,10 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		
     }]);
 
+
+/**
+ * General controller for the entry drill-down page
+ */
 analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routeParams', '$interval', 'EntrySvc', 
     function($scope, $rootScope, $routeParams, $interval, EntrySvc) {
 		$scope.intervalPromise = null; 			// use this to hold update interval
@@ -173,6 +180,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		
 		/**
 		 * get data for the top referrals table
+		 * @param totalPlays
 		 */
 		var getReferrers = function getReferrers(totalPlays) {
 			EntrySvc.getReferrers($scope.entryId).then (function(data) {
@@ -202,7 +210,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 					// live session - show live entry in player
 					$scope.playerEntryId = entry.id;
 					// set 30 secs update interval
-					$scope.intervalPromise = $interval(function() {screenUpdate()}, 30000);
+					$scope.intervalPromise = $interval(function() {screenUpdate();}, 30000);
 				}
 				else if (entry.recordedEntryId && entry.recordedEntryId != '') {
 					// session ended, got recording - show recorded entry in player
@@ -213,7 +221,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 					// show "no recording" in player
 					$scope.playerEntryId = -1;
 					// set 30 secs update interval
-					$scope.intervalPromise = $interval(function() {screenUpdate()}, 30000);
+					$scope.intervalPromise = $interval(function() {screenUpdate();}, 30000);
 				}
 				// set report dates:
 				var d = new Date();
@@ -274,6 +282,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		var screenUpdate = function screenUpdate() {
 			var d = new Date();
 			var t = d.getTime();
+			getAggregates($scope.entry.isLive);
 			getGraph30Secs(t);
 			$rootScope.$broadcast('updateScreen', t);
 		}
