@@ -15,6 +15,10 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs',
   		this.init = function init (element) {
   			self.playerElement = element;
   		};
+  		
+  		$scope.$on('gotoTime', function (event, time) {
+  			// translate timestamp to entry time, go to correct time.
+  		});
 
 
   		$scope.$watch('playerEntryId', function( value ) {
@@ -277,6 +281,12 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			graph = createGraph(series, element);
 		};
 		
+		var graphClickHandler = function graphClickHandler(time) {
+			if (!$scope.entry.isLive && $scope.entry.recordedEntryId && $scope.entry.recordedEntryId != '') {
+				// click - only for recorded entries that are not currently live
+				$scope.$emit('gotoTime', time);
+			}
+		};
 		
 		/**
 		 * create graph and its parts
@@ -318,9 +328,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			    formatter: function(series, x, y, formattedXValue, formattedYValue, point) {
 			    	return y + ' views'; 
 			    },
-				onClick : function (time) {
-					alert(time);
-				}
+				onClick : graphClickHandler
 			} );
 			
 			return graph;
