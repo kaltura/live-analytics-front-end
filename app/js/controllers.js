@@ -240,6 +240,15 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 			$rootScope.$broadcast('updateScreen', t);
 		};
 		
+		
+		$scope.$on('$destroy', function() {
+			// Make sure that the interval is destroyed too
+			if (angular.isDefined($scope.intervalPromise)) {
+				$interval.cancel(stop);
+				$scope.intervalPromise = undefined;
+			}
+		});
+		
 		screenSetup();
 }]);
 
