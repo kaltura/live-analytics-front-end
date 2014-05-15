@@ -283,6 +283,7 @@ analyticsServices.factory('EntrySvc',
 					
 		 			KApi.doRequest(postData).then(function (mr) {
 		 				mr[0].isLive = mr[1];
+		 				mr[0].sessionStartTime = mr[0].createdAt + 60;
 		 				dfd.resolve(mr[0]);
 		 			});
 		 			

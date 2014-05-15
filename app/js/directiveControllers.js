@@ -19,8 +19,7 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs',
   		$scope.$on('gotoTime', function (event, time) {
   			// translate timestamp to entry time, go to correct time.
   			//TODO use entry.sessionStartTime
-  			var sessionStartTime = $scope.entry.createdAt + 60;
-  			var playerTime = time - sessionStartTime;
+  			var playerTime = time - $scope.entry.sessionStartTime;
   			console.log(playerTime);
   			var kdp = angular.element('#kplayer')[0];
   			kdp.sendNotification("doSeek", playerTime);
@@ -94,9 +93,9 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 			self.slider = angular.element('#mapslider');
 			self.slider.slider({
 				max: t, 
-				min: t - 129600000, 
+				min: t - 129600000, // 36 hrs
 				value: t, 
-				step: 10000,
+				step: 10,
 				change: self.sliderChangeHandler
 			});
 		};
@@ -260,8 +259,36 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 			}
 		};
 		
+		this.timeBoundsSetHandler = function timeBoundsSetHandler(event, start, end) {
+			var val = self.slider.slider("option", "value"); // current slider value 
+			var max = self.slider.slider("option", "max"); // max slider value
+			if (val == max) {
+				// we are at the right edge, stay there
+				self.slider.slider("option", "max", end);
+				self.slider.slider("option", "min", start);
+				self.slider.slider("option", "value", end);
+			}
+			else {
+				var updateVal = false;
+				if (val < start) {
+					val = start;
+					updateVal = true; 
+				}
+				if (val > end) {
+					val = end;
+					updateVal = true;
+				}
+				self.slider.slider("option", "max", end);
+				self.slider.slider("option", "min", start);
+				if (updateVal) {
+					self.slider.slider("option", "value", val);
+				}
+			}
+		};
+		
 		$scope.$on('setupScreen', self.updateScreenHandler);
 		$scope.$on('updateScreen', self.updateScreenHandler);
+		$scope.$on('TimeBoundsSet', self.timeBoundsSetHandler);
 		
 }]);
 
@@ -288,8 +315,12 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			graph = createGraph(series, element);
 		};
 		
+		var isRecordedEntry = function isRecordedEntry() {
+			return !$scope.entry.isLive && $scope.entry.recordedEntryId && $scope.entry.recordedEntryId != ''; 
+		};
+		
 		var graphClickHandler = function graphClickHandler(time) {
-			if (!$scope.entry.isLive && $scope.entry.recordedEntryId && $scope.entry.recordedEntryId != '') {
+			if (isRecordedEntry()) {
 				// click - only for recorded entries that are not currently live
 				$scope.$emit('gotoTime', time);
 			}
@@ -355,6 +386,22 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 						stat.y = stat.audience;
 						stat.x = stat.timestamp;
 					});
+					if (isRecordedEntry()) {
+						// trim data edges: 
+						for (var i = 0; i<objects.length; i++) {
+							if (objects[i].timestamp >= $scope.entry.sessionStartTime) { //TODO att name!!
+								break;
+							}
+						}
+						for (var j = objects.length - 1; j>=0; j--) {
+							if (objects[j].audience != 0) {
+								j++;
+								break;
+							}
+						}
+						objects = objects.slice(i, j);
+						$scope.$emit('TimeBoundsSet', objects[0].timestamp, objects[objects.length - 1].timestamp);
+					}
 					resetGraphContent(objects);
 				};
 			});
