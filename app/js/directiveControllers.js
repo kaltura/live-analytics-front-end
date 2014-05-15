@@ -18,6 +18,13 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs',
   		
   		$scope.$on('gotoTime', function (event, time) {
   			// translate timestamp to entry time, go to correct time.
+  			//TODO use entry.sessionStartTime
+  			var sessionStartTime = $scope.entry.createdAt + 60;
+  			var playerTime = time - sessionStartTime;
+  			console.log(playerTime);
+  			var kdp = angular.element('#kplayer')[0];
+  			kdp.sendNotification("doSeek", playerTime);
+
   		});
 
 
