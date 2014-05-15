@@ -68,7 +68,7 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 					updatePagingControlRequired = false;
 				}
 			});
-		}
+		};
 		
 		
 		/**
@@ -90,15 +90,11 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 		var updatePagingControl = function updatePagingControl(current, total) {
 			var options = {
 	                currentPage: current,
-	                totalPages: total,
-	            }
+	                totalPages: total
+	            };
 	        $('#pagination').bootstrapPaginator(options);
-		}
+		};
 		
-		// (analytics) entry stats for live entries by ids 
-		// (analytics) entry stats for not-live entries by ids
-		// return:
-		// [{entryId, name, audience, peakAudience, minutes, bufferTime, bitrate, startTime, isLive, thumbnailUrl}, ..]
 		
 		/**
 		 * initial screen set up
@@ -136,7 +132,7 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 	    		getEntries(newValue == "liveOnly", 1);
 				updatePagingControlRequired = true;
 			 });
-		}
+		};
 		
 		screenSetup();
 		
@@ -153,7 +149,6 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		$scope.pid = 346151;
 		$scope.uiconfId = 22767782;
 		$scope.playerEntryId = '';				// entry that should be shown in player (live / vod)
-		$scope.graphdata = [];					// 36 hours graph data
 		$scope.additionalgraphdata = [];		// graph data from latest update call
 		
 		
@@ -225,7 +220,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 				}
 				// set report dates:
 				var d = new Date();
-				$rootScope.$broadcast('updateScreen', d.getTime());
+				$rootScope.$broadcast('setupScreen', d.getTime());
 				d.setTime(entry.createdAt);
 				$scope.reportStartTime = d;
 				getAggregates(entry.isLive);
@@ -234,58 +229,18 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		};
 		
 		
-		/**
-		 * get graph data for the last 36 hrs 
-		 */
-		var getGraph36Hrs = function getGraph36Hrs() {
-			var d = new Date();
-			var toDate = d.getTime();
-			var fromDate = toDate - 129600000; // 60000 ms per minute * 60 minutes per hour * 36 hrs 
-			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
-				var objects = data.objects;
-				objects.forEach(function (stat) {
-					// re-shape data so rickshaw can understand it
-					stat.y = stat.audience;
-					stat.x = stat.timestamp;
-				});
-				$scope.graphdata = objects;
-			});
-		}
-		
-		
-		/**
-		 * get graph data for the last 30 secs 
-		 * @param endTime (timestamp) get graph data for 30 secs up to this time
-		 */
-		var getGraph30Secs = function getGraph30Secs(endTime) {
-			var toDate = endTime;
-			var fromDate = toDate - 40000;
-			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
-				var objects = data.objects;
-				objects.forEach(function (stat) {
-					// re-shape data so rickshaw can understand it
-					stat.y = stat.audience;
-					stat.x = stat.timestamp;
-				});
-				$scope.additionalgraphdata = objects;
-			});
-		}
-		
-		
 		
 		var screenSetup = function screenSetup() {
 			// report data:
 			getEntry();
-			getGraph36Hrs();
-		}
+		};
 		
 		var screenUpdate = function screenUpdate() {
 			var d = new Date();
 			var t = d.getTime();
 			getAggregates($scope.entry.isLive);
-			getGraph30Secs(t);
 			$rootScope.$broadcast('updateScreen', t);
-		}
+		};
 		
 		screenSetup();
 }]);

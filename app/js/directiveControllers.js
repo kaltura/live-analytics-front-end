@@ -249,6 +249,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 			}
 		};
 		
+		$scope.$on('setupScreen', self.updateScreenHandler);
 		$scope.$on('updateScreen', self.updateScreenHandler);
 		
 }]);
@@ -257,8 +258,8 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 /**
  * controller for (rickshaw) graph on entry page
  */
-analyticsControllers.controller('RGraphController', ['$scope', '$attrs',  
-    function($scope, $attrs) {
+analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntrySvc', 
+    function($scope, $attrs, EntrySvc) {
 		var self = this;
 		this.graphElement = null; // HTML element showing the graph
 		this.graph = null;	// graph JS object
@@ -275,24 +276,6 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs',
 				}
 			];
 
-			/**
-			 * set graph data as attribute
-			 */
-			$scope.$watch($attrs.additionalgraphdata, function(value) {
-				if (graph != null && Array.isArray(value) && value.length > 0) {
-					self.updateGraphContent(value);
-				}
-			});
-			
-			/**
-			 * set graph data as attribute
-			 */
-			$scope.$watch($attrs.graphdata, function(value) {
-				if (graph != null && Array.isArray(value) && value.length > 0) {
-					self.resetGraphContent(value);
-				}
-			});
-			
 
 			var graph = self.graph = new Rickshaw.Graph({
 				element : element[0].children[0],
@@ -336,6 +319,51 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs',
 			} );
 		};
 		
+		
+		/**
+		 * get graph data for the last 36 hrs 
+		 * @param end of 36 hrs term (timestamp)
+		 */
+		this.getGraph36Hrs = function getGraph36Hrs(toDate) {
+			var fromDate = toDate - 129600000; // 60000 ms per minute * 60 minutes per hour * 36 hrs 
+			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
+				if (data.objects.length > 0 && self.graph != null) {
+					var objects = data.objects;
+					objects.forEach(function (stat) {
+						// re-shape data so rickshaw can understand it
+						stat.y = stat.audience;
+						stat.x = stat.timestamp;
+					});
+					self.resetGraphContent(objects);
+				};
+			});
+		};
+		
+		
+		/**
+		 * get graph data for the last 30 secs 
+		 * @param endTime (timestamp) get graph data for 30 secs up to this time
+		 */
+		var getGraph30Secs = function getGraph30Secs(endTime) {
+			var toDate = endTime;
+			var fromDate = toDate - 40000;
+			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
+				var objects = data.objects;
+				if (data.objects.length > 0) {
+					objects.forEach(function (stat) {
+						// re-shape data so rickshaw can understand it
+						stat.y = stat.audience;
+						stat.x = stat.timestamp;
+					});
+				};
+				
+				if (self.graph != null) {
+					self.updateGraphContent(objects);
+				}
+			});
+		};
+		
+		
 		/**
 		 * remove all previous data and set new 
 		 * @param value
@@ -377,4 +405,21 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs',
 		};
 		
 		
+		/**
+		 * event handler for main screen setup event
+		 */
+		this.setupScreenHandler = function setupScreenHandler(event, time) {
+			self.getGraph36Hrs(time);
+		};
+		
+		
+		/**
+		 * event handler for main screen update interval
+		 */
+		this.updateScreenHandler = function updateScreenHandler(event, time) {
+			getGraph30Secs(time);
+		};
+	
+		$scope.$on('setupScreen', self.setupScreenHandler);
+		$scope.$on('updateScreen', self.updateScreenHandler);
 }]);
