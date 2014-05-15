@@ -149,8 +149,6 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		$scope.pid = 346151;
 		$scope.uiconfId = 22767782;
 		$scope.playerEntryId = '';				// entry that should be shown in player (live / vod)
-		$scope.additionalgraphdata = [];		// graph data from latest update call
-		
 		
 
 		/**

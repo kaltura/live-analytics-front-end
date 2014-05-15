@@ -261,28 +261,36 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntrySvc', 
     function($scope, $attrs, EntrySvc) {
 		var self = this;
-		this.graphElement = null; // HTML element showing the graph
-		this.graph = null;	// graph JS object
-		this.series = null;
+		var graphElement = null; 	// HTML element showing the graph
+		var graph = null;			// graph JS object
+		var series = null;			// data container
 		
 		this.init = function init (element) {
-			self.graphElement = element;
+			graphElement = element;
 			var d = new Date();
-			self.series = [ 
-			    {
+			series = [{
 					color : 'steelblue',
 					data : [ {x:d.getTime(), y:0} ],
 					name : "Line 1"
-				}
-			];
+				}];
 
-
-			var graph = self.graph = new Rickshaw.Graph({
+			graph = createGraph(series, element);
+		};
+		
+		
+		/**
+		 * create graph and its parts
+		 * @param series
+		 * @param element
+		 * @return rickshaw graph 
+		 */
+		var createGraph = function createGraph(series, element) {
+			var graph = new Rickshaw.Graph({
 				element : element[0].children[0],
 				width : element.width(),
 				height : element.height() - 20,
 				renderer : 'line',
-				series : self.series
+				series : series
 			});
 			graph.render();
 
@@ -305,9 +313,6 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			});
 			yAxis.render();
 			
-
-			
-
 			var hoverDetail = new KHoverDetail( {
 			    graph: graph,
 			    formatter: function(series, x, y, formattedXValue, formattedYValue, point) {
@@ -317,24 +322,25 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 					alert(time);
 				}
 			} );
+			
+			return graph;
 		};
-		
 		
 		/**
 		 * get graph data for the last 36 hrs 
 		 * @param end of 36 hrs term (timestamp)
 		 */
-		this.getGraph36Hrs = function getGraph36Hrs(toDate) {
+		var getGraph36Hrs = function getGraph36Hrs(toDate) {
 			var fromDate = toDate - 129600000; // 60000 ms per minute * 60 minutes per hour * 36 hrs 
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
-				if (data.objects.length > 0 && self.graph != null) {
+				if (data.objects.length > 0 && graph != null) {
 					var objects = data.objects;
 					objects.forEach(function (stat) {
 						// re-shape data so rickshaw can understand it
 						stat.y = stat.audience;
 						stat.x = stat.timestamp;
 					});
-					self.resetGraphContent(objects);
+					resetGraphContent(objects);
 				};
 			});
 		};
@@ -357,8 +363,8 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 					});
 				};
 				
-				if (self.graph != null) {
-					self.updateGraphContent(objects);
+				if (graph != null) {
+					updateGraphContent(objects);
 				}
 			});
 		};
@@ -368,15 +374,15 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 * remove all previous data and set new 
 		 * @param value
 		 */
-		this.resetGraphContent = function resetGraphContent(value) {
-			var ar = self.series[0].data;
+		var resetGraphContent = function resetGraphContent(value) {
+			var ar = series[0].data;
 			while (ar.length > 0) {
 				ar.pop();
 			}
 			for ( var i = 0; i < value.length; i++) {
 				ar.push(value[i]);
 			}
-			self.graph.update();
+			graph.update();
 		};
 		
 		
@@ -384,8 +390,8 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 * add new data and purge oldest so we keep only 36 hrs
 		 * @param value
 		 */
-		this.updateGraphContent = function updateGraphContent(value) {
-			var ar = self.series[0].data;
+		var updateGraphContent = function updateGraphContent(value) {
+			var ar = series[0].data;
 			// find matching point in 'ar'
 			var lastX = ar[ar.length-1].x;
 			for (var i = value.length-1; i>0; i--) {
@@ -401,25 +407,25 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 				ar.push(value[i]);
 				i++;
 			}
-			self.graph.update();
+			graph.update();
 		};
 		
 		
 		/**
 		 * event handler for main screen setup event
 		 */
-		this.setupScreenHandler = function setupScreenHandler(event, time) {
-			self.getGraph36Hrs(time);
+		var setupScreenHandler = function setupScreenHandler(event, time) {
+			getGraph36Hrs(time);
 		};
 		
 		
 		/**
 		 * event handler for main screen update interval
 		 */
-		this.updateScreenHandler = function updateScreenHandler(event, time) {
+		var updateScreenHandler = function updateScreenHandler(event, time) {
 			getGraph30Secs(time);
 		};
 	
-		$scope.$on('setupScreen', self.setupScreenHandler);
-		$scope.$on('updateScreen', self.updateScreenHandler);
+		$scope.$on('setupScreen', setupScreenHandler);
+		$scope.$on('updateScreen', updateScreenHandler);
 }]);
