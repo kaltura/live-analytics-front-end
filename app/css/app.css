@@ -86,7 +86,8 @@ hr.section-title {
 }
 
 .agg-data {
-	padding-top: 40px;
+	margin-top: 54px;
+	margin-bottom: -16px;
 	font-size: 400%;
 	font-weight: bold;
 	color: #019cfd;
