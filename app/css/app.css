@@ -139,6 +139,7 @@ hr.section-title {
 
 .entry-info {
 	float:right;
+	margin-right: 20px;
 }
 
 .entry-info p {
@@ -148,6 +149,9 @@ hr.section-title {
 
 .entry-info td {
 	padding: 0px 5px 0px 5px;
+}
+.entry-info tr {
+	height: 22px;
 }
 
 .entry-time {
