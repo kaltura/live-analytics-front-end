@@ -142,11 +142,11 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSv
 /**
  * General controller for the entry drill-down page
  */
-analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routeParams', '$interval', 'EntrySvc', 
-    function($scope, $rootScope, $routeParams, $interval, EntrySvc) {
+analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routeParams', '$interval', 'PID', 'EntrySvc', 
+    function($scope, $rootScope, $routeParams, $interval, PID, EntrySvc) {
 		$scope.intervalPromise = null; 			// use this to hold update interval
 		$scope.entryId = $routeParams.entryid;	// current entry
-		$scope.pid = 346151;
+		$scope.pid = PID;
 		$scope.uiconfId = 22767782;
 		$scope.playerEntryId = '';				// entry that should be shown in player (live / vod)
 		

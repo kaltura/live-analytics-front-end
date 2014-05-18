@@ -29,6 +29,31 @@ analyticsServices.factory('KS',
 		 		return ks;
 		 	} 
 	 	]);
+
+analyticsServices.factory('PID',
+		['$location',
+		 function PIDFactory($location) {
+			//TODO remove this!!
+			var pid = '346151';
+			try {
+				var kmc = window.parent.kmc;
+				if (kmc && kmc.vars) {
+					// got ks from KMC - save to local storage
+					if (kmc.vars.partner_id)
+						pid = kmc.vars.partner_id;
+				}
+			} catch (e) {
+				console.log('Could not located parent.kmc: ' + e);
+			}
+			
+			if (!pid) { //navigate to login
+				$location.path("/login");
+				return false;
+			} 
+			
+			return pid;
+		} 
+		]);
 		
 		
 analyticsServices.factory('KApi',
