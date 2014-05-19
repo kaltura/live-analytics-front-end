@@ -61,6 +61,7 @@ analyticsServices.factory('KApi',
 		 	function KApiFactory ($http, $q, KS) {
 		 		var KApi = {};
 		 		
+		 		KApi.IE = (!!window.ActiveXObject && +(/msie\s(\d+)/i.exec(navigator.userAgent)[1])) || NaN;
 		 		/**
 		 		 * @param request 	request params
 		 		 * @returns	promise object
@@ -71,12 +72,25 @@ analyticsServices.factory('KApi',
 		            
 			 		// add required params
 		            request.ks = KS;
-			 		var sParams = this.serializeParams(request);
+		            var method = "post";
+			 		var sParams;
+			 		var params;
+			 		if (KApi.IE < 10) {
+	                    request['callback'] = 'JSON_CALLBACK';
+	                    request['format'] = '9';
+	                    params = request;
+	                    method = 'jsonp';
+	                }
+			 		else {
+			 			param = {'format' : '1'};
+			 			sParams = this.serializeParams(request);
+			 		}
+			 		
 			 		$http({
 			 			data: sParams,
 			 			url: "http://www.kaltura.com/api_v3/index.php",
-				 		method: "POST",
-			 			params: {'format' : '1'},
+				 		method: method,
+			 			params: params,
 			 			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 		}).success(function (data, status) {
 			 			if (data.objectType === "KalturaAPIException") {
