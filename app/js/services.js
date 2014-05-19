@@ -82,7 +82,7 @@ analyticsServices.factory('KApi',
 	                    method = 'jsonp';
 	                }
 			 		else {
-			 			param = {'format' : '1'};
+			 			params = {'format' : '1'};
 			 			sParams = this.serializeParams(request);
 			 		}
 			 		
