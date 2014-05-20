@@ -7,10 +7,10 @@ var analyticsDirectives = angular.module('analyticsDirectives', []);
 
 analyticsDirectives.directive('kplayer', function() {
 	return {
-		restrict : 'E',
+		restrict : 'A',
 		controller: 'KPlayerController',
-		replace : true,
-		template: '<div id="kplayer" style="width:100%; height:100%;"></div>',
+		replace : false,
+		template: '<div id="kplayer" class="full-width full-height"></div>',
 		link: function($scope, element, attrs, KPlayerController) {
 			KPlayerController.init(element);
 		}
@@ -19,10 +19,10 @@ analyticsDirectives.directive('kplayer', function() {
 
 analyticsDirectives.directive('rgraph', function() {
 	return {
-		restrict : 'E',
+		restrict : 'A',
 		controller: 'RGraphController',
-		template : '<div style="width:100%;height:100%;"><div id="graph"></div><div id="preview"></div></div>',
-		replace : true,
+		template : '<div id="graph"></div><div id="preview"></div>',
+		replace : false,
 		link : function(scope, element, attrs, RGraphController) {
 			RGraphController.init(element);
 			
@@ -33,10 +33,10 @@ analyticsDirectives.directive('rgraph', function() {
 
 analyticsDirectives.directive('olmap', function() {
 	return {
-		restrict : 'E',
+		restrict : 'A',
 		controller : 'OLMapController',
-		template : '<div ><div id="map"></div><div id="mapslider"></div></div>',
-		replace : true,
+		template : '<div id="map"></div><div id="mapslider"></div>',
+		replace : false,
 		link : function(scope, element, attrs, OLMapController) {
 			OLMapController.init(element);
 		}
