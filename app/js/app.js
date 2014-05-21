@@ -27,5 +27,5 @@ liveAnalytics.config(['$routeProvider', function($routeProvider) {
 }]);
 
 function navigateToFlashAnalytics(subtabName) {
-	alert(subtabName);
+	$("#kcms",parent.document)[0].gotoPage({moduleName: "analytics",subtab: "playersList"});
 }
