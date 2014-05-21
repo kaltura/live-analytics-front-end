@@ -25,3 +25,7 @@ liveAnalytics.config(['$routeProvider', function($routeProvider) {
 	});
 	$routeProvider.otherwise({redirectTo: '/dashboard'});
 }]);
+
+function navigateToFlashAnalytics(subtabName) {
+	alert(subtabName);
+}

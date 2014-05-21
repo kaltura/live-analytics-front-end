@@ -4,6 +4,27 @@ body {
 	font-family: Helvetica,"Helvetica Neue",Arial,sans-serif; 
 }
 
+.kmcSubNav {
+    border-bottom: 2px solid #CCCCCC;
+    display: block;
+    height: 33px;
+    margin-bottom: 1px;
+    padding-left: 10px;
+    background-color: #FFFFFF;
+}
+.kmcSubNav a {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 18px;
+    color: #555555;
+    font: 700 11px arial,sans-serif;
+    margin: 7px;
+    padding: 3px 9px;
+}
+.kmcSubNav a.active {
+    background: none repeat scroll 0 0 #222222;
+    color: #FFFFFF;
+}
+
 h1 {
 	font-weight: bold;
 }
