@@ -1,2 +1,3 @@
-# Kaltura Live Analytics
+LiveAnalytics
+=============
 
