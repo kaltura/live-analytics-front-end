@@ -8,8 +8,7 @@ var analyticsServices = angular.module('analyticsServices', [ 'ngResource' ]);
 analyticsServices.factory('KS',
 		['$location',
 		 	function KSFactory($location) {
-				//TODO remove this!!
-		 		var ks = 'M2Q5M2NjNDM2NDAzNGRiNTFlZTA0ZGUxYjVkNjc3OGZmNjdmYjU4M3wzNDYxNTE7MzQ2MTUxOzM1NDI0NDk4NTI7MjsxMzk0OTY2MjA1LjcwMTQ7YXRhci5zaGFkbWlAa2FsdHVyYS5jb207Ozs=';
+		 		var ks;
 		 		try {
 	                var kmc = window.parent.kmc;
 	                if (kmc && kmc.vars) {
@@ -18,7 +17,7 @@ analyticsServices.factory('KS',
 	                        ks = kmc.vars.ks;
 	                }
 	            } catch (e) {
-	                console.log('Could not located parent.kmc: ' + e);
+	                console.log('Could not locate parent.kmc: ' + e);
 	            }
 	            
 	            if (!ks) { //navigate to login
@@ -33,8 +32,7 @@ analyticsServices.factory('KS',
 analyticsServices.factory('PID',
 		['$location',
 		 function PIDFactory($location) {
-			//TODO remove this!!
-			var pid = '346151';
+			var pid;
 			try {
 				var kmc = window.parent.kmc;
 				if (kmc && kmc.vars) {
@@ -50,7 +48,6 @@ analyticsServices.factory('PID',
 				$location.path("/login");
 				return false;
 			} 
-			
 			return pid;
 		} 
 		]);
