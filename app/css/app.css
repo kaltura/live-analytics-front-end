@@ -17,7 +17,7 @@ body {
     border-radius: 18px;
     color: #555555;
     font: 700 11px arial,sans-serif;
-    margin: 7px;
+    margin: 7px 0px;
     padding: 3px 9px;
 }
 .kmcSubNav a.active {

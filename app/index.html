@@ -20,14 +20,15 @@
 
 
 </head>
-<body class="container">
+<body >
 <div class="kmcSubNav">
 	<a href="javascript:navigateToFlashAnalytics('contentDashboard')" class="btn">Content Reports</a>
 	<a href="javascript:navigateToFlashAnalytics('usersandCommunity')" class="btn">Users & Community Reports</a>
 	<a href="javascript:navigateToFlashAnalytics('usageTabTitle')" class="btn">Bandwidth & Storage Reports</a>
-	<a href="javascript:navigateToFlashAnalytics('platformReports')" class="btn">Platform Reports</a>
+	<a href="javascript:navigateToFlashAnalytics('platformReports')" class="btn">System Reports</a>
 	<a href="index.html" class="btn active">Live Reports</a>
 </div>
+<div clas="container">
 	<div class="view-container">
 		<div ng-view></div>
 	</div>
@@ -68,6 +69,6 @@
 	<script src="js/directives.js"></script>
 	
 	<script src="js/dummyServices.js"></script>
-	
+</div>	
 </body>
 </html>
