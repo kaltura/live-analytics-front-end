@@ -9,6 +9,7 @@ analyticsServices.factory('KS',
 		['$location',
 		 	function KSFactory($location) {
 		 		var ks;
+		 		ks = 'ZTYwMTMzNWVlMmM5YTYyNTU5NWE5MmVjYjI5MzU2ODM5NzM1MzJmZXwzNDYxNTE7MzQ2MTUxOzM1NDg1NzY0MDY7MjsxNDAxMDkyNzU5LjIxMzM7YXRhci5zaGFkbWlAa2FsdHVyYS5jb207Ozs='; 
 		 		try {
 	                var kmc = window.parent.kmc;
 	                if (kmc && kmc.vars) {
@@ -33,6 +34,7 @@ analyticsServices.factory('PID',
 		['$location',
 		 function PIDFactory($location) {
 			var pid;
+			pid = 346151;
 			try {
 				var kmc = window.parent.kmc;
 				if (kmc && kmc.vars) {

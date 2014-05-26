@@ -1,12 +1,25 @@
 {
-  "name": "angularjs-seed",
-  "description": "A starter project for AngularJS",
-  "repository": "https://github.com/angular/angular-seed",
+  "name": "LiveAnalytics",
+  "version": "0.0.1",
+  "main": "Gruntfile.js",
+  "dependencies": {},
   "devDependencies": {
-    "phantomjs" : "~1.9",
-    "karma" : "~0.10",
-    "karma-junit-reporter" : "~0.1",
-    "karma-jasmine" : "~0.1",
-    "protractor" : "~0.17.0"
-  }
+    "grunt": "~0.4.0",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-cssmin": "~0.7.0",
+    "grunt-contrib-uglify": "*",
+    "grunt-remove": "^0.1.0",
+    "grunt-shell": "~0.2.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaltura/LiveAnalytics.git"
+  },
+  "author": "atarsh",
+  "readmeFilename": "README.md"
 }

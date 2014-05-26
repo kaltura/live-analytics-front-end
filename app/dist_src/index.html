@@ -1,0 +1,40 @@
+<!doctype html>
+<html xmlns:ng="http://angularjs.org" lang="en" id="ng-app" ng-app="liveAnalytics">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+   
+<title>Live Anaytics</title>
+
+<link type="text/css" rel="stylesheet" href="css/vendor.css" />
+<link type="text/css" rel="stylesheet" href="css/app.css" />
+
+
+</head>
+<body >
+<div class="kmcSubNav">
+	<a href="javascript:navigateToFlashAnalytics('contentDashboard')" class="btn">Content Reports</a>
+	<a href="javascript:navigateToFlashAnalytics('usersandCommunity')" class="btn">Users & Community Reports</a>
+	<a href="javascript:navigateToFlashAnalytics('usageTabTitle')" class="btn">Bandwidth & Storage Reports</a>
+	<a href="javascript:navigateToFlashAnalytics('platformReports')" class="btn">System Reports</a>
+	<a href="index.html" class="btn active">Live Reports</a>
+</div>
+<div clas="container">
+	<div class="view-container">
+		<div ng-view></div>
+	</div>
+
+	<!-- player -->
+	<script src="http://cdnapi.kaltura.com/p/346151/sp/34615100/embedIframeJs/uiconf_id/22767782/partner_id/346151"></script>
+	
+	
+	<script src="js/libs.js"></script>
+	<script src="js/livea.min.js"></script>
+	<script type="text/javascript">
+    	// tell OpenLayers where the control images are
+    	// remember the trailing slash
+    	OpenLayers.ImgPath = "css/img/ol";
+    </script>
+</div>	
+</body>
+</html>
