@@ -63,7 +63,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 			self.mapElement = element;
 			
 			// create map
-			self.map = new OpenLayers.Map('map');
+			self.map = new OpenLayers.Map('map', {theme: null});
 	
 			// create OSM layer
 			var osm = new OpenLayers.Layer.OSM();
