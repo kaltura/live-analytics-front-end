@@ -30,8 +30,8 @@ analyticsServices.factory('SessionInfo',
 	                        sessionInfo.ks = kmc.vars.ks;
 	                    if (kmc.vars.partner_id)
 	                    	sessionInfo.pid = kmc.vars.partner_id;
-	                    if (kmc.vars.livea_player_id)
-	                    	sessionInfo.uiconfid = kmc.vars.livea_player_id;
+	                    if (kmc.vars.liveanalytics) 
+	                    	sessionInfo.uiconfid = kmc.vars.liveanalytics.player_id;
 	                }
 	            } catch (e) {
 	                console.log('Could not locate parent.kmc: ' + e);
