@@ -5,57 +5,51 @@
 var analyticsServices = angular.module('analyticsServices', [ 'ngResource' ]);
 
 
-analyticsServices.factory('KS',
+analyticsServices.factory('SessionInfo',
 		['$location',
-		 	function KSFactory($location) {
-		 		var ks;
+		 	function SessionInfoFactory($location) {
+		 		var sessionInfo = {};
+		 		sessionInfo.ks = '';
+		 		sessionInfo.pid = '';
+		 		sessionInfo.uiconfid = '';
+		 		
+		 		sessionInfo.setKs = function setKs(value) {
+		 			sessionInfo.ks = value;
+		 		};
+		 		sessionInfo.setPid = function setPid(value) {
+		 			sessionInfo.pid = value;
+		 		};
+		 		sessionInfo.setUiconfId = function setUiconfId(value) {
+		 			sessionInfo.uiconfid = value;
+		 		};
+		 		
 		 		try {
 	                var kmc = window.parent.kmc;
 	                if (kmc && kmc.vars) {
-	                    // got ks from KMC - save to local storage
 	                    if (kmc.vars.ks)
-	                        ks = kmc.vars.ks;
+	                        sessionInfo.ks = kmc.vars.ks;
+	                    if (kmc.vars.partner_id)
+	                    	sessionInfo.pid = kmc.vars.partner_id;
+	                    if (kmc.vars.livea_player_id)
+	                    	sessionInfo.uiconfid = kmc.vars.livea_player_id;
 	                }
 	            } catch (e) {
 	                console.log('Could not locate parent.kmc: ' + e);
 	            }
 	            
-	            if (!ks) { //navigate to login
+	            if (!sessionInfo.ks) { //navigate to login
 	                $location.path("/login");
-	                return false;
 	            } 
-		 		
-		 		return ks;
+	            
+		 		return sessionInfo;
 		 	} 
 	 	]);
 
-analyticsServices.factory('PID',
-		['$location',
-		 function PIDFactory($location) {
-			var pid;
-			try {
-				var kmc = window.parent.kmc;
-				if (kmc && kmc.vars) {
-					// got ks from KMC - save to local storage
-					if (kmc.vars.partner_id)
-						pid = kmc.vars.partner_id;
-				}
-			} catch (e) {
-				console.log('Could not located parent.kmc: ' + e);
-			}
-			
-			if (!pid) { //navigate to login
-				$location.path("/login");
-				return false;
-			} 
-			return pid;
-		} 
-		]);
 		
 		
 analyticsServices.factory('KApi',
-		['$http', '$q', 'KS',
-		 	function KApiFactory ($http, $q, KS) {
+		['$http', '$q', 'SessionInfo',
+		 	function KApiFactory ($http, $q, SessionInfo) {
 		 		var KApi = {};
 		 		
 		 		KApi.IE = (!!window.ActiveXObject && +(/msie\s(\d+)/i.exec(navigator.userAgent)[1])) || NaN;
@@ -66,9 +60,8 @@ analyticsServices.factory('KApi',
 		 		KApi.doRequest = function doRequest (request) {
 		 			// Creating a deferred object
 		            var deferred = $q.defer();
-		            
 			 		// add required params
-		            request.ks = KS;
+		            request.ks = SessionInfo.ks;
 		            var method = "post";
 			 		var sParams;
 			 		var params;
