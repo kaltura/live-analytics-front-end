@@ -120,6 +120,12 @@ module.exports = function(grunt) {
                 	src: '*',
                 	dest: '_dist/css/images'
                 },
+                { // deployment
+                	expand: true,
+                	cwd: 'deploy',
+                	src: '**',
+                	dest: '_dist/deploy'
+                },
                 
             ]
         }
