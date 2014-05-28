@@ -7,8 +7,8 @@ var analyticsControllers = angular.module('analyticsControllers', []);
 /**
  * Dashboard Controller 
  */
-analyticsControllers.controller('DashboardCtrl', ['$scope', 'KApi', 'DashboardSvc', 
-    function($scope, KApi, DashboardSvc) {
+analyticsControllers.controller('DashboardCtrl', ['$scope', 'DashboardSvc', 
+    function($scope, DashboardSvc) {
 		
 		/**
 		 * entries currently on display
@@ -208,7 +208,6 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 				else if (entry.recordedEntryId && entry.recordedEntryId != '') {
 					// session ended, got recording - show recorded entry in player
 					$scope.playerEntryId = entry.recordedEntryId;
-					//TODO in graph, only show recorded duration (how ??)
 				}
 				else {
 					// show "no recording" in player
@@ -251,5 +250,3 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		
 		screenSetup();
 }]);
-
-
