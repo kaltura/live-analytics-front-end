@@ -31,11 +31,11 @@
 </head>
 <body >
 <div class="kmcSubNav">
-	<a href="javascript:navigateToFlashAnalytics('contentDashboard')" class="btn">Content Reports</a>
-	<a href="javascript:navigateToFlashAnalytics('usersandCommunity')" class="btn">Users & Community Reports</a>
-	<a href="javascript:navigateToFlashAnalytics('usageTabTitle')" class="btn">Bandwidth & Storage Reports</a>
-	<a href="javascript:navigateToFlashAnalytics('platformReports')" class="btn">System Reports</a>
-	<a href="index.html" class="btn active">Live Reports</a>
+	<a href="javascript:navigateToFlashAnalytics('contentDashboard')" class="btn">{{'main.Content_Reports' | translate}}</a>
+	<a href="javascript:navigateToFlashAnalytics('usersandCommunity')" class="btn">{{'main.Community_Reports' | translate}}</a>
+	<a href="javascript:navigateToFlashAnalytics('usageTabTitle')" class="btn">{{'main.Storage_Reports' | translate}}</a>
+	<a href="javascript:navigateToFlashAnalytics('platformReports')" class="btn">{{'main.System_Reports' | translate}}</a>
+	<a href="index.html" class="btn active">{{'main.Live_Reports' | translate}}</a>
 </div>
 <div clas="container">
 	<div class="view-container">
@@ -54,9 +54,12 @@
     
 	<script src="lib/bootstrap/bootstrap-3.1.1-dist/js/bootstrap.min.js"></script>
 	<script src="lib/bootstrap/bootstrap-paginator.js"></script>
-	<script src="lib/angular/angular.min.js"></script>
+	<script src="lib/angular/angular.js"></script>
 	<script src="lib/angular/angular-resource.min.js"></script>
 	<script src="lib/angular/angular-route.min.js"></script>
+	
+	<!-- i18n -->
+	<script src="lib/angular-translate-2.2.0/angular-translate.js"></script>
 	
 	<!-- graphs -->
 	<script src="lib/rickshaw/rickshaw.js"></script>

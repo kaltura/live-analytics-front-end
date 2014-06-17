@@ -1,7 +1,7 @@
 <div class="entry-details page container">
 	<div class="header">
 		<div class="page-title">
-			<h1><a href="#">Live Content</a> > Investigate</h1>
+			<h1><a href="#">{{'entry.Live_Content' | translate }}</a> > {{'entry.Investigate' | translate}}</h1>
 		</div>
 		<div class="clear-both" ></div>
 		<div class="date-range">{{reportStartTime | date : 'd MMM H:mm:ss'}}</div>
@@ -14,11 +14,11 @@
 	<div class="row aggregates clear-both">
 		<div class="aggregate-item col-md-2" ng-repeat="agg in aggregates">
 			<div class="agg-data">{{agg | formatAgg}}</div>
-			<div class="agg-info">{{agg.title | textify}}</div>
+			<div class="agg-info">{{agg.title | translate}}</div>
 		</div>
 	</div>
 	
-	<h2 class="section-title">Audience</h2>
+	<h2 class="section-title">{{'entry.Audience' | translate}}</h2>
 	<hr class="section-title" />
 	
 	<!-- Graph -->
@@ -36,7 +36,7 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<h2 class="section-title">Location</h2>
+			<h2 class="section-title">{{'entry.Location' | translate}}</h2>
 			<hr class="section-title" />
 			<!-- map -->
 			<div style="width:470px; height:265px;">
@@ -48,15 +48,15 @@
 	<!-- referals -->
 	<div class="row">
 		<div class="col-md-6">
-			<h2 class="section-title">Top referals</h2>
+			<h2 class="section-title">{{'entry.Top_referals' | translate}}</h2>
 			<hr class="section-title" />
 			<table class="table table-striped">
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>Domain</th>
-						<th>Visits</th>
-						<th>% of total</th>
+						<th>{{'entry.Domain' | translate}}</th>
+						<th>{{'entry.Visits' | translate}}</th>
+						<th>{{'entry.of_total' | translate}}</th>
 					</tr>
 				</thead>
 				<tbody>

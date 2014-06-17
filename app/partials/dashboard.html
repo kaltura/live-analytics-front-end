@@ -1,14 +1,14 @@
 <div class="dashboard page container">
 	<div class="header">
 		<div class="page-title">
-			<h1>Live Content (in past 36 hours)</h1>
+			<h1>{{'dashboard.Live_Content_36' | translate}}</h1>
 		</div>
 		<div class="clear-both" ></div>
 		<div class="date-range">{{reportStartTime | date : 'd MMM H:mm:ss'}} - {{nowTime | date : 'd MMM H:mm:ss'}}</div>
 		<div class="clear-both" >
 			<select ng-model="boardType" >
-				<option value="all">Show All Entries</option>
-				<option value="liveOnly">Show Kaltura Live Now Only</option>
+				<option value="all">{{'dashboard.Show_All_Entries' | translate}}</option>
+				<option value="liveOnly">{{'dashboard.Show_Kaltura' | translate}}</option>
 			</select>
 		</div>
 	</div>
@@ -19,7 +19,7 @@
 	<div class="row aggregates clear-both">
 		<div class="aggregate-item col-md-3" ng-repeat="agg in aggregates">
 			<div class="agg-data">{{agg | formatAgg}}</div>
-			<div class="agg-info">{{agg.title | textify}}</div>
+			<div class="agg-info">{{agg.title | translate}}</div>
 		</div>
 	</div>
 	
@@ -39,23 +39,23 @@
 				<div class="entry-info" >
 					<table>
 						<tr>
-							<td>Audience:</td>
+							<td>{{'dashboard.Audience' | translate}}:</td>
 							<td>{{entry.audience ? entry.audience : entry.plays}}</td>
 						</tr>
 						<tr>
-							<td>Peak Audience:</td>
+							<td>{{'dashboard.Peak_Audience' | translate}}:</td>
 							<td>{{entry.peakAudience}}</td>
 						</tr>
 						<tr>
-							<td>Minutes Viewed:</td>
+							<td>{{'dashboard.Minutes_Viewed' | translate}}:</td>
 							<td>{{entry.secondsViewed | minutes}}</td>
 						</tr>
 						<tr>
-							<td>Buffering Time:</td>
+							<td>{{'dashboard.Buffer_Time' | translate}}:</td>
 							<td>{{entry.bufferTime | time}}</td>
 						</tr>
 						<tr>
-							<td>Average Bitrate:</td>
+							<td>{{'dashboard.Avg_Bitrate' | translate}}:</td>
 							<td>{{entry.avgBitrate}}mbs</td>
 						</tr>
 					</table>
@@ -64,7 +64,7 @@
 			</div>
 			<div class="panel-footer col-md-12">
 				<div class="col-md-6">
-					<a class="btn btn-primary" href="#/entry/{{entry.entryId}}"><span class="glyphicon glyphicon-import"></span> Investigate </a>
+					<a class="btn btn-primary" href="#/entry/{{entry.entryId}}"><span class="glyphicon glyphicon-import"></span> {{'dashboard.Investigate' | translate}}</a>
 				</div>
 				<div class="col-md-6 entry-time" >
 					<span>{{entry.startTime | date : 'd MMM H:mm:ss'}}</span> 
