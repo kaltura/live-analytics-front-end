@@ -29,7 +29,7 @@ liveAnalytics.config(['$routeProvider', '$translateProvider', function($routePro
 	
 	// translates
 	$translateProvider.translations('en_US', {
-		// aggregates:
+		// aggregates: (keys should match Kaltura server)
 		'audience': 'Audience',
 		'seconds_viewed': 'Minutes Viewed', // this is not a mistake, text should read minutes
 		'buffertime': 'Buffering Time',
