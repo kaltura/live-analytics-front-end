@@ -36,28 +36,6 @@ function addZero(n) {
 };
 
 
-analyticsFilters.filter('textify', [function() {
-	var textify = function textify(text) {
-		var result = '';
-		switch (text) {
-		case 'audience':
-			result = 'Audience';
-			break;
-		case 'seconds_viewed':
-			result = 'Minutes Viewed';
-			break;
-		case 'buffertime':
-			result = 'Buffering Time';
-			break;
-		case 'bitrate':
-			result = 'Average Bitrate';
-			break;
-		}
-		return result;
-    }; 
-    return textify;
-}]);
-
 analyticsFilters.filter('formatAgg', [function() {
 	var formatAgg = function formatAgg(agg) {
 		var result = '';
@@ -66,7 +44,7 @@ analyticsFilters.filter('formatAgg', [function() {
 			result = agg.value;
 			break;
 		case 'seconds_viewed':
-			result = Math.floor(agg.value/60);
+			result = Math.floor(agg.value/60); // actually returns minutes
 			break;
 		case 'buffertime':
 			result = formatTime(agg.value, false, true);
