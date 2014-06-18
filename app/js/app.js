@@ -39,5 +39,5 @@ liveAnalytics.config(['$routeProvider', '$translateProvider', function($routePro
 }]);
 
 function navigateToFlashAnalytics(subtabName) {
-	$("#kcms",parent.document)[0].gotoPage({moduleName: "analytics",subtab: "playersList"});
+	$("#kcms",parent.document)[0].gotoPage({moduleName: "analytics",subtab: subtabName});
 }
