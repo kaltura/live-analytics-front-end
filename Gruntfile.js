@@ -30,7 +30,7 @@ module.exports = function(grunt) {
           'app/js/services.js', 
           'app/js/dummyServices.js' 
         ],
-        dest: 'app/js/livea.js'
+        dest: 'app/js/livea.tmp.js'
       },
       libs: {
           src: [
@@ -41,11 +41,14 @@ module.exports = function(grunt) {
               'app/lib/angular/angular.min.js',
               'app/lib/angular/angular-resource.min.js',
               'app/lib/angular/angular-route.min.js',
+              'app/lib/angular-translate-2.2.0/angular-translate.min.js',
+              'app/lib/angular-translate-2.2.0/angular-translate-loader-static-files.min.js',
               'app/lib/rickshaw/rickshaw.js',
               'app/lib/rickshaw/d3.v3.js',
               'app/lib/rickshaw/d3.layout.min.js',
               'app/lib/kaltura/KHoverDetail.js',
-              'app/lib/OpenLayers-2.13.1/OpenLayers.js'
+              'app/lib/OpenLayers-2.13.1/OpenLayers.js',
+              'app/locale/en_US.js'
           ],
           dest: '_dist/js/libs.js'
       }
@@ -97,6 +100,12 @@ module.exports = function(grunt) {
                     src: '**',
                     dest: '_dist/partials/'
                 },
+                { // locale
+                	expand: true,
+                	cwd: 'app/locale/',
+                	src: '**',
+                	dest: '_dist/locale/'
+                },
                 // js app + vendor are created directly in place
                 { // css - app (vendor is created directly in place)
                     src: 'app/css/app.css',
@@ -131,7 +140,8 @@ module.exports = function(grunt) {
         }
     },
     clean: {
-    	build: ['app/js/livea.js']
+    	before: ['_dist/**'],
+    	after: ['app/js/livea.tmp.js']
     }
     
   });
@@ -145,5 +155,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
 
   // Default task.
-  grunt.registerTask('default', ['clean:build', 'copy:main', 'concat:dist', 'uglify:dist', 'concat:libs', 'cssmin:combine', 'clean:build']);
+  grunt.registerTask('default', ['clean:before', 'copy:main', 'concat:dist', 'uglify:dist', 'concat:libs', 'cssmin:combine', 'clean:after']);
 };
