@@ -43,7 +43,15 @@
 	</div>
 
 	<!-- player -->
-	<script src="http://cdnapi.kaltura.com/p/346151/sp/34615100/embedIframeJs/uiconf_id/22767782/partner_id/346151"></script>
+	<script>
+		var oHead = document.getElementsByTagName('head').item(0);
+		var oScript= document.createElement("script");
+		oScript.type = "text/javascript";
+		var pid = window.parent.kmc.vars.partner_id;
+		var uiconfid = window.parent.kmc.vars.liveanalytics.player_id;
+		oScript.src="http://cdnapi.kaltura.com/p/"+pid+"/sp/"+pid+"00/embedIframeJs/uiconf_id/"+uiconfid+"/partner_id/"+pid;
+		oHead.appendChild( oScript);
+	</script>
 	
 	<script src="lib/jquery/jquery-1.10.2.min.js"></script>
 	<script src="lib/jquery-ui/jquery-ui-1.10.4/ui/minified/jquery-ui.min.js"></script>
