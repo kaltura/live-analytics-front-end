@@ -2,7 +2,7 @@
 	"objectType" : "KalturaLiveStatsListResponse",
 	"objects" :[{
 		"objectType" : "KalturaEntryLiveStats",
-		"entryId":"1_svrtnkpi",
+		"entryId":"1_i6mc5951",
 		"plays" : "90",
 		"audience" : "",
 		"secondsViewed" : "485",
@@ -12,7 +12,7 @@
 	},
 	{
 		"objectType" : "KalturaEntryLiveStats",
-		"entryId":"1_oeq67tuc",
+		"entryId":"1_53cfzba8",
 		"plays" : "40",
 		"audience" : "",
 		"secondsViewed" : "2500",
@@ -22,7 +22,7 @@
 	},
 	{
 		"objectType" : "KalturaEntryLiveStats",
-		"entryId":"1_ezrsr2bz",
+		"entryId":"1_uxezvfr3",
 		"plays" : "59",
 		"audience" : "",
 		"secondsViewed" : "1285",
@@ -32,7 +32,7 @@
 	},
 	{
 		"objectType" : "KalturaEntryLiveStats",
-		"entryId":"0_qnqownnl",
+		"entryId":"1_cp75ii7x",
 		"plays" : "12",
 		"audience" : "",
 		"secondsViewed" : "90",
@@ -42,7 +42,7 @@
 	},
 	{
 		"objectType" : "KalturaEntryLiveStats",
-		"entryId":"1_53cfzba8",
+		"entryId":"1_m2eimx9a",
 		"plays" : "60",
 		"audience" : "",
 		"secondsViewed" : "5681",
