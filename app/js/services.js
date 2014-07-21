@@ -195,6 +195,7 @@ analyticsServices.factory('DashboardSvc',
 									if (entryStat.entryId == entry.id) {
 										entryStat.name = entry.name;
 										entryStat.thumbnailUrl = entry.thumbnailUrl;
+										entryStat.startTime = entry.firstBroadcast * 1000; // API returns secs, we need ms
 										return false;
 									}
 									return true;
@@ -269,6 +270,7 @@ analyticsServices.factory('DashboardSvc',
 									if (entryStat.entryId == entry.id) {
 										entryStat.name = entry.name;
 										entryStat.thumbnailUrl = entry.thumbnailUrl;
+										entryStat.startTime = entry.firstBroadcast * 1000; // API returns secs, we need ms
 										return false;
 									}
 									return true;
