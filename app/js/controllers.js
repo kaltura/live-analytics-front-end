@@ -149,6 +149,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		$scope.pid = SessionInfo.pid;
 		$scope.uiconfId = SessionInfo.uiconfid;
 		$scope.playerEntryId = '';				// entry that should be shown in player (live / vod)
+		$rootScope.nonav = $routeParams.nonav == 'nonav';
 		
 
 		/**

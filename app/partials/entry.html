@@ -1,7 +1,11 @@
 <div class="entry-details page container">
 	<div class="header">
 		<div class="page-title">
-			<h1><a href="#">{{'entry.Live_Content' | translate }}</a> > {{'entry.Investigate' | translate}}</h1>
+			<h1>
+				<a ng-if="!nonav" href="#">{{'entry.Live_Content' | translate }}</a>
+				<span ng-if="nonav">{{'entry.Live_Content' | translate }}</span>
+				 > {{'entry.Investigate' | translate}}
+			</h1>
 		</div>
 		<div class="clear-both" ></div>
 		<div class="date-range">{{reportStartTime | date : 'd MMM H:mm:ss'}}</div>

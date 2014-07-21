@@ -18,7 +18,7 @@ liveAnalytics.config(['$routeProvider', '$translateProvider', function($routePro
 		templateUrl: 'partials/dashboard.html', 
 		controller: 'DashboardCtrl'
 	});
-	$routeProvider.when('/entry/:entryid', {
+	$routeProvider.when('/entry/:entryid/:nonav?', {
 		templateUrl: 'partials/entry.html', 
 		controller: 'EntryCtrl'
 	});
