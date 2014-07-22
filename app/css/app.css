@@ -81,7 +81,7 @@ hr.section-title {
 .page {
 	margin-right: auto;
   	margin-left: auto;
-  	max-width: 980px; 
+  	width: 980px; 
 }
 
 /* **************************** dashboard *************************** */
