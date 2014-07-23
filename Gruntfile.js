@@ -10,7 +10,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     meta: {
-      banner: '/*! KMC - v<%= pkg.version %> - ' +
+      banner: '/*! KMC Live Analytics - v<%= pkg.version %> - ' +
         '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
         '* https://github.com/kaltura/LiveAnalytics\n' +
         '* Copyright (c) <%= grunt.template.today("yyyy") %> ' +
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
           'app/js/services.js', 
           'app/js/dummyServices.js' 
         ],
-        dest: 'app/js/livea.tmp.js'
+        dest: '_dist/js/livea.js'
       },
       libs: {
           src: [
@@ -155,5 +155,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
 
   // Default task.
-  grunt.registerTask('default', ['clean:before', 'copy:main', 'concat:dist', 'uglify:dist', 'concat:libs', 'cssmin:combine', 'clean:after']);
+  grunt.registerTask('default', ['clean:before', 'copy:main', 'concat:dist', 'uglify:dist', 'concat:libs', 'cssmin:combine'/*, 'clean:after'*/]);
 };
