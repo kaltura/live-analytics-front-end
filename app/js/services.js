@@ -30,6 +30,8 @@ analyticsServices.factory('SessionInfo',
 	                        sessionInfo.ks = kmc.vars.ks;
 	                    if (kmc.vars.partner_id)
 	                    	sessionInfo.pid = kmc.vars.partner_id;
+	                    if (kmc.vars.service_url) 
+	                    	sessionInfo.service_url = kmc.vars.service_url;
 	                    if (kmc.vars.liveanalytics) 
 	                    	sessionInfo.uiconfid = kmc.vars.liveanalytics.player_id;
 	                }
@@ -78,7 +80,7 @@ analyticsServices.factory('KApi',
 			 		
 			 		$http({
 			 			data: sParams,
-			 			url: "http://www.kaltura.com/api_v3/index.php",
+			 			url: SessionInfo.service_url + "/api_v3/index.php",
 				 		method: method,
 			 			params: params,
 			 			headers: {'Content-Type': 'application/x-www-form-urlencoded'}

@@ -24,6 +24,8 @@
 	window.parent.kmc.vars = {
 			ks : 'OGE2MTZkNWRjM2YwNTM1OWVkZDVlMDk5NzMzZDg2M2I0MDNlMDZmOHwzNDYxNTE7MzQ2MTUxOzM1NDg3NDYxNjQ7MjsxNDAxMjYyNTE3LjI3NDk7YXRhci5zaGFkbWlAa2FsdHVyYS5jb207Ozs=',
 			partner_id : '346151',
+			service_url : 'http://www.kaltura.com',
+			cdn_host : 'cdnsecakmi.kaltura.com',
 			liveanalytics : {player_id : '22767782'}
 	};
 	
@@ -49,7 +51,7 @@
 		oScript.type = "text/javascript";
 		var pid = window.parent.kmc.vars.partner_id;
 		var uiconfid = window.parent.kmc.vars.liveanalytics.player_id;
-		oScript.src="http://cdnapi.kaltura.com/p/"+pid+"/sp/"+pid+"00/embedIframeJs/uiconf_id/"+uiconfid+"/partner_id/"+pid;
+		oScript.src=window.location.protocol + "//" + window.parent.kmc.vars.cdn_host + ""/p/"+pid+"/sp/"+pid+"00/embedIframeJs/uiconf_id/"+uiconfid+"/partner_id/"+pid;
 		oHead.appendChild( oScript);
 	</script>
 	

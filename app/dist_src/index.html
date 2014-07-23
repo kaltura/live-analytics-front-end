@@ -31,7 +31,7 @@
 		oScript.type = "text/javascript";
 		var pid = window.parent.kmc.vars.partner_id;
 		var uiconfid = window.parent.kmc.vars.liveanalytics.player_id;
-		oScript.src="http://cdnapi.kaltura.com/p/"+pid+"/sp/"+pid+"00/embedIframeJs/uiconf_id/"+uiconfid+"/partner_id/"+pid;
+		oScript.src=window.location.protocol + "//" + window.parent.kmc.vars.cdn_host + "/p/"+pid+"/sp/"+pid+"00/embedIframeJs/uiconf_id/"+uiconfid+"/partner_id/"+pid;
 		oHead.appendChild( oScript);
 	</script>
 	
