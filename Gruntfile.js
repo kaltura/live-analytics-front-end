@@ -131,9 +131,9 @@ module.exports = function(grunt) {
                 },
                 { // deployment
                 	expand: true,
-                	cwd: 'deploy',
+                	cwd: 'deploy/files',
                 	src: '**',
-                	dest: '_dist/deploy'
+                	dest: '_dist/deploy/files'
                 },
                 
             ]
@@ -142,7 +142,22 @@ module.exports = function(grunt) {
     clean: {
     	before: ['_dist/**'],
     	after: ['app/js/livea.tmp.js']
+    },
+	'string-replace': {
+    	deploy: {
+    		files: {
+    			'_dist/deploy/config.ini': 'deploy/config.ini'
+    	    },
+    	    options: {
+    	    	replacements: [{
+    	    		pattern: '{VERSION}',
+    	    		replacement: '<%= pkg.version %>'
+    	    	}]
+    	    }
+    	}
     }
+    
+
     
   });
 
@@ -153,7 +168,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-string-replace');
 
   // Default task.
-  grunt.registerTask('default', ['clean:before', 'copy:main', 'concat:dist', 'uglify:dist', 'concat:libs', 'cssmin:combine'/*, 'clean:after'*/]);
+  grunt.registerTask('default', ['clean:before', 'string-replace:deploy', 'copy:main', 'concat:dist', 'uglify:dist', 'concat:libs', 'cssmin:combine'/*, 'clean:after'*/]);
 };
