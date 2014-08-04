@@ -88,6 +88,7 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'DashboardSvc',
 		 * @param total		total number of pages
 		 */
 		var updatePagingControl = function updatePagingControl(current, total) {
+			if (total < 1) total = 1; // it's only for display..
 			var options = {
 	                currentPage: current,
 	                totalPages: total
