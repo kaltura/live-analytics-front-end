@@ -118,8 +118,8 @@ analyticsServices.factory('KApi',
 		]);
 
 analyticsServices.factory('DashboardSvc',
-		['KApi', '$resource', '$q', 'DashboardDummySvc', 
-		 	function DashboardSvcFactory(KApi, $resource, $q, DashboardDummySvc) {
+		['KApi', '$resource', '$q',  
+		 	function DashboardSvcFactory(KApi, $resource, $q) {
 		 		var DashboardSvc = {};
 		 		
 		 		/**
@@ -128,12 +128,21 @@ analyticsServices.factory('DashboardSvc',
 		 		 * @returns promise
 		 		 */
 		 		DashboardSvc.getAggregates = function getAggregates(liveOnly) {
-		 			// liveReportInputFilter = KalturaLiveReportsInputFilter
-		 			// liveReportInputFilter.hoursBefore = 36;
-		 			// liveReportInputFilter.isLive = liveOnly;
-		 			// KalturaFilterPager = null;
-		 			// LiveReports.getReport(LiveReportType.PARTNER_TOTAL, liveReportInputFilter, KalturaFilterPager) 
-		 			return DashboardDummySvc.getAggregates(liveOnly);
+		 			//return DashboardDummySvc.getAggregates(liveOnly);
+		 			var postData = {
+						'ignoreNull': '1',
+						'filter:objectType': 'KalturaLiveReportsInputFilter',
+			            'filter:hoursBefore': '36',
+			            'filter:live': liveOnly ? '1' : '0',
+			            'pager:objectType': 'KalturaFilterPager',
+			            'pager:pageIndex': '1',
+			            'pager:pageSize': '10',
+			            'reportType': 'PARTNER_TOTAL',
+			            'service': 'livereports',
+			            'action': 'getreport'
+			        };
+					
+					return KApi.doRequest(postData);
 		 		};
 		 		
 		 		
@@ -142,19 +151,22 @@ analyticsServices.factory('DashboardSvc',
 		 		 * for all live entries - get stats
 		 		 */
 		 		DashboardSvc._getAllEntriesStats = function _getAllEntriesStats(pageNumber) {
-		 			return DashboardDummySvc._getAllEntriesStats(pageNumber).query().$promise;
-//					var postData = {
-//						'ignoreNull': '1',
-//						'filter:objectType': 'KalturaLiveReportsInputFilter',
-//			            'filter:orderBy': '-createdAt',
-//			            'pager:objectType': 'KalturaFilterPager',
-//			            'pager:pageIndex': pageNumber,
-//			            'pager:pageSize': '10',
-//			            'service': 'livereports',
-//			            'action': 'getreport'
-//			        };
-//					
-//					return KApi.doRequest(postData);
+//		 			return DashboardDummySvc._getAllEntriesStats(pageNumber).query().$promise;
+					var postData = {
+						'ignoreNull': '1',
+						'filter:objectType': 'KalturaLiveReportsInputFilter',
+			            'filter:orderBy': '-createdAt',
+			            'filter:hoursBefore': '36',
+			            
+			            'pager:objectType': 'KalturaFilterPager',
+			            'pager:pageIndex': pageNumber,
+			            'pager:pageSize': '10',
+			            'reportType': 'ENTRY_TOTAL',
+			            'service': 'livereports',
+			            'action': 'getreport'
+			        };
+					
+					return KApi.doRequest(postData);
 		 		};
 		 		
 		 		/**
@@ -163,13 +175,13 @@ analyticsServices.factory('DashboardSvc',
 		 		 */
 		 		DashboardSvc._getAllEntriesEntries = function _getAllEntriesEntries(entryIds) {
 		 			var postData = {
-							'ignoreNull': '1',
-							'filter:objectType': 'KalturaLiveStreamEntryFilter',
-							'filter:entryIdsIn': entryIds,
-				            'filter:orderBy': '-createdAt',
-				            'service': 'livestream',
-				            'action': 'list'
-				        };
+						'ignoreNull': '1',
+						'filter:objectType': 'KalturaLiveStreamEntryFilter',
+						'filter:entryIdsIn': entryIds,
+			            'filter:orderBy': '-createdAt',
+			            'service': 'livestream',
+			            'action': 'list'
+			        };
 					return KApi.doRequest(postData);
 		 		};
 		 		
@@ -186,25 +198,31 @@ analyticsServices.factory('DashboardSvc',
 		            DashboardSvc._getAllEntriesStats(pageNumber).then(function (entryStats) {
 						// entryStats is KalturaLiveStatsListResponse
 						var ids = '';
-						entryStats.objects.forEach(function(entry) {
-							ids += entry.entryId + ","; 
-						}); 
-						DashboardSvc._getAllEntriesEntries(ids).then(function(entries) {
-							// entries is LiveStreamListResponse
-							entryStats.objects.forEach(function (entryStat) {
-								// add entry name to stats object
-								entries.objects.every(function (entry) {
-									if (entryStat.entryId == entry.id) {
-										entryStat.name = entry.name;
-										entryStat.thumbnailUrl = entry.thumbnailUrl;
-										entryStat.startTime = entry.firstBroadcast * 1000; // API returns secs, we need ms
-										return false;
-									}
-									return true;
+						if (entryStats.totalCount > 0) {
+							entryStats.objects.forEach(function(entry) {
+								ids += entry.entryId + ","; 
+							}); 
+							DashboardSvc._getAllEntriesEntries(ids).then(function(entries) {
+								// entries is LiveStreamListResponse
+								entryStats.objects.forEach(function (entryStat) {
+									// add entry name to stats object
+									entries.objects.every(function (entry) {
+										if (entryStat.entryId == entry.id) {
+											entryStat.name = entry.name;
+											entryStat.thumbnailUrl = entry.thumbnailUrl;
+											entryStat.startTime = entry.firstBroadcast * 1000; // API returns secs, we need ms
+											return false;
+										}
+										return true;
+									});
 								});
+								deferred.resolve(entryStats);
 							});
+						}
+						else {
+							// no entries returned stats, resolve.
 							deferred.resolve(entryStats);
-						});
+						}
 					});
 			 		
 			 		// Returning the promise object
@@ -237,16 +255,18 @@ analyticsServices.factory('DashboardSvc',
 				 * @param entryIds
 				 */
 				DashboardSvc._getLiveEntriesStats = function _getLiveEntriesStats(entryIds) {
-					return DashboardDummySvc._getLiveEntriesStats(entryIds);
-//					var postData = {
-//						'ignoreNull': '1',
-//						'filter:objectType': 'KalturaLiveReportsInputFilter',
-//			            'filter:orderBy': '-createdAt',
-//			            'service': 'livereports',
-//			            'action': 'getreport'
-//			        };
-//					
-//					return KApi.doRequest(postData);
+					//return DashboardDummySvc._getLiveEntriesStats(entryIds);
+					var postData = {
+						'ignoreNull': '1',
+						'filter:objectType': 'KalturaLiveReportsInputFilter',
+			            'filter:orderBy': '-createdAt',
+			            'filter:entryIds': entryIds,
+			            'reportType': 'ENTRY_TOTAL',
+			            'service': 'livereports',
+			            'action': 'getreport'
+			        };
+					
+					return KApi.doRequest(postData);
 				};
 				
 				/**
@@ -261,25 +281,35 @@ analyticsServices.factory('DashboardSvc',
 		            DashboardSvc._getLiveEntriesEntries(pageNumber).then(function (entries) {
 						// entries is LiveStreamListResponse 
 						var ids = '';
-						entries.objects.forEach(function(entry) {
-							ids += entry.id + ","; 
-						}); 
-						DashboardSvc._getLiveEntriesStats(ids).then(function(entryStats) {
-							// entryStats is KalturaLiveStatsListResponse 
-							entryStats.objects.forEach(function (entryStat) {
-								// add entry name to stats object
-								entries.objects.every(function (entry) {
-									if (entryStat.entryId == entry.id) {
-										entryStat.name = entry.name;
-										entryStat.thumbnailUrl = entry.thumbnailUrl;
-										entryStat.startTime = entry.firstBroadcast * 1000; // API returns secs, we need ms
-										return false;
-									}
-									return true;
+						if (entries.totalCount > 0) {
+							entries.objects.forEach(function(entry) {
+								ids += entry.id + ","; 
+							}); 
+							DashboardSvc._getLiveEntriesStats(ids).then(function(entryStats) {
+								// entryStats is KalturaLiveStatsListResponse 
+								entryStats.objects.forEach(function (entryStat) {
+									// add entry name to stats object
+									entries.objects.every(function (entry) {
+										if (entryStat.entryId == entry.id) {
+											entryStat.name = entry.name;
+											entryStat.thumbnailUrl = entry.thumbnailUrl;
+											entryStat.startTime = entry.firstBroadcast * 1000; // API returns secs, we need ms
+											return false;
+										}
+										return true;
+									});
 								});
+								deferred.resolve(entryStats);
 							});
-							deferred.resolve(entryStats);
-						});
+						}
+						else {
+							// no currently live entries, resolve with empty data
+							deferred.resolve({
+		                        "objectType" : "KalturaLiveStatsListResponse",
+		                        "objects" : null,
+		                        "totalCount" : '0'
+		                    });
+						}
 					});
 			 		
 			 		// Returning the promise object
@@ -293,8 +323,8 @@ analyticsServices.factory('DashboardSvc',
 
 
 analyticsServices.factory('EntrySvc',
-		['KApi', '$resource', '$q', 'EntryDummySvc',
-		 	function EntrySvcFactory(KApi, $resource, $q, EntryDummySvc) {
+		['KApi', '$resource', '$q', 
+		 	function EntrySvcFactory(KApi, $resource, $q) {
 		 		var EntrySvc = {};
 		 		
 		 		/**
@@ -331,13 +361,19 @@ analyticsServices.factory('EntrySvc',
 		 		 * @returns KalturaEntryLiveStats 
 		 		 */
 		 		EntrySvc.getAggregates = function getAggregates(entryId, isLive) {
-		 			// liveReportInputFilter = KalturaLiveReportsInputFilter
-		 			// liveReportInputFilter.hoursBefore = 36;
-		 			// liveReportInputFilter.isLive = isLive;
-		 			// liveReportInputFilter.entryIds = entryId;
-		 			// KalturaFilterPager = null;
-		 			// LiveReports.getReport(LiveReportType.ENTRY_TOTAL, liveReportInputFilter, KalturaFilterPager) 
-		 			return EntryDummySvc.getAggregates(entryId, isLive);
+		 			//return EntryDummySvc.getAggregates(entryId, isLive);
+		 			var postData = {
+						'ignoreNull': '1',
+						'filter:objectType': 'KalturaLiveReportsInputFilter',
+			            'filter:hoursBefore': '36',
+			            'filter:entryIds': entryId,
+			            'filter:live': isLive ? '1' : '0',
+			            'reportType': 'ENTRY_TOTAL',
+			            'service': 'livereports',
+			            'action': 'getreport'
+			        };
+					
+					return KApi.doRequest(postData);
 		 		};
 		 		
 		 		
@@ -347,14 +383,21 @@ analyticsServices.factory('EntrySvc',
 		 		 * @returns
 		 		 */
 		 		EntrySvc.getReferrers = function getReferrers(entryId) {
-		 			// liveReportInputFilter = KalturaLiveReportsInputFilter
-		 			// liveReportInputFilter.hoursBefore = 36;
-		 			// liveReportInputFilter.entryIds = entryId;
-		 			// liveReportInputFilter.orderBy = ???;
-		 			// KalturaFilterPager.pageSize = 10;
-		 			// KalturaFilterPager.pageIndex = 1;
-		 			// LiveReports.getReport(LiveReportType.ENTRY_SYNDICATION_TOTAL, liveReportInputFilter, KalturaFilterPager) 
-		 			return EntryDummySvc.getReferrers(entryId);
+		 			//return EntryDummySvc.getReferrers(entryId);
+		 			var postData = {
+						'ignoreNull': '1',
+						'filter:objectType': 'KalturaLiveReportsInputFilter',
+			            'filter:hoursBefore': '36',
+			            'filter:entryIds': entryId,
+			            'pager:objectType': 'KalturaFilterPager',
+			            'pager:pageIndex': '1',
+			            'pager:pageSize': '10',
+			            'reportType': 'ENTRY_SYNDICATION_TOTAL',
+			            'service': 'livereports',
+			            'action': 'getreport'
+			        };
+					
+					return KApi.doRequest(postData);
 		 		};
 		 		
 		 		
@@ -367,14 +410,22 @@ analyticsServices.factory('EntrySvc',
 		 		 * @returns
 		 		 */
 		 		EntrySvc.getGraph = function getGraph(entryId, fromDate, toDate) {
-		 			// liveReportInputFilter = KalturaLiveReportsInputFilter
-		 			// liveReportInputFilter.fromDate = ??;
-		 			// liveReportInputFilter.toDate = ???;
-		 			// liveReportInputFilter.entryIds = entryId;
-		 			// KalturaFilterPager.pageSize = 12960;	// 6 per minute * 60 minutes per hour * 36 hours  
-		 			// KalturaFilterPager.pageIndex = 1;
-		 			// LiveReports.getReport(LiveReportType.ENTRY_TIME_LINE, liveReportInputFilter, KalturaFilterPager) 
-		 			return EntryDummySvc.getGraph(entryId, fromDate, toDate);
+		 			//return EntryDummySvc.getGraph(entryId, fromDate, toDate);
+		 			var postData = {
+						'ignoreNull': '1',
+						'filter:objectType': 'KalturaLiveReportsInputFilter',
+			            'filter:fromTime': fromDate,
+			            'filter:toTime': toDate,
+			            'filter:entryIds': entryId,
+			            'pager:objectType': 'KalturaFilterPager',
+			            //'pager:pageIndex': '1',
+			            //'pager:pageSize': '12960', // 6 per minute * 60 minutes per hour * 36 hours 	
+			            //'reportType': 'ENTRY_TIME_LINE',
+			            'service': 'livereports',
+			            'action': 'getreport'
+			        };
+					
+					return KApi.doRequest(postData);
 		 		};
 		 		
 		 		
@@ -386,14 +437,22 @@ analyticsServices.factory('EntrySvc',
 		 		 * @returns
 		 		 */
 		 		EntrySvc.getMap = function getMap(entryId, time) {
-		 			// liveReportInputFilter = KalturaLiveReportsInputFilter
-		 			// liveReportInputFilter.fromDate = time;
-		 			// liveReportInputFilter.toDate = time; 	// use same value to get a single point
-		 			// liveReportInputFilter.entryIds = entryId;
-		 			// KalturaFilterPager.pageSize = ??;  
-		 			// KalturaFilterPager.pageIndex = 1;
-		 			// LiveReports.getReport(LiveReportType.ENTRY_GEO_TIME_LINE, liveReportInputFilter, KalturaFilterPager) 
-		 			return EntryDummySvc.getMap(entryId, time);
+		 			//return EntryDummySvc.getMap(entryId, time);
+		 			var postData = {
+						'ignoreNull': '1',
+						'filter:objectType': 'KalturaLiveReportsInputFilter',
+			            'filter:fromTime': time,
+			            'filter:toTime': time,
+			            'filter:entryIds': entryId,
+			            //'pager:objectType': 'KalturaFilterPager',
+			            //'pager:pageIndex': '1',
+			            //'pager:pageSize': '12960', // 6 per minute * 60 minutes per hour * 36 hours 	
+			            'reportType': 'ENTRY_GEO_TIME_LINE',
+			            'service': 'livereports',
+			            'action': 'getreport'
+			        };
+					
+					return KApi.doRequest(postData);
 		 		};
 		 		
 		 		
