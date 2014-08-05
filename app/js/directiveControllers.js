@@ -108,7 +108,15 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 			self.getMapData(ui.value);
 		};
 		
-		this.createStyleMap = function createStyleMap() {
+		
+		/**
+		 * create a style map for the dots
+		 * @param min the smallest data point value
+		 * @param max the largest data point value
+		 */
+		this.createStyleMap = function createStyleMap(min, max) {
+			var sRadius = 2;
+			var lRadius = 10;
 			// style
 			var style = new OpenLayers.Style({
 				pointRadius: "${radius}",
@@ -122,7 +130,8 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 			{
 				context: {
 					radius: function(feature) {
-						return feature.attributes.data / 100;
+						// data point size normalization
+						return lRadius - ((max - feature.attributes.data) * (lRadius - sRadius) / (max - min));
 					},
 					tooltip: function(feature) {
 						return feature.attributes.text+ " " + feature.attributes.data;
@@ -174,53 +183,74 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 				var countriesData = {};
 				var features = new Array();
 				var point;
+				var min = 0;
+				var max = 0;
 				for ( var i = 0; i < value.length; i++) {
+					var val = parseInt(value[i].audience, 10);
 					// accumulate data for country-level layer
 					if (!countriesData[value[i].country.name]) { 
 						// init - keep whole value for lat/long
-						countriesData[value[i].country.name] = value[i];  
+						countriesData[value[i].country.name] = value[i];
+						countriesData[value[i].country.name]['audience'] = val; // convert string to int
 					}
 					else {
 						// sum audience
-						countriesData[value[i].country.name]['audience'] += value[i].audience;
+						countriesData[value[i].country.name]['audience'] += val;
 					}
 					point = new OpenLayers.Geometry.Point(value[i].city.longitude, value[i].city.latitude).transform('EPSG:4326', 'EPSG:3857');
 					features[i] = new OpenLayers.Feature.Vector(
 							point, 
 							{
-								"data" : value[i].audience,
+								"data" : val,
 								"text" : value[i].city.name
 							}
 							);
+					
+					// update cities min-max
+					if (min == 0 || val < min) {
+						min = val;
+					}
+					if (val > max) {
+						max = val;
+					}
 				}
 				
 				// create cities layer
 				var layer = self.citiesLayer = new OpenLayers.Layer.Vector('Cities', {
 					"projection": "EPSG:3857",
 					"visibility" : self.map.zoom > 3,
-					"styleMap" : self.createStyleMap()
+					"styleMap" : self.createStyleMap(min, max)
 				});
 				layer.addFeatures(features);
 				self.map.addLayer(layer);
 				
 				// create countries layer
+				min = max = 0;
 				features = new Array();
 				for (var key in countriesData) {
+					var val = parseInt(countriesData[key].audience, 10);
 					point = new OpenLayers.Geometry.Point(countriesData[key].country.longitude, countriesData[key].country.latitude).transform('EPSG:4326', 'EPSG:3857');
 					features.push(new OpenLayers.Feature.Vector(
 							point, 
 							{
-								"data" : countriesData[key].audience,
+								"data" : val,
 								"text" : countriesData[key].country.name
 							}
 							));
+					// update countries min-max
+					if (min == 0 || val < min) {
+						min = val;
+					}
+					if (val > max) {
+						max = val;
+					}
 				}
 				
 				// create countries layer
 				layer = self.countriesLayer = new OpenLayers.Layer.Vector('Countries', {
 					"projection": "EPSG:3857",
 					"visibility" : self.map.zoom < 4,
-					"styleMap" : self.createStyleMap()
+					"styleMap" : self.createStyleMap(min, max)
 				});
 				layer.addFeatures(features);
 				self.map.addLayer(layer);
@@ -389,7 +419,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 					if (isRecordedEntry()) {
 						// trim data edges: 
 						for (var i = 0; i<objects.length; i++) {
-							if (objects[i].timestamp >= $scope.entry.sessionStartTime) { //TODO att name!!
+							if (objects[i].timestamp >= $scope.entry.firstBroadcast) { //TODO att name!!
 								break;
 							}
 						}
