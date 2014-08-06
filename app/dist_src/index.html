@@ -23,18 +23,27 @@
 	<div class="view-container">
 		<div ng-view></div>
 	</div>
-
+	
 	<!-- player -->
 	<script>
+		window.playerLibLoaded = false;
+		
 		var oHead = document.getElementsByTagName('head').item(0);
 		var oScript= document.createElement("script");
 		oScript.type = "text/javascript";
 		var pid = window.parent.kmc.vars.partner_id;
 		var uiconfid = window.parent.kmc.vars.liveanalytics.player_id;
 		oScript.src=window.location.protocol + "//" + window.parent.kmc.vars.cdn_host + "/p/"+pid+"/sp/"+pid+"00/embedIframeJs/uiconf_id/"+uiconfid+"/partner_id/"+pid;
+		oScript.onload = plrCallback;
 		oHead.appendChild( oScript);
+		
+		function plrCallback() {
+			console.log('player loaded');
+			window.playerLibLoaded = true; // only embed when true
+		}
+		
 	</script>
-	
+
 	
 	<script src="js/libs.js"></script>
 	<script src="js/livea.min.js"></script>

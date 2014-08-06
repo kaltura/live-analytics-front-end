@@ -22,7 +22,7 @@
 	window.parent = {};
 	window.parent.kmc = {};
 	window.parent.kmc.vars = {
-			ks : 'MmVhNzNiNTM5YTU2MzdmNjA5ZmFmNWIyYTM3ODE2ZDE1YjQ4ODc2M3wxMDM7MTAzOzE0MDcxMzk4NTY7MjsxNDA3MDUzNDU2Ljk4MjM7YXRhci5zaGFkbWlAa2FsdHVyYS5jb207KixkaXNhYmxlZW50aXRsZW1lbnQ7Ow==',
+			ks : 'N2Q3NWFlMjgyNDI1YmQxN2M0OWRhM2QxNzE4MjBjOGM3ZTkwN2U2N3wxMDM7MTAzOzE0MDc0MDM1MjI7MjsxNDA3MzE3MTIyLjg2Nzg7YXRhci5zaGFkbWlAa2FsdHVyYS5jb207KixkaXNhYmxlZW50aXRsZW1lbnQ7Ow==',
 			partner_id : '103',
 			service_url : 'http://dev-hudson11.dev.kaltura.com',
 			cdn_host : 'dev-hudson11.dev.kaltura.com',
@@ -30,6 +30,7 @@
 	};
 	
 </script>
+
 </head>
 <body >
 <div class="kmcSubNav" ng-class="{hidden : nonav}">
@@ -46,14 +47,24 @@
 
 	<!-- player -->
 	<script>
+		window.playerLibLoaded = false;
+		
 		var oHead = document.getElementsByTagName('head').item(0);
 		var oScript= document.createElement("script");
 		oScript.type = "text/javascript";
 		var pid = window.parent.kmc.vars.partner_id;
 		var uiconfid = window.parent.kmc.vars.liveanalytics.player_id;
 		oScript.src=window.location.protocol + "//" + window.parent.kmc.vars.cdn_host + "/p/"+pid+"/sp/"+pid+"00/embedIframeJs/uiconf_id/"+uiconfid+"/partner_id/"+pid;
+		oScript.onload = plrCallback;
 		oHead.appendChild( oScript);
+		
+		function plrCallback() {
+			console.log('player loaded');
+			window.playerLibLoaded = true; // only embed when true
+		}
+		
 	</script>
+
 	
 	<script src="lib/jquery/jquery-1.10.2.min.js"></script>
 	<script src="lib/jquery-ui/jquery-ui-1.10.4/ui/minified/jquery-ui.min.js"></script>

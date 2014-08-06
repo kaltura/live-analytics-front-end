@@ -7,8 +7,8 @@ var analyticsControllers = angular.module('analyticsControllers'); // get, don't
 /**
  * controller for KDP on entry page
  */
-analyticsControllers.controller('KPlayerController', ['$scope', '$attrs',  
-    function($scope, $attrs) {
+analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$interval', 
+    function($scope, $attrs, $interval) {
 		var self = this;
 		this.playerElement = null;
   		
@@ -18,8 +18,8 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs',
   		
   		$scope.$on('gotoTime', function (event, time) {
   			// translate timestamp to entry time, go to correct time.
-  			//TODO use entry.sessionStartTime
-  			var playerTime = time - $scope.entry.sessionStartTime;
+  			//TODO use entry.firstBroadcast
+  			var playerTime = time - $scope.entry.firstBroadcast;
   			console.log(playerTime);
   			var kdp = angular.element('#kplayer')[0];
   			kdp.sendNotification("doSeek", playerTime);
@@ -28,22 +28,49 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs',
 
 
   		$scope.$watch('playerEntryId', function( value ) {
+  			function embedNow() {
+  				console.log('embedNow');
+  				kWidget.embed({
+  					"targetId": "kplayer", 
+  					"wid": "_" + $scope.pid, 
+  					"uiconf_id": $scope.uiconfId, 
+  					"entry_id": value, 
+  					"flashvars": { 
+  						"streamerType": "auto" 
+  					} 
+  				});
+  			};
   			if (value) {
   				if (value != -1) {
-		  			kWidget.embed({
-		            	"targetId": "kplayer", 
-		            	"wid": "_" + $scope.pid, 
-		              	"uiconf_id": $scope.uiconfId, 
-		              	"entry_id": value, 
-		              	"flashvars": { 
-		              		"streamerType": "auto" 
-		              	} 
-		            });
+  					if (window.playerLibLoaded) {
+  						console.log('lib loaded before embed');
+			  			embedNow();
+  					}
+  					else {
+  						// setTimeout until loaded
+  						$scope.playerIntervalPromise = $interval(function() {
+  							if (window.playerLibLoaded) {
+  								console.log('clearing interval and embedding');
+  								$interval.cancel($scope.playerIntervalPromise);
+  								$scope.playerIntervalPromise = undefined;		
+  								embedNow();
+  							}
+  						}, 500);
+  					}
   				} else {
   					self.playerElement.html('<h3>Live Session Was Not Recorded</h3>');
   				}
+  				$scope.playerEntryId = null;
 	  		}
   		});
+  		
+  		$scope.$on('$destroy', function() {
+			// Make sure that the interval is destroyed too
+			if (angular.isDefined($scope.playerIntervalPromise)) {
+				$interval.cancel($scope.playerIntervalPromise);
+				$scope.playerIntervalPromise = undefined;
+			}
+		});
 }]);
 
 
@@ -170,14 +197,14 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 		 * @param value array of KalturaGeoTimeLiveStats
 		 */
 		this.displayData = function displayData(value) {
+			// remove existing layers
+			if (self.citiesLayer) {
+				self.map.removeLayer(self.citiesLayer);
+			}
+			if (self.countriesLayer) {
+				self.map.removeLayer(self.countriesLayer);
+			}
 			if (value) { 
-				// remove existing layers
-				if (self.citiesLayer) {
-					self.map.removeLayer(self.citiesLayer);
-				}
-				if (self.countriesLayer) {
-					self.map.removeLayer(self.countriesLayer);
-				}
 				
 				// process data to create new layers
 				var countriesData = {};
@@ -407,16 +434,17 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 * @param end of 36 hrs term (timestamp)
 		 */
 		var getGraph36Hrs = function getGraph36Hrs(toDate) {
-			var fromDate = toDate - 129600000; // 60000 ms per minute * 60 minutes per hour * 36 hrs 
+			var fromDate = toDate - 60000;//129600000; // 60000 ms per minute * 60 minutes per hour * 36 hrs 
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
-				if (data.objects.length > 0 && graph != null) {
+				if (data.objects && data.objects.length > 0 && graph != null) {
 					var objects = data.objects;
 					objects.forEach(function (stat) {
 						// re-shape data so rickshaw can understand it
-						stat.y = stat.audience;
+						stat.y = stat.value;
 						stat.x = stat.timestamp;
 					});
 					if (isRecordedEntry()) {
+						console.log('recorded');
 						// trim data edges: 
 						for (var i = 0; i<objects.length; i++) {
 							if (objects[i].timestamp >= $scope.entry.firstBroadcast) { //TODO att name!!
@@ -424,7 +452,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 							}
 						}
 						for (var j = objects.length - 1; j>=0; j--) {
-							if (objects[j].audience != 0) {
+							if (objects[j].value != 0) {
 								j++;
 								break;
 							}
@@ -447,10 +475,10 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			var fromDate = toDate - 40000;
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
 				var objects = data.objects;
-				if (data.objects.length > 0) {
+				if (data.objects && data.objects.length > 0) {
 					objects.forEach(function (stat) {
 						// re-shape data so rickshaw can understand it
-						stat.y = stat.audience;
+						stat.y = stat.value;
 						stat.x = stat.timestamp;
 					});
 				};
