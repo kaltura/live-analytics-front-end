@@ -9,7 +9,7 @@ var KHoverDetail = Rickshaw.Class.create(Rickshaw.Graph.HoverDetail, {
 					};
 
 					this.yFormatter = args.yFormatter || function(y) {
-						return y === null ? y : y.toFixed(2);
+						return y === null ? y : parseInt(y, 10).toFixed(2);
 					};
 
 					var element = this.element = document.createElement('div');
