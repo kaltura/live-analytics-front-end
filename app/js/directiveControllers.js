@@ -429,6 +429,21 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			return graph;
 		};
 		
+		
+		/**
+		 * @param str	info string
+		 * @return array [{x, y}, ..]
+		 */
+		var parseData = function parseData(str) {
+			var os = str.split(';');
+			var objects = new Array();
+			os.forEach(function (sLine) {
+				var vals = sLine.split(',');
+				objects.push({'x':vals[0], 'timestamp':vals[0], 'y':vals[1]});
+			});
+			return objects;
+		};
+		
 		/**
 		 * get graph data for the last 36 hrs 
 		 * @param end of 36 hrs term (timestamp)
@@ -436,15 +451,10 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		var getGraph36Hrs = function getGraph36Hrs(toDate) {
 			var fromDate = toDate - 60000;//129600000; // 60000 ms per minute * 60 minutes per hour * 36 hrs 
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
-				if (data.objects && data.objects.length > 0 && graph != null) {
-					var objects = data.objects;
-					objects.forEach(function (stat) {
-						// re-shape data so rickshaw can understand it
-						stat.y = stat.value;
-						stat.x = stat.timestamp;
-					});
+				if (data[0] && data[0].data && graph != null) {
+					// parse string into objects
+					var objects = parseData(data[0].data);
 					if (isRecordedEntry()) {
-						console.log('recorded');
 						// trim data edges: 
 						for (var i = 0; i<objects.length; i++) {
 							if (objects[i].timestamp >= $scope.entry.firstBroadcast) { //TODO att name!!

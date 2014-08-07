@@ -411,22 +411,19 @@ analyticsServices.factory('EntrySvc',
 		 		 * @returns
 		 		 */
 		 		EntrySvc.getGraph = function getGraph(entryId, fromDate, toDate) {
-		 			return EntryDummySvc.getGraph(entryId, fromDate, toDate);
-		 			/*var postData = {
+		 			//return EntryDummySvc.getGraph(entryId, fromDate, toDate);
+		 			var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportsInputFilter',
-			            'filter:fromTime': fromDate,
-			            'filter:toTime': toDate,
+			            'filter:fromTime': Math.floor(fromDate / 1000),
+			            'filter:toTime': Math.floor(toDate / 1000),
 			            'filter:entryIds': entryId,
-			            //'pager:objectType': 'KalturaFilterPager',
-			            //'pager:pageIndex': '1',
-			            //'pager:pageSize': '12960', // 6 per minute * 60 minutes per hour * 36 hours 	
 			            'reportType': 'ENTRY_TIME_LINE',
 			            'service': 'livereports',
-			            'action': 'getreport'
+			            'action': 'getevents'
 			        };
 					
-					return KApi.doRequest(postData);*/
+					return KApi.doRequest(postData);
 		 		};
 		 		
 		 		
@@ -444,9 +441,6 @@ analyticsServices.factory('EntrySvc',
 						'filter:objectType': 'KalturaLiveReportsInputFilter',
 			            'filter:eventTime': Math.floor(time / 1000),
 			            'filter:entryIds': entryId,
-			            //'pager:objectType': 'KalturaFilterPager',
-			            //'pager:pageIndex': '1',
-			            //'pager:pageSize': '12960', // 6 per minute * 60 minutes per hour * 36 hours 	
 			            'reportType': 'ENTRY_GEO_TIME_LINE',
 			            'service': 'livereports',
 			            'action': 'getreport'
