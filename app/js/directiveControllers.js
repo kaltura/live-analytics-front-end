@@ -363,9 +363,10 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		this.init = function init (element) {
 			graphElement = element;
 			var d = new Date();
+			var t = d.getTime()/1000;
 			series = [{
 					color : 'steelblue',
-					data : [ {x:d.getTime(), y:0} ],
+					data : [ {x:t, y:0} ],
 					name : "Line 1"
 				}];
 
@@ -438,18 +439,20 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			var os = str.split(';');
 			var objects = new Array();
 			os.forEach(function (sLine) {
-				var vals = sLine.split(',');
-				objects.push({'x':vals[0], 'timestamp':vals[0], 'y':vals[1]});
+				if (sLine) {
+					var vals = sLine.split(',');
+					objects.push({'x':parseInt(vals[0], 10), 'timestamp':vals[0], 'y':vals[1]});
+				}
 			});
 			return objects;
 		};
 		
 		/**
 		 * get graph data for the last 36 hrs 
-		 * @param end of 36 hrs term (timestamp)
+		 * @param end of 36 hrs term (timestamp ms)
 		 */
 		var getGraph36Hrs = function getGraph36Hrs(toDate) {
-			var fromDate = toDate - 60000;//129600000; // 60000 ms per minute * 60 minutes per hour * 36 hrs 
+			var fromDate = toDate - 129600000; // 60000 ms per minute * 60 minutes per hour * 36 hrs 
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
 				if (data[0] && data[0].data && graph != null) {
 					// parse string into objects
@@ -484,15 +487,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			var toDate = endTime;
 			var fromDate = toDate - 40000;
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
-				var objects = data.objects;
-				if (data.objects && data.objects.length > 0) {
-					objects.forEach(function (stat) {
-						// re-shape data so rickshaw can understand it
-						stat.y = stat.value;
-						stat.x = stat.timestamp;
-					});
-				};
-				
+				var objects = parseData(data[0].data);
 				if (graph != null) {
 					updateGraphContent(objects);
 				}
@@ -543,6 +538,8 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		
 		/**
 		 * event handler for main screen setup event
+		 * @param event
+		 * @param time (timestamp ms)
 		 */
 		var setupScreenHandler = function setupScreenHandler(event, time) {
 			getGraph36Hrs(time);
