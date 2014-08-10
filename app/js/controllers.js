@@ -159,7 +159,19 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		 */
 		var getAggregates = function getAggregates(isLive) {
 			EntrySvc.getAggregates($scope.entryId, isLive).then (function(data) {
-				var o = data.objects[0];
+				var o;
+				if (data.objects && data.objects.length > 0) {
+					o = data.objects[0];
+				}
+				else {
+					// create empty dummy object
+					o = {'audience' : 0,
+						'plays' : 0,
+						'secondsViewed' : 0,
+						'bufferTime' : 0,
+						'avgBitrate' : 0
+					};
+				}
 				var results = [
 				           	{"title": "audience", "value": isLive ? o.audience : o.plays},
 				        	{"title": "seconds_viewed", "value": o.secondsViewed},
@@ -169,6 +181,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 				
 				$scope.aggregates = results;
 				getReferrers(isLive ? o.audience : o.plays);
+				
 			});
 		};
 		
@@ -179,7 +192,13 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		 */
 		var getReferrers = function getReferrers(totalPlays) {
 			EntrySvc.getReferrers($scope.entryId).then (function(data) {
-				var objects = data.objects;
+				var objects;
+				if (data.objects && data.objects.length > 0) {
+					objects = data.objects;
+				}
+				else {
+					objects = new Array();
+				}
 				var results = new Array();
 				var o;
 				for (var i = 0; i<objects.length; i++) {
