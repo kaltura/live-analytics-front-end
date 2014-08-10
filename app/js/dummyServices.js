@@ -146,32 +146,21 @@ analyticsServices.factory('EntryDummySvc',
 		 		
 		 		EntryDummySvc.getGraph = function getGraph(entryId, fromDate, toDate) {
 		 			var dfd = $q.defer();
-		 			var t = fromDate;
+		 			var t = fromDate; //ms
 		 			var ar = new Array();
 		 			var stats;
 		 			var au = Math.floor(Math.random() * 500);
 		 			while (t < toDate) {
 		 				au += Math.floor(Math.random() * 10) - 5;
 		 				au = Math.max(au, 0);
-		 				stats = {
-	 						"objectType" : "KalturaEntryLiveStats",
-	 						"plays" : "",
-	 						"audience" : au,
-	 						"secondsViewed" : "",
-	 						"bufferTime" : "",
-	 						"avgBitrate" : "",
-	 						"timestamp" : Math.floor(t /1000)
-	 							
-	 					};
+		 				stats = Math.floor(t /1000) + "," + au;
 		 				ar.push(stats);
 		 				t += 10000;
 		 			}
 		 			
-		 			dfd.resolve({
-		 				"objectType" : "KalturaLiveStatsListResponse",
-		 				"objects" : ar,
-		 				"totalCount" : ar.length
-		 			});
+		 			dfd.resolve([{
+		 				"data" : ar.join(';')
+		 			}]);
 		 			return dfd.promise;
 		 		};
 		 		
