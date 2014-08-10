@@ -406,8 +406,8 @@ analyticsServices.factory('EntrySvc',
 		 		/**
 		 		 * get graph data for base 36 hours
 		 		 * @param entryId
-		 		 * @param fromDate (timestamp)
-		 		 * @param toDate (timestamp)
+		 		 * @param fromDate (timestamp ms)
+		 		 * @param toDate (timestamp ms)
 		 		 * @returns
 		 		 */
 		 		EntrySvc.getGraph = function getGraph(entryId, fromDate, toDate) {
@@ -431,7 +431,7 @@ analyticsServices.factory('EntrySvc',
 		 		/**
 		 		 * get map data for required time
 		 		 * @param entryId
-		 		 * @param time
+		 		 * @param time	(timestamp ms)
 		 		 * @returns
 		 		 */
 		 		EntrySvc.getMap = function getMap(entryId, time) {
