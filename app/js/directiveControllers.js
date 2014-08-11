@@ -18,9 +18,7 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$inte
   		
   		$scope.$on('gotoTime', function (event, time) {
   			// translate timestamp to entry time, go to correct time.
-  			//TODO use entry.firstBroadcast
   			var playerTime = time - $scope.entry.firstBroadcast;
-  			console.log(playerTime);
   			var kdp = angular.element('#kplayer')[0];
   			kdp.sendNotification("doSeek", playerTime);
 
@@ -29,7 +27,6 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$inte
 
   		$scope.$watch('playerEntryId', function( value ) {
   			function embedNow() {
-  				console.log('embedNow');
   				kWidget.embed({
   					"targetId": "kplayer", 
   					"wid": "_" + $scope.pid, 
@@ -43,14 +40,12 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$inte
   			if (value) {
   				if (value != -1) {
   					if (window.playerLibLoaded) {
-  						console.log('lib loaded before embed');
 			  			embedNow();
   					}
   					else {
   						// setTimeout until loaded
   						$scope.playerIntervalPromise = $interval(function() {
   							if (window.playerLibLoaded) {
-  								console.log('clearing interval and embedding');
   								$interval.cancel($scope.playerIntervalPromise);
   								$scope.playerIntervalPromise = undefined;		
   								embedNow();
@@ -116,11 +111,11 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 			
 			// create slider
 			var d = new Date();
-			var t = d.getTime();
+			var t = Math.floor(d.getTime() / 1000);
 			self.slider = angular.element('#mapslider');
 			self.slider.slider({
 				max: t, 
-				min: t - 129600000, // 36 hrs
+				min: t - 129600, // 36 hrs
 				value: t, 
 				step: 10,
 				change: self.sliderChangeHandler
@@ -158,6 +153,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 				context: {
 					radius: function(feature) {
 						// data point size normalization
+						if (max == min) return lRadius;
 						return lRadius - ((max - feature.attributes.data) * (lRadius - sRadius) / (max - min));
 					},
 					tooltip: function(feature) {
@@ -182,7 +178,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 		
 		/**
 		 * get data to display on map
-		 * @param time unix timestamp. if null, current time is used.
+		 * @param time unix timestamp (seconds). if null, current time is used.
 		 */
 		this.getMapData = function getMapData(time) {
 			EntrySvc.getMap($scope.entryId, time).then(function(data) {
@@ -213,12 +209,12 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 				var min = 0;
 				var max = 0;
 				for ( var i = 0; i < value.length; i++) {
-					var val = parseInt(value[i].audience, 10);
+					var val = parseInt(value[i].audience, 10); // convert string to int
 					// accumulate data for country-level layer
 					if (!countriesData[value[i].country.name]) { 
 						// init - keep whole value for lat/long
 						countriesData[value[i].country.name] = value[i];
-						countriesData[value[i].country.name]['audience'] = val; // convert string to int
+						countriesData[value[i].country.name]['audience'] = val; 
 					}
 					else {
 						// sum audience
@@ -300,6 +296,8 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 		
 		/**
 		 * event handler for main screen update interval
+		 * @param event
+		 * @param timestamp (seconds)
 		 */
 		this.updateScreenHandler = function updateScreenHandler(event, time) {
 			var val = self.slider.slider("option", "value"); // current slider value 
@@ -317,6 +315,8 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 		};
 		
 		this.timeBoundsSetHandler = function timeBoundsSetHandler(event, start, end) {
+			start = parseInt(start, 10);
+			end = parseInt(end, 10);
 			var val = self.slider.slider("option", "value"); // current slider value 
 			var max = self.slider.slider("option", "max"); // max slider value
 			if (val == max) {
@@ -441,7 +441,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			os.forEach(function (sLine) {
 				if (sLine) {
 					var vals = sLine.split(',');
-					objects.push({'x':parseInt(vals[0], 10), 'timestamp':vals[0], 'y':vals[1]});
+					objects.push({'x':parseInt(vals[0], 10), 'timestamp':parseInt(vals[0], 10), 'y':parseInt(vals[1], 10)});
 				}
 			});
 			return objects;
@@ -449,18 +449,19 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		
 		/**
 		 * get graph data for the last 36 hrs 
-		 * @param end of 36 hrs term (timestamp ms)
+		 * @param end of 36 hrs term (timestamp sec)
 		 */
 		var getGraph36Hrs = function getGraph36Hrs(toDate) {
-			var fromDate = toDate - 129600000; // 60000 ms per minute * 60 minutes per hour * 36 hrs 
+			var fromDate = toDate - 129600; // 60 sec per minute * 60 minutes per hour * 36 hrs 
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
 				if (data[0] && data[0].data && graph != null) {
 					// parse string into objects
 					var objects = parseData(data[0].data);
 					if (isRecordedEntry()) {
+						var firstBroadcast = parseInt($scope.entry.firstBroadcast, 10);
 						// trim data edges: 
 						for (var i = 0; i<objects.length; i++) {
-							if (objects[i].timestamp >= $scope.entry.firstBroadcast) { //TODO att name!!
+							if (objects[i].timestamp >= firstBroadcast) {
 								break;
 							}
 						}
@@ -481,11 +482,11 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		
 		/**
 		 * get graph data for the last 30 secs 
-		 * @param endTime (timestamp) get graph data for 30 secs up to this time
+		 * @param endTime (timestamp sec) get graph data for 30 secs up to this time
 		 */
 		var getGraph30Secs = function getGraph30Secs(endTime) {
 			var toDate = endTime;
-			var fromDate = toDate - 40000;
+			var fromDate = toDate - 40;
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
 				var objects = parseData(data[0].data);
 				if (graph != null) {
@@ -539,7 +540,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		/**
 		 * event handler for main screen setup event
 		 * @param event
-		 * @param time (timestamp ms)
+		 * @param time (timestamp sec)
 		 */
 		var setupScreenHandler = function setupScreenHandler(event, time) {
 			getGraph36Hrs(time);
@@ -548,6 +549,8 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		
 		/**
 		 * event handler for main screen update interval
+		 * @param event
+		 * @param time (timestamp sec)
 		 */
 		var updateScreenHandler = function updateScreenHandler(event, time) {
 			getGraph30Secs(time);

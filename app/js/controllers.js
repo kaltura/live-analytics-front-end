@@ -238,8 +238,8 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 				}
 				// set report dates:
 				var d = new Date();
-				$rootScope.$broadcast('setupScreen', d.getTime());
-				d.setTime(entry.createdAt);
+				$rootScope.$broadcast('setupScreen', d.getTime()/1000);
+				d.setTime(entry.createdAt * 1000);
 				$scope.reportStartTime = d;
 				getAggregates(entry.isLive);
 				
@@ -255,7 +255,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		
 		var screenUpdate = function screenUpdate() {
 			var d = new Date();
-			var t = d.getTime();
+			var t = d.getTime()/1000;
 			getAggregates($scope.entry.isLive);
 			$rootScope.$broadcast('updateScreen', t);
 		};

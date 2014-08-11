@@ -405,8 +405,8 @@ analyticsServices.factory('EntrySvc',
 		 		/**
 		 		 * get graph data for base 36 hours
 		 		 * @param entryId
-		 		 * @param fromDate (timestamp ms)
-		 		 * @param toDate (timestamp ms)
+		 		 * @param fromDate (timestamp sec)
+		 		 * @param toDate (timestamp sec)
 		 		 * @returns
 		 		 */
 		 		EntrySvc.getGraph = function getGraph(entryId, fromDate, toDate) {
@@ -414,8 +414,8 @@ analyticsServices.factory('EntrySvc',
 		 			var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportsInputFilter',
-			            'filter:fromTime': Math.floor(fromDate / 1000),
-			            'filter:toTime': Math.floor(toDate / 1000),
+			            'filter:fromTime': fromDate,
+			            'filter:toTime': toDate,
 			            'filter:entryIds': entryId,
 			            'reportType': 'ENTRY_TIME_LINE',
 			            'service': 'livereports',
@@ -430,7 +430,7 @@ analyticsServices.factory('EntrySvc',
 		 		/**
 		 		 * get map data for required time
 		 		 * @param entryId
-		 		 * @param time	(timestamp ms)
+		 		 * @param time	(timestamp sec)
 		 		 * @returns
 		 		 */
 		 		EntrySvc.getMap = function getMap(entryId, time) {
@@ -438,7 +438,7 @@ analyticsServices.factory('EntrySvc',
 		 			var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportsInputFilter',
-			            'filter:eventTime': Math.floor(time / 1000),
+			            'filter:eventTime': time,
 			            'filter:entryIds': entryId,
 			            'reportType': 'ENTRY_GEO_TIME_LINE',
 			            'service': 'livereports',
