@@ -233,12 +233,10 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 				else {
 					// show "no recording" in player
 					$scope.playerEntryId = -1;
-					// set 30 secs update interval
-					$scope.intervalPromise = $interval(function() {screenUpdate();}, 30000);
 				}
 				// set report dates:
 				var d = new Date();
-				$rootScope.$broadcast('setupScreen', d.getTime()/1000);
+				$rootScope.$broadcast('setupScreen', Math.floor(d.getTime()/1000));
 				d.setTime(entry.createdAt * 1000);
 				$scope.reportStartTime = d;
 				getAggregates(entry.isLive);
