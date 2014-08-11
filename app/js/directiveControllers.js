@@ -33,7 +33,7 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$inte
   					"uiconf_id": $scope.uiconfId, 
   					"entry_id": value, 
   					"flashvars": { 
-  						"streamerType": "auto" 
+  						"streamerType": "rtmp" //TODO should eventually be "auto"
   					} 
   				});
   			};
@@ -457,7 +457,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 				if (data[0] && data[0].data && graph != null) {
 					// parse string into objects
 					var objects = parseData(data[0].data);
-					if (isRecordedEntry()) {
+					if (!$scope.entry.isLive) {
 						var firstBroadcast = parseInt($scope.entry.firstBroadcast, 10);
 						// trim data edges: 
 						for (var i = 0; i<objects.length; i++) {
