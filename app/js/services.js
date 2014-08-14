@@ -128,7 +128,6 @@ analyticsServices.factory('DashboardSvc',
 		 		 * @returns promise
 		 		 */
 		 		DashboardSvc.getAggregates = function getAggregates(liveOnly) {
-		 			//return DashboardDummySvc.getAggregates(liveOnly);
 		 			var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportsInputFilter',
@@ -151,7 +150,6 @@ analyticsServices.factory('DashboardSvc',
 		 		 * for all live entries - get stats
 		 		 */
 		 		DashboardSvc._getAllEntriesStats = function _getAllEntriesStats(pageNumber) {
-//		 			return DashboardDummySvc._getAllEntriesStats(pageNumber).query().$promise;
 					var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportsInputFilter',
@@ -255,7 +253,6 @@ analyticsServices.factory('DashboardSvc',
 				 * @param entryIds
 				 */
 				DashboardSvc._getLiveEntriesStats = function _getLiveEntriesStats(entryIds) {
-					//return DashboardDummySvc._getLiveEntriesStats(entryIds);
 					var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportsInputFilter',
@@ -326,8 +323,8 @@ analyticsServices.factory('DashboardSvc',
 
 
 analyticsServices.factory('EntrySvc',
-		['KApi', '$resource', '$q', 'EntryDummySvc',
-		 	function EntrySvcFactory(KApi, $resource, $q, EntryDummySvc) {
+		['KApi', '$resource', '$q', 
+		 	function EntrySvcFactory(KApi, $resource, $q) {
 		 		var EntrySvc = {};
 		 		
 		 		/**
@@ -364,7 +361,6 @@ analyticsServices.factory('EntrySvc',
 		 		 * @returns KalturaEntryLiveStats 
 		 		 */
 		 		EntrySvc.getAggregates = function getAggregates(entryId, isLive) {
-		 			//return EntryDummySvc.getAggregates(entryId, isLive);
 		 			var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportsInputFilter',
@@ -386,7 +382,6 @@ analyticsServices.factory('EntrySvc',
 		 		 * @returns
 		 		 */
 		 		EntrySvc.getReferrers = function getReferrers(entryId) {
-		 			//return EntryDummySvc.getReferrers(entryId);
 		 			var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportsInputFilter',
@@ -413,7 +408,6 @@ analyticsServices.factory('EntrySvc',
 		 		 * @returns
 		 		 */
 		 		EntrySvc.getGraph = function getGraph(entryId, fromDate, toDate) {
-		 			//return EntryDummySvc.getGraph(entryId, fromDate, toDate);
 		 			var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportsInputFilter',
@@ -437,7 +431,6 @@ analyticsServices.factory('EntrySvc',
 		 		 * @returns
 		 		 */
 		 		EntrySvc.getMap = function getMap(entryId, time) {
-		 			//return EntryDummySvc.getMap(entryId, time);
 		 			var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportsInputFilter',

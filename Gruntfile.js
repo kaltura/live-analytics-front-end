@@ -27,8 +27,7 @@ module.exports = function(grunt) {
           'app/js/directiveControllers.js', 
           'app/js/directives.js', 
           'app/js/filters.js', 
-          'app/js/services.js', 
-          'app/js/dummyServices.js' 
+          'app/js/services.js' 
         ],
         dest: '_dist/js/livea.js'
       },
@@ -82,12 +81,6 @@ module.exports = function(grunt) {
     copy: {
         main: {
             files: [
-                    { // dummy data
-                    	expand: true,
-                    	cwd: 'app/data/',
-                    	src: '**',
-                    	dest: '_dist/data/'
-                    },
                 { // main files
                     expand: true,
                     cwd: 'app/dist_src',
