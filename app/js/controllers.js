@@ -236,7 +236,9 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 				}
 				// set report dates:
 				var d = new Date();
+				$scope.nowTime = d;
 				$rootScope.$broadcast('setupScreen', Math.floor(d.getTime()/1000));
+				d = new Date();
 				d.setHours(d.getHours() - 36);
 				$scope.reportStartTime = d;
 				getAggregates(entry.isLive);
