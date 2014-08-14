@@ -285,20 +285,23 @@ analyticsServices.factory('DashboardSvc',
 							entries.objects.forEach(function(entry) {
 								ids += entry.id + ","; 
 							}); 
+							ids = ids.substr(0, ids.length - 1);
 							DashboardSvc._getLiveEntriesStats(ids).then(function(entryStats) {
-								// entryStats is KalturaLiveStatsListResponse 
-								entryStats.objects.forEach(function (entryStat) {
-									// add entry name to stats object
-									entries.objects.every(function (entry) {
-										if (entryStat.entryId == entry.id) {
-											entryStat.name = entry.name;
-											entryStat.thumbnailUrl = entry.thumbnailUrl;
-											entryStat.startTime = entry.firstBroadcast * 1000; // API returns secs, we need ms
-											return false;
-										}
-										return true;
+								// entryStats is KalturaLiveStatsListResponse
+								if (entryStats.objects) {
+									entryStats.objects.forEach(function (entryStat) {
+										// add entry name to stats object
+										entries.objects.every(function (entry) {
+											if (entryStat.entryId == entry.id) {
+												entryStat.name = entry.name;
+												entryStat.thumbnailUrl = entry.thumbnailUrl;
+												entryStat.startTime = entry.firstBroadcast * 1000; // API returns secs, we need ms
+												return false;
+											}
+											return true;
+										});
 									});
-								});
+								}
 								deferred.resolve(entryStats);
 							});
 						}
