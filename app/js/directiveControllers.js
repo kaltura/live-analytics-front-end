@@ -95,11 +95,13 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 			self.map.zoomToMaxExtent();
 			
 			self.map.events.register('zoomend', this, function (event) {
+				if (!self.citiesLayer) return; // if no layers no need to toggle.
+				
 		        var zLevel = self.map.getZoom();     
 		        if( zLevel < 4)
 		        {
 		        	// show countries
-		            self.citiesLayer.setVisibility(false);
+		        	self.citiesLayer.setVisibility(false);
 		            self.countriesLayer.setVisibility(true);
 		        }
 		        else {
@@ -196,12 +198,13 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 			// remove existing layers
 			if (self.citiesLayer) {
 				self.map.removeLayer(self.citiesLayer);
+				self.citiesLayer = null;
 			}
 			if (self.countriesLayer) {
 				self.map.removeLayer(self.countriesLayer);
+				self.countriesLayer = null;
 			}
 			if (value) { 
-				
 				// process data to create new layers
 				var countriesData = {};
 				var features = new Array();
