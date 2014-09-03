@@ -180,37 +180,59 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 				        ]; 
 				
 				$scope.aggregates = results;
-				getReferrers(isLive ? o.audience : o.plays);
+				getReferrers(isLive, o.plays);
 				
 			});
 		};
+		
 		
 		
 		/**
 		 * get data for the top referrals table
 		 * @param totalPlays
 		 */
-		var getReferrers = function getReferrers(totalPlays) {
-			EntrySvc.getReferrers($scope.entryId).then (function(data) {
-				var objects;
-				if (data.objects && data.objects.length > 0) {
-					objects = data.objects;
-				}
-				else {
-					objects = new Array();
-				}
-				var results = new Array();
-				var o;
-				for (var i = 0; i<objects.length; i++) {
-					o = {
-							'domain': objects[i].referrer, 
-							'visits': objects[i].plays, 
-							'percents' : objects[i].plays / totalPlays
-						}; 
-					results.push(o);
-				}
-				$scope.referals = results;
-			});
+		var getReferrers = function getReferrers(isLive, totalPlays) {
+			if (isLive) {
+				// need to get the non-live entry stats and use the totalplays from there
+				EntrySvc.getAggregates($scope.entryId, false).then (function(data) {
+					var o;
+					if (data.objects && data.objects.length > 0) {
+						o = data.objects[0];
+					}
+					else {
+						// create empty dummy object
+						o = {'audience' : 0,
+							'plays' : 0,
+							'secondsViewed' : 0,
+							'bufferTime' : 0,
+							'avgBitrate' : 0
+						};
+					}
+					getReferrers(false, o.plays);
+				});
+			}
+			else {
+				EntrySvc.getReferrers($scope.entryId).then (function(data) {
+					var objects;
+					if (data.objects && data.objects.length > 0) {
+						objects = data.objects;
+					}
+					else {
+						objects = new Array();
+					}
+					var results = new Array();
+					var o;
+					for (var i = 0; i<objects.length; i++) {
+						o = {
+								'domain': objects[i].referrer, 
+								'visits': objects[i].plays, 
+								'percents' : objects[i].plays / totalPlays
+							}; 
+						results.push(o);
+					}
+					$scope.referals = results;
+				});
+			}
 		};
 		
 		
