@@ -399,6 +399,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 				width : element.width(),
 				height : element.height() - 20,
 				renderer : 'line',
+				interpolation: 'linear',
 				series : series
 			});
 			graph.render();
