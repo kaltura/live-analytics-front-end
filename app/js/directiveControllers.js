@@ -520,22 +520,38 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 * @param value
 		 */
 		var updateGraphContent = function updateGraphContent(value) {
-			var ar = series[0].data;
-			// find matching point in 'ar'
-			var lastX = ar[ar.length-1].x;
-			for (var i = value.length-1; i>0; i--) {
-				if (value[i].x == lastX) {
+			console.log(value.length);
+			var ar = series[0].data; // already in the graph
+			var lastArX = ar[ar.length-1].x;
+			// first see if any existing values need to be updated
+			for (var i = 0; i<value.length; i++) {
+				var valX = value[i].x;
+				if (valX <= lastArX) {
+					for (var j = ar.length-1; j>0; j--) {
+						if (ar[j].x == valX) {
+							ar[j].y = value[i].y;
+							break;
+						}
+						else if (ar[j].x < valX) {
+							// j will only become smaller
+							break;
+						}
+					}
+				}
+				else {
+					// valX is out of ar bounds, will be so for any larger i
 					break;
 				}
 			}
-			// now i+1 is the index of the first element in 'value' that needs to be inserted to 'ar'
-			// add required elements from value to ar, while removing elements from tail
-			i++;
-			while(i<value.length) {
+			console.log(i);
+			// then shift/push for new ones
+			while(i < value.length) {
+				console.log(value[i].x);
 				ar.shift();
 				ar.push(value[i]);
 				i++;
 			}
+			
 			graph.update();
 		};
 		
