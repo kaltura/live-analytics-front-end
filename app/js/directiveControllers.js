@@ -489,8 +489,8 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 * @param endTime (timestamp sec) get graph data for 30 secs up to this time
 		 */
 		var getGraph30Secs = function getGraph30Secs(endTime) {
-			var toDate = endTime;
-			var fromDate = toDate - 40;
+			var toDate = -2;	//endTime;
+			var fromDate = -60; //toDate - 40;
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
 				var objects = parseData(data[0].data);
 				if (graph != null) {
@@ -521,7 +521,6 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 * @param value
 		 */
 		var updateGraphContent = function updateGraphContent(value) {
-			console.log(value.length);
 			var ar = series[0].data; // already in the graph
 			var lastArX = ar[ar.length-1].x;
 			// first see if any existing values need to be updated
@@ -544,10 +543,8 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 					break;
 				}
 			}
-			console.log(i);
 			// then shift/push for new ones
 			while(i < value.length) {
-				console.log(value[i].x);
 				ar.shift();
 				ar.push(value[i]);
 				i++;
