@@ -303,11 +303,12 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 		 * @param timestamp (seconds)
 		 */
 		this.updateScreenHandler = function updateScreenHandler(event, time) {
+			time -= 60; // we only have data about 60 seconds back, so we adjust what we got  
 			var val = self.slider.slider("option", "value"); // current slider value 
 			var max = self.slider.slider("option", "max"); // max slider value
 			if (val == max) {
 				// we are at the right edge, auto update
-				self.getMapData(time);
+				//self.getMapData(time); // adjusting the slider will also trigger the update
 				// update scrollbar and handle (keep handle on right edge)
 				self.adjustSlider(max, time, time);
 			}
