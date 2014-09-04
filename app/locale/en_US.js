@@ -22,8 +22,8 @@ var en_US_trans = {
 		"Investigate": "Investigate",
 		"Audience": "Audience",
 		"Location": "Location",
-		"Top_referals": "Top referals",
-		"Domain": "Domain",
+		"Top_referals": "Top Referrers",
+		"Domain": "Referrer",
 		"Visits": "Visits",
 		"of_total": "% of total"
 	},
