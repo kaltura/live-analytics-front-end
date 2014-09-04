@@ -412,7 +412,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			var xAxis = new Rickshaw.Graph.Axis.Time({
 				graph : graph,
 				ticksTreatment : 'glow',
-				timeFixture : new Rickshaw.Fixtures.Time.Local()
+				timeFixture : new KTime_Local()
 			});
 			xAxis.render();
 
