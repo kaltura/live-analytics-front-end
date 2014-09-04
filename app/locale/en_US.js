@@ -19,12 +19,12 @@ var en_US_trans = {
 		"Minutes_Viewed": "Minutes Viewed",
 		"Buffer_Time": "Buffering Time",
 		"Avg_Bitrate": "Average Bitrate",
-		"Investigate": "Investigate"
+		"Investigate": "Details"
 	},
 	
 	"entry" : {
 		"Live_Content": "Live Content",
-		"Investigate": "Investigate",
+		"Investigate": "Details",
 		"Audience": "Audience",
 		"Location": "Location",
 		"Location_tt": "audience change based on geography and time",
