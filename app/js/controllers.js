@@ -36,10 +36,10 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'DashboardSvc',
 			DashboardSvc.getAggregates(liveOnly).then (function(data) {
 				var o = data.objects[0];
 				var results = [
-				           	{"title": "audience", "value": liveOnly ? o.audience : o.plays},
-				        	{"title": "seconds_viewed", "value": o.secondsViewed},
-				        	{"title": "buffertime", "value": o.bufferTime},
-				        	{"title": "bitrate", "value": o.avgBitrate}
+				           	{"title": "audience", "value": liveOnly ? o.audience : o.plays, "tooltip":"agg_audience_tt"},
+				        	{"title": "seconds_viewed", "value": o.secondsViewed, "tooltip":"agg_secs_tt"},
+				        	{"title": "buffertime", "value": o.bufferTime, "tooltip":"agg_buffer_tt"},
+				        	{"title": "bitrate", "value": o.avgBitrate, "tooltip":"agg_bitrate_tt"}
 				        ]; 
 				
 				$scope.aggregates = results;
@@ -173,10 +173,10 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 					};
 				}
 				var results = [
-				           	{"title": "audience", "value": isLive ? o.audience : o.plays},
-				        	{"title": "seconds_viewed", "value": o.secondsViewed},
-				        	{"title": "buffertime", "value": o.bufferTime},
-				        	{"title": "bitrate", "value": o.avgBitrate}
+				           	{"title": "audience", "value": isLive ? o.audience : o.plays, "tooltip":"agg_audience_tt"},
+				        	{"title": "seconds_viewed", "value": o.secondsViewed, "tooltip":"agg_secs_tt"},
+				        	{"title": "buffertime", "value": o.bufferTime, "tooltip":"agg_buffer_tt"},
+				        	{"title": "bitrate", "value": o.avgBitrate, "tooltip":"agg_bitrate_tt"}
 				        ]; 
 				
 				$scope.aggregates = results;

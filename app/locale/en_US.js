@@ -4,6 +4,11 @@ var en_US_trans = {
 	"seconds_viewed": "Minutes Viewed", // text should read minutes, not seconds
 	"buffertime": "Average Buffering Time per Minute (seconds)",
 	"bitrate": "Average Bitrate",
+	"agg_audience_tt":"the number of viewers at the moment",
+	"agg_secs_tt":"sum of minutes viewed by all viewers so far",
+	"agg_buffer_tt":"average time per minute that viewers experienced buffering",
+	"agg_bitrate_tt":"the average bitrate viewers are consuming",
+	
 	
 	"dashboard" : {
 		"Live_Content_36": "Live Content (in past 36 hours)",

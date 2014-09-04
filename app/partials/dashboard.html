@@ -17,7 +17,7 @@
 	
 	<!-- Aggregates -->
 	<div class="row aggregates clear-both">
-		<div class="aggregate-item col-md-3" ng-repeat="agg in aggregates">
+		<div class="aggregate-item col-md-3" ng-repeat="agg in aggregates" title="{{agg.tooltip | translate}}">
 			<div class="agg-data">{{agg | formatAgg}}</div>
 			<div class="agg-info">{{agg.title | translate}}</div>
 		</div>
