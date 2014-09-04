@@ -2,7 +2,7 @@ var en_US_trans = {
 	// aggregates - keys should match Kaltura server 
 	"audience": "Audience",
 	"seconds_viewed": "Minutes Viewed", // text should read minutes, not seconds
-	"buffertime": "Average Buffering Time per Minute",
+	"buffertime": "Average Buffering Time per Minute (seconds)",
 	"bitrate": "Average Bitrate",
 	
 	"dashboard" : {

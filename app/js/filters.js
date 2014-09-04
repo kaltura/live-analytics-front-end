@@ -21,12 +21,23 @@ function formatTime(secs, showHours, showSeconds, forceHours) {
 	var s = secs - sh - sm;
 	
 	var result = '';
-	if ((showHours && h>0) || forceHours) {
-		result += addZero(h) + ':'; 
+	if (h>0 || m>0) {
+		if ((showHours && h>0) || forceHours) {
+			result += addZero(h) + ':'; 
+		}
+		result += addZero(m);
+		if (showSeconds) {
+			result += ':' + addZero(s);
+		}
 	}
-	result += addZero(m);
-	if (showSeconds) {
-		result += ':' + addZero(s);
+	else {
+		// only seconds, maybe
+		if (showSeconds) {
+			result = addZero(s);
+		}
+		else {
+			return '00';
+		}
 	}
 	return result;
 };
