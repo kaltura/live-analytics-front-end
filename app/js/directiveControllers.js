@@ -490,7 +490,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 */
 		var getGraph30Secs = function getGraph30Secs(endTime) {
 			var toDate = -2;	//endTime;
-			var fromDate = -60; //toDate - 40;
+			var fromDate = -120; //toDate - 40;
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
 				var objects = parseData(data[0].data);
 				if (graph != null) {
