@@ -46,6 +46,7 @@ module.exports = function(grunt) {
               'app/lib/rickshaw/d3.v3.js',
               'app/lib/rickshaw/d3.layout.min.js',
               'app/lib/kaltura/KHoverDetail.js',
+              'app/lib/kaltura/KTime_Local.js',
               'app/lib/OpenLayers-2.13.1/OpenLayers.js',
               'app/locale/en_US.js'
           ],
