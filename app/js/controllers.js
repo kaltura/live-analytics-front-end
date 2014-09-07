@@ -7,8 +7,8 @@ var analyticsControllers = angular.module('analyticsControllers', []);
 /**
  * Dashboard Controller 
  */
-analyticsControllers.controller('DashboardCtrl', ['$scope', 'DashboardSvc', 
-    function($scope, DashboardSvc) {
+analyticsControllers.controller('DashboardCtrl', ['$scope', '$timeout', 'DashboardSvc', 
+    function($scope, $timeout, DashboardSvc) {
 		
 		/**
 		 * entries currently on display
@@ -43,6 +43,8 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'DashboardSvc',
 				        ]; 
 				
 				$scope.aggregates = results;
+				// reactivate tooltips
+				$timeout(function() {$('.tooltip-wrap').tooltip();}, 0);
 			});
 		};
 		
@@ -143,8 +145,8 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', 'DashboardSvc',
 /**
  * General controller for the entry drill-down page
  */
-analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routeParams', '$interval', 'SessionInfo', 'EntrySvc', 
-    function($scope, $rootScope, $routeParams, $interval, SessionInfo, EntrySvc) {
+analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routeParams', '$interval', '$timeout', 'SessionInfo', 'EntrySvc',  
+    function($scope, $rootScope, $routeParams, $interval, $timeout, SessionInfo, EntrySvc) {
 		$scope.intervalPromise = null; 			// use this to hold update interval
 		$scope.entryId = $routeParams.entryid;	// current entry
 		$scope.pid = SessionInfo.pid;
@@ -180,6 +182,9 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 				        ]; 
 				
 				$scope.aggregates = results;
+				// reactivate tooltips
+				$timeout(function() {$('.tooltip-wrap').tooltip();}, 0);
+				
 				getReferrers(isLive, o.plays);
 				
 			});
