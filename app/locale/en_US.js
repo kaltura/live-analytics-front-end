@@ -19,7 +19,8 @@ var en_US_trans = {
 		"Minutes_Viewed": "Minutes Viewed",
 		"Buffer_Time": "Buffering Time",
 		"Avg_Bitrate": "Average Bitrate",
-		"Investigate": "Details"
+		"Investigate": "Details",
+		"first_broadcast_tt": "first broadcast start time"
 	},
 	
 	"entry" : {

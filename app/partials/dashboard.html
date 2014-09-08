@@ -69,7 +69,10 @@
 					<a class="btn btn-primary" href="#/entry/{{entry.entryId}}"><span class="glyphicon glyphicon-import"></span> {{'dashboard.Investigate' | translate}}</a>
 				</div>
 				<div class="col-md-6 entry-time" >
-					<span>{{entry.startTime | date : 'd MMM H:mm:ss'}}</span> 
+					<span class="tooltip-wrap" title="{{'dashboard.first_broadcast_tt' | translate }}">{{entry.startTime | date : 'd MMM H:mm:ss'}}</span>
+					<script type="text/javascript">
+					$('.tooltip-wrap').tooltip();
+					</script> 
 				</div>
 			</div>
 		</div>
