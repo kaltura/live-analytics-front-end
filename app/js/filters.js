@@ -61,7 +61,7 @@ analyticsFilters.filter('formatAgg', [function() {
 			result = formatTime(agg.value, false, true);
 			break;
 		case 'bitrate':
-			result = agg.value + 'mbs';
+			result = parseInt(agg.value, 10) + 'mbs';
 			break;
 		}
 		return result;
