@@ -4,7 +4,7 @@ var en_US_trans = {
 	"plays" : "Plays",
 	"seconds_viewed": "Minutes Viewed", // text should read minutes, not seconds
 	"buffertime": "Average Buffering Time per Minute (seconds)",
-	"bitrate": "Average Bitrate",
+	"bitrate": "Average Bitrate (mbs)",
 	"agg_audience_tt": "the number of viewers at the moment",
 	"agg_plays_tt": "number of plays by viewers",
 	"agg_secs_tt":"sum of minutes viewed by all viewers so far",
