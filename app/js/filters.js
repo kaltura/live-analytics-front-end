@@ -52,6 +52,7 @@ analyticsFilters.filter('formatAgg', [function() {
 		var result = '';
 		switch (agg.title) {
 		case 'audience':
+		case 'plays':
 			result = agg.value;
 			break;
 		case 'seconds_viewed':
