@@ -7,8 +7,8 @@ var analyticsControllers = angular.module('analyticsControllers', []);
 /**
  * Dashboard Controller 
  */
-analyticsControllers.controller('DashboardCtrl', ['$scope', '$timeout', 'DashboardSvc', 
-    function($scope, $timeout, DashboardSvc) {
+analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeout', 'DashboardSvc', 
+    function($scope, $interval, $timeout, DashboardSvc) {
 		
 		/**
 		 * entries currently on display
@@ -287,6 +287,11 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		var screenUpdate = function screenUpdate() {
 			var d = new Date();
 			var t = d.getTime()/1000;
+			
+			$scope.nowTime = d;
+			var d = new Date();
+			d.setHours(d.getHours() - 36);
+			$scope.reportStartTime = d;
 			getAggregates($scope.entry.isLive);
 			$rootScope.$broadcast('updateScreen', t);
 		};
