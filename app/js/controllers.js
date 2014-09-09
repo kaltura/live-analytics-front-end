@@ -18,7 +18,7 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 		/**
 		 * number of entries in page
 		 */
-		var pageSize = 5;
+		var pageSize = 6;
 		
 		/**
 		 * total number of pages
@@ -137,7 +137,33 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 	    		getEntries(newValue == "liveOnly", 1);
 				updatePagingControlRequired = true;
 			 });
+			// set 30 secs update interval
+			$scope.intervalPromise = $interval(function() {screenUpdate();}, 30000);
 		};
+		
+		var screenUpdate = function screenUpdate() {
+			var d = new Date();
+			var t = d.getTime()/1000;
+			
+			$scope.nowTime = d;
+			var d = new Date();
+			d.setHours(d.getHours() - 36);
+			$scope.reportStartTime = d;
+			getAggregates($scope.boardType == "liveOnly");
+			var pages = $('#pagination').bootstrapPaginator('getPages');
+			getEntries($scope.boardType == "liveOnly", pages.current);
+		};
+		
+		
+		$scope.$on('$destroy', function() {
+			// Make sure that the interval is destroyed too
+			if (angular.isDefined($scope.intervalPromise)) {
+				$interval.cancel($scope.intervalPromise);
+				$scope.intervalPromise = undefined;
+			}
+		});
+		
+		
 		
 		screenSetup();
 		
