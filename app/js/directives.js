@@ -35,7 +35,7 @@ analyticsDirectives.directive('olmap', function() {
 	return {
 		restrict : 'A',
 		controller : 'OLMapController',
-		template : '<div id="map"></div><div id="mapslider"></div>',
+		template : '<div id="map"></div><div id="mapctrls"><div id="sliderticks"></div><div id="mapslider"></div></div>',
 		replace : false,
 		link : function(scope, element, attrs, OLMapController) {
 			OLMapController.init(element);

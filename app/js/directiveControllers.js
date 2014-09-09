@@ -77,6 +77,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 		var self = this;
 		this.mapElement = null;
 		this.slider = null;
+		this.sliderTicks = null;
 		this.map = null;
 		this.citiesLayer = null;
 		this.countriesLayer = null;
@@ -122,6 +123,11 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 				step: 10,
 				change: self.sliderChangeHandler
 			});
+			
+			// create ticks
+			self.sliderTicks = angular.element('#sliderticks');
+			self.createSliderTicks(t-12960, t);
+			
 		};
 		
 		
@@ -130,6 +136,43 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 		 */
 		this.sliderChangeHandler = function sliderChangeHandler(event, ui) {
 			self.getMapData(ui.value);
+		};
+		
+		
+		/**
+		 * @param min, max - timestamp (seconds)
+		 */
+		this.createSliderTicks = function createSliderTicks(min, max) {
+			// remove existing ticks
+			self.sliderTicks.html('');
+			
+			// create new ticks
+			var step, left, label, range = max-min, cnt = 6;
+			for (var i = 0; i<cnt; i++) {
+				step = i / cnt;
+				label = min + range * step;
+				var d = new Date(Math.floor(label*1000));
+				label = self.formatTime(d);
+				left = step * 100;
+				self.createSliderTick(left + '%', label);
+			}
+
+		};
+		
+		
+		this.createSliderTick = function createSliderTick(left, txt) {
+			var element = document.createElement('div');
+			element.style.left = left;
+			element.classList.add('slidertick');
+			var title = document.createElement('div');
+			title.classList.add('title');
+			title.innerHTML = txt;
+			element.appendChild(title);
+			self.sliderTicks[0].appendChild(element);
+		};
+		
+		this.formatTime = function formatTime(d) {
+			return d.toString().match(/(\d+:\d+):/)[1];
 		};
 		
 		
@@ -294,6 +337,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 			if (val) {
 				self.slider.slider("option", "value", val);
 			}
+			self.createSliderTicks(min+n, newmax);
 		};
 		
 		

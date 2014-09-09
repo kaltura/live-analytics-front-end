@@ -208,9 +208,28 @@ hr.section-title {
 	height: 100%;
 }
 
+#mapctrls {
+	width: 100%;
+	position:relative;
+	top:-20px;
+	z-index:1001;
+}
+
 #mapslider {
 	width: 100%;
+	top: 18px;
 }
+
+.slidertick {
+	position: absolute;
+	border-left: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.slidertick .title {
+	opacity: 0.5;
+	font-size:12px;
+	font-family: Arial,sans-serif;
+}	
 
 
 
