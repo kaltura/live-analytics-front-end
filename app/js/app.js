@@ -34,7 +34,7 @@ liveAnalytics.config(['$routeProvider', '$translateProvider', function($routePro
 		suffix: '.json'
 	});
 		 
-	$translateProvider.fallbackLanguage('en_US');
+	//$translateProvider.fallbackLanguage('en_US'); //TODO return this when we localize the app
 	$translateProvider.preferredLanguage('en_US');
 }]);
 
