@@ -41,8 +41,8 @@
 				<div class="entry-info" >
 					<table>
 						<tr>
-							<td>{{(entry.audience > 0 ? 'dashboard.Audience' : 'dashboard.Plays') | translate}}:</td>
-							<td>{{entry.audience > 0 ? entry.audience : entry.plays}}</td>
+							<td>{{(boardType == "liveOnly" ? 'dashboard.Audience' : 'dashboard.Plays') | translate}}:</td>
+							<td>{{boardType == "liveOnly" ? entry.audience : entry.plays}}</td>
 						</tr>
 						<tr>
 							<td>{{'dashboard.Peak_Audience' | translate}}:</td>

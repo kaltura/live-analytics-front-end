@@ -258,6 +258,7 @@ analyticsServices.factory('DashboardSvc',
 						'filter:objectType': 'KalturaLiveReportsInputFilter',
 			            'filter:orderBy': '-createdAt',
 			            'filter:entryIds': entryIds,
+			            'filter:live': 1,
 			            'reportType': 'ENTRY_TOTAL',
 			            'service': 'livereports',
 			            'action': 'getreport'
