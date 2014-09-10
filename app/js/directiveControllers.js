@@ -145,7 +145,6 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 		this.createSliderTicks = function createSliderTicks(min, max) {
 			// remove existing ticks
 			self.sliderTicks.html('');
-			
 			// create new ticks
 			var step, left, label, range = max-min, cnt = 6;
 			for (var i = 0; i<cnt; i++) {
@@ -389,6 +388,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 					self.slider.slider("option", "value", val);
 				}
 			}
+			self.createSliderTicks(start, end);
 		};
 		
 		$scope.$on('setupScreen', self.updateScreenHandler);
