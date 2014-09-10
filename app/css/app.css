@@ -1,4 +1,8 @@
 /* app css stylesheet */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+	display: none !important;
+}
+
 body {
 	background-color: #f3f2ee;
 	font-family: Helvetica,"Helvetica Neue",Arial,sans-serif; 
