@@ -17,6 +17,7 @@ var en_US_trans = {
 		"Show_All_Entries": "Show All Entries",
 		"Show_Kaltura": "Show Kaltura Live Now Only",
 		"Audience": "Audience",
+		"Plays": "Plays",
 		"Peak_Audience": "Peak Audience",
 		"Minutes_Viewed": "Minutes Viewed",
 		"Buffer_Time": "Buffering Time",
