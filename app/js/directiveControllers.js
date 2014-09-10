@@ -90,7 +90,8 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 	
 			// create OSM layer
 			var osm = new OpenLayers.Layer.OSM();
-			
+			// add target so we won't try to open in frame
+			osm.attribution = "&copy; <a href='http://www.openstreetmap.org/copyright' target='_blank'>OpenStreetMap</a> contributors";
 			
 			self.map.addLayer(osm);
 			self.map.zoomToMaxExtent();
