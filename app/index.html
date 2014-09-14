@@ -22,23 +22,36 @@
 	window.parent = {};
 	window.parent.kmc = {};
 	window.parent.kmc.vars = {
-			ks : 'ZWRhYjgxYWZkNDRhYjJjN2Q4MGJkMzk3Y2ZiOGEwMjliNzIzMjRkY3wxMDM7MTAzOzE0MDgwODUwMTQ7MjsxNDA3OTk4NjE0LjkxNTE7YXRhci5zaGFkbWlAa2FsdHVyYS5jb207KixkaXNhYmxlZW50aXRsZW1lbnQ7Ow==',
+			/*
+			// testing
+			ks : 'N2ZjMjc3N2NiMGE0YzJiMGMyNDZlYzcwYzZkZDA4NmQ4MjBhMzE0ZXwyNjE7MjYxOzE0MDk4OTg5NDI7MjsxNDA5ODEyNTQyLjM3ODtzaGFoYXIuZGFub3NAa2FsdHVyYS5jb207KixkaXNhYmxlZW50aXRsZW1lbnQ7Ow=',
+			partner_id : '261',
+			service_url : 'http://apache-testing.dev.kaltura.com',
+			cdn_host : 'cdntesting.qa.mkaltura.com',
+			liveanalytics : {player_id : '15076371'}
+			*/
+			
+			// hudson11
+			ks : 'NmNkYTBjNTkzMDVlZjE3NjJkMTdiN2JiOWFiYzdkOWVjNWM0Njg1YXwxMDM7MTAzOzE0MTA3NzcyNDk7MjsxNDEwNjkwODQ5LjAyMzg7YXRhci5zaGFkbWlAa2FsdHVyYS5jb207KixkaXNhYmxlZW50aXRsZW1lbnQ7Ow',
 			partner_id : '103',
-			service_url : 'http://dev-hudson11.dev.kaltura.com',
+			//service_url : 'http://dev-hudson11.dev.kaltura.com',
+			service_url : 'http://dev-hudson11',
 			cdn_host : 'dev-hudson11.dev.kaltura.com',
-			liveanalytics : {player_id : '23448231'}
+			liveanalytics : {player_id : '23448260'}
+	
 	};
 	
 </script>
 
 </head>
 <body >
-<div class="kmcSubNav" ng-class="{hidden : nonav}" ng-cloak>
+<div class="kmcSubNav" ng-class="{hidden : nonav}" ng-cloak >
 	<a href="javascript:navigateToFlashAnalytics('contentDashboard')" class="btn">{{'main.Content_Reports' | translate}}</a>
 	<a href="javascript:navigateToFlashAnalytics('usersandCommunity')" class="btn">{{'main.Community_Reports' | translate}}</a>
 	<a href="javascript:navigateToFlashAnalytics('usageTabTitle')" class="btn">{{'main.Storage_Reports' | translate}}</a>
 	<a href="javascript:navigateToFlashAnalytics('platformReports')" class="btn">{{'main.System_Reports' | translate}}</a>
-	<a href="index.html" class="btn active">{{'main.Live_Reports' | translate}}</a>
+	<a href="javascript:navigateToFlashAnalytics('liveContent')" class="btn">{{'main.Live_Reports' | translate}}</a>
+	<a href="index.html" class="btn active">{{'main.Real_Time_Reports' | translate}}</a>
 </div>
 <div clas="container">
 	<div class="view-container">
@@ -68,10 +81,6 @@
 	
 	<script src="lib/jquery/jquery-1.10.2.min.js"></script>
 	<script src="lib/jquery-ui/jquery-ui-1.10.4/ui/minified/jquery-ui.min.js"></script>
-	
-	 <!--[if lt IE 9]>
-    <script type="text/javascript" src="lib/aight/aight.min.js"></script>
-    <![endif]-->
     
 	<script src="lib/bootstrap/bootstrap-3.1.1-dist/js/bootstrap.min.js"></script>
 	<script src="lib/bootstrap/bootstrap-paginator.js"></script>
@@ -88,10 +97,9 @@
 	<script src="lib/rickshaw/rickshaw.js"></script>
 	<script src="lib/rickshaw/d3.v3.js"></script>
 	<script src="lib/rickshaw/d3.layout.min.js"></script>
-	<!--[if lt IE 9]>
-	<script type="text/javascript" src="lib/aight/aight.d3.min.js"></script>
-	<![endif]-->
+
 	<script src="lib/kaltura/KHoverDetail.js"></script>
+	<script src="lib/kaltura/KTime_Local.js"></script>
 	
 	<!-- openLayers maps -->
 	<script src="lib/OpenLayers-2.13.1/OpenLayers.debug.js"></script>
