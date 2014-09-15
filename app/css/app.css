@@ -12,9 +12,12 @@ body {
     border-bottom: 2px solid #CCCCCC;
     display: block;
     height: 33px;
+    width: 100%;
     margin-bottom: 1px;
     padding-left: 10px;
     background-color: #FFFFFF;
+    position:fixed;
+    z-index:2;
 }
 .kmcSubNav a {
     background: none repeat scroll 0 0 #FFFFFF;
@@ -86,6 +89,7 @@ hr.section-title {
 	margin-right: auto;
   	margin-left: auto;
   	width: 980px; 
+  	padding-top:20px;
 }
 
 /* **************************** dashboard *************************** */
