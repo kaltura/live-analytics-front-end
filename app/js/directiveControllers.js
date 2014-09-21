@@ -498,6 +498,51 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		};
 		
 		/**
+		 * add 0 points where no data received
+		 * for live - all the way
+		 * for dead - after first point, before last point
+		 * @param data 		objects array with "holes"
+		 * @param fromDate	timestamp, seconds
+		 * @param toDate	timestamp, seconds
+		 * @param fillAll	boolean, should data outside existing range be filled
+		 * @return array without "holes"
+		 */
+		var balanceData = function balanceData(data, fromDate, toDate, fillAll) {
+			var firstPoint = data[0].x;
+			var lastPoint = data[data.length-1].x;
+			var curx, nextx, i = 1;
+			
+			// add points between lastPoint and firstPoint
+			curx = firstPoint + 10;
+			while (curx < lastPoint) {
+				nextx = data[i].x;
+				if (curx < nextx) {
+					// need to add point here
+					data.splice(i, 0, {'x':curx, 'timestamp':curx, 'y':0});
+				}
+				curx += 10;
+				i++;
+			}
+			
+			if (fillAll) {
+				// add points between firstPoint and fromDate 
+				curx = firstPoint - 10;
+				while (curx >= fromDate) {
+					data.unshift({'x':curx, 'timestamp':curx, 'y':0});
+					curx -= 10;
+				}
+
+				// add points after lastPoint
+				curx = lastPoint;
+				while (curx < toDate) {
+					data.push({'x':curx, 'timestamp':curx, 'y':0});
+					curx += 10;
+				}
+			}
+			return data;
+		};
+		
+		/**
 		 * get graph data for the last 36 hrs 
 		 * @param end of 36 hrs term (timestamp sec)
 		 */
@@ -507,6 +552,8 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 				if (data[0] && data[0].data && graph != null) {
 					// parse string into objects
 					var objects = parseData(data[0].data);
+					// add 0 points where no data received
+					objects = balanceData(objects, fromDate, toDate, $scope.entry.isLive);
 					if (!$scope.entry.isLive) {
 						var firstBroadcast = parseInt($scope.entry.firstBroadcast, 10);
 						// trim data edges: 
@@ -536,9 +583,10 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 */
 		var getGraph30Secs = function getGraph30Secs(endTime) {
 			var toDate = -2;	//endTime;
-			var fromDate = -120; //toDate - 40;
+			var fromDate = -120; 
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
 				var objects = parseData(data[0].data);
+				objects = balanceData(objects, endTime-122, endTime-2, $scope.entry.isLive);
 				if (graph != null) {
 					updateGraphContent(objects);
 				}
