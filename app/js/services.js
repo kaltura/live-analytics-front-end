@@ -259,6 +259,7 @@ analyticsServices.factory('DashboardSvc',
 			            'filter:orderBy': '-createdAt',
 			            'filter:entryIds': entryIds,
 			            'filter:live': 1,
+			            'filter:hoursBefore': '36',
 			            'reportType': 'ENTRY_TOTAL',
 			            'service': 'livereports',
 			            'action': 'getreport'
