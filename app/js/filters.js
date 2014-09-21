@@ -59,8 +59,6 @@ analyticsFilters.filter('formatAgg', [function() {
 			result = Math.floor(agg.value/60); // actually returns minutes
 			break;
 		case 'buffertime':
-			result = formatTime(agg.value, false, true);
-			break;
 		case 'bitrate':
 			result = parseInt(agg.value, 10);
 			break;
