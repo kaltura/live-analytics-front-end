@@ -123,6 +123,18 @@ module.exports = function(grunt) {
                 	src: '*',
                 	dest: '_dist/css/images'
                 },
+                { // angualr map files
+                	src: 'app/lib/angular/angular-route.min.js.map',
+                	dest: '_dist/js/angular-route.min.js.map'
+                },
+                { // angualr map files
+                	src: 'app/lib/angular/angular-resource.min.js.map',
+                	dest: '_dist/js/angular-resource.min.js.map'
+                },
+                { // angualr map files
+                	src: 'app/lib/angular/angular.min.js.map',
+                	dest: '_dist/js/angular.min.js.map'
+                },
                 { // deployment
                 	expand: true,
                 	cwd: 'deploy/files',
