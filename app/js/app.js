@@ -35,7 +35,9 @@ liveAnalytics.config(['$routeProvider', '$translateProvider', function($routePro
 	});
 		 
 	//$translateProvider.fallbackLanguage('en_US'); //TODO return this when we localize the app
-	$translateProvider.preferredLanguage('en_US');
+	//var lang = window.lang ? window.lang : 'en_US';
+	var lang = 'en_US';
+	$translateProvider.preferredLanguage(lang);
 }]);
 
 function navigateToFlashAnalytics(subtabName) {
