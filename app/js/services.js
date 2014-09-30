@@ -123,6 +123,11 @@ analyticsServices.factory('DashboardSvc',
 		 		var DashboardSvc = {};
 		 		
 		 		/**
+		 		 * always use 10 items in page
+		 		 */ 
+		 		DashboardSvc.pageSize = '10';
+		 		
+		 		/**
 		 		 * get info for dashboard aggregates line 
 		 		 * @param liveOnly	aggregate only live-now-kaltura entries, or viewed during last 36 hrs all-live entries
 		 		 * @returns promise
@@ -135,7 +140,7 @@ analyticsServices.factory('DashboardSvc',
 			            'filter:live': liveOnly ? '1' : '0',
 			            'pager:objectType': 'KalturaFilterPager',
 			            'pager:pageIndex': '1',
-			            'pager:pageSize': '10',
+			            'pager:pageSize': DashboardSvc.pageSize,
 			            'reportType': 'PARTNER_TOTAL',
 			            'service': 'livereports',
 			            'action': 'getreport'
@@ -155,10 +160,9 @@ analyticsServices.factory('DashboardSvc',
 						'filter:objectType': 'KalturaLiveReportsInputFilter',
 			            'filter:orderBy': '-createdAt',
 			            'filter:hoursBefore': '36',
-			            
 			            'pager:objectType': 'KalturaFilterPager',
 			            'pager:pageIndex': pageNumber,
-			            'pager:pageSize': '10',
+			            'pager:pageSize': DashboardSvc.pageSize,
 			            'reportType': 'ENTRY_TOTAL',
 			            'service': 'livereports',
 			            'action': 'getreport'
@@ -240,7 +244,7 @@ analyticsServices.factory('DashboardSvc',
 				            'ignoreNull': '1',
 				            'pager:objectType': 'KalturaFilterPager',
 				            'pager:pageIndex': pageNumber,
-				            'pager:pageSize': '10',
+				            'pager:pageSize': DashboardSvc.pageSize,
 				            'service': 'livestream',
 				            'action': 'list'
 				        };

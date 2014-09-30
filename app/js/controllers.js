@@ -18,7 +18,7 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 		/**
 		 * number of entries in page
 		 */
-		var pageSize = 6;
+		var pageSize = DashboardSvc.pageSize;
 		
 		/**
 		 * total number of pages
