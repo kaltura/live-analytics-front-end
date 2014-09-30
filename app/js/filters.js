@@ -93,3 +93,11 @@ analyticsFilters.filter('percents', [function() {
 	
 	return percents;
 }]);
+
+analyticsFilters.filter('avgBitrate', [function() {
+	var avgBitrate = function avgBitrate(val) {
+		return parseInt(val, 10);
+	}; 
+	
+	return avgBitrate;
+}]);
