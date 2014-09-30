@@ -23,7 +23,7 @@ liveAnalytics.config(['$routeProvider', '$translateProvider', function($routePro
 		controller: 'EntryCtrl'
 	});
 	$routeProvider.when('/login', {
-		template: '<div>Missing KS</div>' 
+		template: '<script>window.parent.kmc.functions.expired();</script><div class="page container"><br/><p>invalid ks</p></div>' 
 	});
 	$routeProvider.otherwise({redirectTo: '/dashboard'});
 	

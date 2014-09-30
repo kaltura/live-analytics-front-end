@@ -50,8 +50,8 @@ analyticsServices.factory('SessionInfo',
 		
 		
 analyticsServices.factory('KApi',
-		['$http', '$q', 'SessionInfo',
-		 	function KApiFactory ($http, $q, SessionInfo) {
+		['$http', '$q', '$location', 'SessionInfo',
+		 	function KApiFactory ($http, $q, $location, SessionInfo) {
 		 		var KApi = {};
 		 		
 		 		KApi.IE = (!!window.ActiveXObject && +(/msie\s(\d+)/i.exec(navigator.userAgent)[1])) || NaN;
@@ -86,13 +86,21 @@ analyticsServices.factory('KApi',
 			 			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 		}).success(function (data, status) {
 			 			if (data.objectType === "KalturaAPIException") {
-			 				deferred.reject(data.message);
+			 				if (data.code == "INVALID_KS") {
+			 					console.log(data);
+			 					$location.path("/login");
+			 				}
+			 				else {
+			 					deferred.reject(data.message);
+			 				}
 			 			}
 			 			else {
 			 				deferred.resolve(data);
 			 			}
 			 		}).error(function(data, status) {
-			 			deferred.reject(data.message);
+			 			console.log(data);
+			 			$location.path("/login");
+			 			//deferred.reject(data.message);
 			 		});
 			 		
 			 		// Returning the promise object
