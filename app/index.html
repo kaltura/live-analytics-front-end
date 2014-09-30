@@ -19,25 +19,34 @@
 <link type="text/css" rel="stylesheet" href="css/app.css" />
 
 <script>
+	window.lang = 'de_DE';
 	window.parent = {};
 	window.parent.kmc = {};
+	window.parent.kmc.functions = {
+			expired: function() {
+				alert('login, here I come!');
+			}
+	};
+	
 	window.parent.kmc.vars = {
-			/*
+			
 			// testing
-			ks : 'N2ZjMjc3N2NiMGE0YzJiMGMyNDZlYzcwYzZkZDA4NmQ4MjBhMzE0ZXwyNjE7MjYxOzE0MDk4OTg5NDI7MjsxNDA5ODEyNTQyLjM3ODtzaGFoYXIuZGFub3NAa2FsdHVyYS5jb207KixkaXNhYmxlZW50aXRsZW1lbnQ7Ow=',
+//			ks : 'MjFhYTQ0YmRjYzg1YzEwMzNlM2MzYzM3Njg5MjZkNjQ2YTg4Yzg1NHwyNjE7MjYxOzE0MTIxNTI3MjA7MjsxNDEyMDY2MzIwLjY4NzI7c2hhaGFyLmRhbm9zQGthbHR1cmEuY29tOyosZGlzYWJsZWVudGl0bGVtZW50Ozs=',
+			ks : 'YmIyMjc3YzNjZGYyNWQ2MzU2YThmYzhmOGJhMDk0MzEyYTRiYWFiZXwyNjE7MjYxOzE0MTIwNzA1MTM7MjsxNDEyMDcwNDgzLjUxNDQ7c2hhaGFyLmRhbm9zQGthbHR1cmEuY29tOzs7',
 			partner_id : '261',
 			service_url : 'http://apache-testing.dev.kaltura.com',
 			cdn_host : 'cdntesting.qa.mkaltura.com',
 			liveanalytics : {player_id : '15076371'}
-			*/
 			
+			/*
 			// hudson11
-			ks : 'NmNkYTBjNTkzMDVlZjE3NjJkMTdiN2JiOWFiYzdkOWVjNWM0Njg1YXwxMDM7MTAzOzE0MTA3NzcyNDk7MjsxNDEwNjkwODQ5LjAyMzg7YXRhci5zaGFkbWlAa2FsdHVyYS5jb207KixkaXNhYmxlZW50aXRsZW1lbnQ7Ow',
+			ks : 'ZTA0OTk4NTE4MDQ1MzYxODlkYjZlODlmNjIyYmRkNTM4NWNjOGZhN3wxMDM7MTAzOzE0MTEzOTE2Njg7MjsxNDExMzA1MjY4LjQxMDI7YXRhci5zaGFkbWlAa2FsdHVyYS5jb207KixkaXNhYmxlZW50aXRsZW1lbnQ7Ow',
 			partner_id : '103',
 			//service_url : 'http://dev-hudson11.dev.kaltura.com',
 			service_url : 'http://dev-hudson11',
 			cdn_host : 'dev-hudson11.dev.kaltura.com',
 			liveanalytics : {player_id : '23448260'}
+			*/
 	
 	};
 	
