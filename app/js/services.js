@@ -385,6 +385,7 @@ analyticsServices.factory('DashboardSvc',
 										hours.every(function (entryStat2) {
 											if (entryStat.entryId == entryStat2.entryId) {
 												entryStat.secondsViewed = entryStat2.secondsViewed;
+												entryStat.peakAudience = entryStat2.peakAudience;
 												return false;
 											}
 											return true;
