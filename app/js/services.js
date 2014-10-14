@@ -136,16 +136,16 @@ analyticsServices.factory('DashboardSvc',
 		 		DashboardSvc.pageSize = '10';
 		 		
 		 		/**
-		 		 * get info for dashboard aggregates line 
-		 		 * @param liveOnly	aggregate only live-now-kaltura entries, or viewed during last 36 hrs all-live entries
+		 		 * get info for dashboard aggregates line - for all entries (live + dead, as dead) 
 		 		 * @returns promise
 		 		 */
-		 		DashboardSvc.getAggregates = function getAggregates(liveOnly) {
+		 		DashboardSvc.getDeadAggregates = function getDeadAggregates() {
 		 			var postData = {
 						'ignoreNull': '1',
-						'filter:objectType': 'KalturaLiveReportsInputFilter',
-			            'filter:hoursBefore': '36',
-			            'filter:live': liveOnly ? '1' : '0',
+						'filter:objectType': 'KalturaLiveReportInputFilter',
+			            'filter:fromTime': '-129600',
+			            'filter:toTime': '-2',
+			            'filter:live': '0',
 			            'pager:objectType': 'KalturaFilterPager',
 			            'pager:pageIndex': '1',
 			            'pager:pageSize': DashboardSvc.pageSize,
@@ -157,6 +157,58 @@ analyticsServices.factory('DashboardSvc',
 					return KApi.doRequest(postData);
 		 		};
 		 		
+		 		/**
+		 		 * get info for dashboard aggregates line - for currently live Kaltura-live entries 
+		 		 * @returns promise
+		 		 */
+		 		DashboardSvc.getLiveAggregates = function getLiveAggregates() {
+		 			/* MR:
+		 			 * audience - 10 secs (now)
+		 			 * minutes viewed - 36 hours
+		 			 * buffertime - 1 minute
+		 			 * bitrate - 1 minute
+		 			 * */
+		 			var postData = {
+		 					'ignoreNull': '1',
+		 					'service': 'multirequest',
+		 					// 1 - audience - now
+		 					'1:filter:objectType': 'KalturaLiveReportInputFilter',
+		 					'1:filter:fromTime': '-60',
+		 					'1:filter:toTime': '-60',
+		 					'1:filter:live': '1',
+		 					'1:pager:objectType': 'KalturaFilterPager',
+		 					'1:pager:pageIndex': '1',
+		 					'1:pager:pageSize': DashboardSvc.pageSize,
+		 					'1:reportType': 'PARTNER_TOTAL',
+		 					'1:service': 'livereports',
+		 					'1:action': 'getreport',
+	 						// 2 - minutes viewed - 36 hours
+	 						'2:filter:objectType': 'KalturaLiveReportInputFilter',
+	 						'2:filter:fromTime': '-129600',
+	 						'2:filter:toTime': '-2',
+	 						'2:filter:live': '1',
+	 						'2:pager:objectType': 'KalturaFilterPager',
+	 						'2:pager:pageIndex': '1',
+	 						'2:pager:pageSize': DashboardSvc.pageSize,
+	 						'2:reportType': 'PARTNER_TOTAL',
+	 						'2:service': 'livereports',
+	 						'2:action': 'getreport',
+ 							// 3 - buffertime, bitrate - 1 minute
+ 							'3:filter:objectType': 'KalturaLiveReportInputFilter',
+ 							'3:filter:fromTime': '-60',
+ 							'3:filter:toTime': '-2',
+ 							'3:filter:live': '1',
+ 							'3:pager:objectType': 'KalturaFilterPager',
+ 							'3:pager:pageIndex': '1',
+ 							'3:pager:pageSize': DashboardSvc.pageSize,
+ 							'3:reportType': 'PARTNER_TOTAL',
+ 							'3:service': 'livereports',
+ 							'3:action': 'getreport'
+		 			};
+		 			
+		 			return KApi.doRequest(postData);
+		 		};
+		 		
 		 		
 		 		/**
 		 		 * @private
@@ -165,9 +217,10 @@ analyticsServices.factory('DashboardSvc',
 		 		DashboardSvc._getAllEntriesStats = function _getAllEntriesStats(pageNumber) {
 					var postData = {
 						'ignoreNull': '1',
-						'filter:objectType': 'KalturaLiveReportsInputFilter',
+						'filter:objectType': 'KalturaLiveReportInputFilter',
 			            'filter:orderBy': '-createdAt',
-			            'filter:hoursBefore': '36',
+			            'filter:fromTime': '-129600',
+			            'filter:toTime': '-2',
 			            'pager:objectType': 'KalturaFilterPager',
 			            'pager:pageIndex': pageNumber,
 			            'pager:pageSize': DashboardSvc.pageSize,
@@ -267,14 +320,37 @@ analyticsServices.factory('DashboardSvc',
 				DashboardSvc._getLiveEntriesStats = function _getLiveEntriesStats(entryIds) {
 					var postData = {
 						'ignoreNull': '1',
-						'filter:objectType': 'KalturaLiveReportsInputFilter',
-			            'filter:orderBy': '-createdAt',
-			            'filter:entryIds': entryIds,
-			            'filter:live': 1,
-			            'filter:hoursBefore': '36',
-			            'reportType': 'ENTRY_TOTAL',
-			            'service': 'livereports',
-			            'action': 'getreport'
+						'service': 'multirequest',
+						// 1 - audience - now
+						'1:filter:objectType': 'KalturaLiveReportInputFilter',
+			            '1:filter:orderBy': '-createdAt',
+			            '1:filter:entryIds': entryIds,
+			            '1:filter:live': 1,
+			            '1:filter:fromTime': '-60',
+			            '1:filter:toTime': '-60',
+			            '1:reportType': 'ENTRY_TOTAL',
+			            '1:service': 'livereports',
+			            '1:action': 'getreport',
+			            // 2 - minutes viewed - 36 hours
+			            '2:filter:objectType': 'KalturaLiveReportInputFilter',
+			            '2:filter:orderBy': '-createdAt',
+			            '2:filter:entryIds': entryIds,
+			            '2:filter:live': 1,
+			            '2:filter:fromTime': '-129600',
+			            '2:filter:toTime': '-2',
+			            '2:reportType': 'ENTRY_TOTAL',
+			            '2:service': 'livereports',
+			            '2:action': 'getreport',
+			            // 3 - buffertime, bitrate - 1 minute
+			            '3:filter:objectType': 'KalturaLiveReportInputFilter',
+			            '3:filter:orderBy': '-createdAt',
+			            '3:filter:entryIds': entryIds,
+			            '3:filter:live': 1,
+			            '3:filter:fromTime': '-60',
+			            '3:filter:toTime': '-2',
+			            '3:reportType': 'ENTRY_TOTAL',
+			            '3:service': 'livereports',
+			            '3:action': 'getreport'
 			        };
 					
 					return KApi.doRequest(postData);
@@ -297,11 +373,33 @@ analyticsServices.factory('DashboardSvc',
 								ids += entry.id + ","; 
 							}); 
 							ids = ids.substr(0, ids.length - 1);
-							DashboardSvc._getLiveEntriesStats(ids).then(function(entryStats) {
-								// entryStats is KalturaLiveStatsListResponse
-								if (entryStats.objects) {
-									entryStats.objects.forEach(function (entryStat) {
-										// add entry name to stats object
+							DashboardSvc._getLiveEntriesStats(ids).then(function(entryStatsMR) {
+								// entryStats is MR with KalturaLiveStatsListResponse
+								// take the 1st set of results, override with the results from the other sets, then add entry info
+								if (entryStatsMR[0].objects) {
+									var now = entryStatsMR[0].objects;
+									var hours = entryStatsMR[1].objects; 
+									var minute = entryStatsMR[2].objects;
+									now.forEach(function (entryStat) {
+										// secondsViewed - in 36 hours
+										hours.every(function (entryStat2) {
+											if (entryStat.entryId == entryStat2.entryId) {
+												entryStat.secondsViewed = entryStat2.secondsViewed;
+												return false;
+											}
+											return true;
+										});
+
+										// buffertime, bitrate - 1 minute
+										minute.every(function (entryStat3) {
+											if (entryStat.entryId == entryStat3.entryId) {
+												entryStat.bufferTime = entryStat3.bufferTime;
+												entryStat.avgBitrate = entryStat3.avgBitrate;
+												return false;
+											}
+											return true;
+										});
+										// entry info
 										entries.objects.every(function (entry) {
 											if (entryStat.entryId == entry.id) {
 												entryStat.name = entry.name;
@@ -313,7 +411,7 @@ analyticsServices.factory('DashboardSvc',
 										});
 									});
 								}
-								deferred.resolve(entryStats);
+								deferred.resolve(entryStatsMR[0]);
 							});
 						}
 						else {
@@ -377,8 +475,9 @@ analyticsServices.factory('EntrySvc',
 		 		EntrySvc.getAggregates = function getAggregates(entryId, isLive) {
 		 			var postData = {
 						'ignoreNull': '1',
-						'filter:objectType': 'KalturaLiveReportsInputFilter',
-			            'filter:hoursBefore': '36',
+						'filter:objectType': 'KalturaLiveReportInputFilter',
+						'filter:fromTime': '-129600',
+			            'filter:toTime': '-2',
 			            'filter:entryIds': entryId,
 			            'filter:live': isLive ? '1' : '0',
 			            'reportType': 'ENTRY_TOTAL',
@@ -398,8 +497,9 @@ analyticsServices.factory('EntrySvc',
 		 		EntrySvc.getReferrers = function getReferrers(entryId) {
 		 			var postData = {
 						'ignoreNull': '1',
-						'filter:objectType': 'KalturaLiveReportsInputFilter',
-			            'filter:hoursBefore': '36',
+						'filter:objectType': 'KalturaLiveReportInputFilter',
+						'filter:fromTime': '-129600',
+			            'filter:toTime': '-2',
 			            'filter:entryIds': entryId,
 			            'pager:objectType': 'KalturaFilterPager',
 			            'pager:pageIndex': '1',
@@ -424,9 +524,9 @@ analyticsServices.factory('EntrySvc',
 		 		EntrySvc.getGraph = function getGraph(entryId, fromDate, toDate) {
 		 			var postData = {
 						'ignoreNull': '1',
-						'filter:objectType': 'KalturaLiveReportsInputFilter',
-			            'filter:fromTime': fromDate,
-			            'filter:toTime': toDate,
+						'filter:objectType': 'KalturaLiveReportInputFilter',
+						'filter:fromTime': '-129600',
+			            'filter:toTime': '-2',
 			            'filter:entryIds': entryId,
 			            'reportType': 'ENTRY_TIME_LINE',
 			            'service': 'livereports',
@@ -447,8 +547,9 @@ analyticsServices.factory('EntrySvc',
 		 		EntrySvc.getMap = function getMap(entryId, time) {
 		 			var postData = {
 						'ignoreNull': '1',
-						'filter:objectType': 'KalturaLiveReportsInputFilter',
-			            'filter:eventTime': time,
+						'filter:objectType': 'KalturaLiveReportInputFilter',
+						'filter:fromTime': time,
+			            'filter:toTime': time,
 			            'filter:entryIds': entryId,
 			            'reportType': 'ENTRY_GEO_TIME_LINE',
 			            'service': 'livereports',
