@@ -33,21 +33,43 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 		 * get data for the aggregates line
 		 */
 		var getAggregates = function getAggregates(liveOnly) {
-			DashboardSvc.getAggregates(liveOnly).then (function(data) {
-				var o = data.objects[0];
-				var results = [
-				           	{"title" : liveOnly ? "audience" : "plays", 
-				           		"value" : liveOnly ? o.audience : o.plays, 
-				           		"tooltip" : liveOnly ? "agg_audience_tt" : "agg_plays_tt"},
-				        	{"title": "seconds_viewed", "value": o.secondsViewed, "tooltip":"agg_secs_tt"},
-				        	{"title": "buffertime", "value": o.bufferTime, "tooltip":"agg_buffer_tt"},
-				        	{"title": "bitrate", "value": o.avgBitrate, "tooltip":"agg_bitrate_tt"}
-				        ]; 
+			
+			if (liveOnly) {
+				DashboardSvc.getLiveAggregates().then (function(data) {
+					/* 1 audience - 10 secs (now)
+		 			 * 2 minutes viewed - 36 hours
+		 			 * 3 buffertime, bitrate - 1 minute
+		 			 * */
+					var results = [
+					           	{"title": "audience", "value": data[0].objects[0].audience, "tooltip": "agg_audience_tt"},
+					        	{"title": "seconds_viewed", "value": data[1].objects[0].secondsViewed, "tooltip":"agg_secs_tt"},
+					        	{"title": "buffertime", "value": data[2].objects[0].bufferTime, "tooltip":"agg_buffer_tt"},
+					        	{"title": "bitrate", "value": data[2].objects[0].avgBitrate, "tooltip":"agg_bitrate_tt"}
+					        ]; 
+					
+					$scope.aggregates = results;
+					// reactivate tooltips
+					$timeout(function() {$('.tooltip-wrap').tooltip();}, 0);
+				});
+			}
+			else {
 				
-				$scope.aggregates = results;
-				// reactivate tooltips
-				$timeout(function() {$('.tooltip-wrap').tooltip();}, 0);
-			});
+				DashboardSvc.getDeadAggregates().then (function(data) {
+					var o = data.objects[0];
+					var results = [
+					           	{"title" : "plays", 
+					           		"value" : o.plays, 
+					           		"tooltip" : "agg_plays_tt"},
+					        	{"title": "seconds_viewed", "value": o.secondsViewed, "tooltip":"agg_secs_tt"},
+					        	{"title": "buffertime", "value": o.bufferTime, "tooltip":"agg_buffer_tt"},
+					        	{"title": "bitrate", "value": o.avgBitrate, "tooltip":"agg_bitrate_tt"}
+					        ]; 
+					
+					$scope.aggregates = results;
+					// reactivate tooltips
+					$timeout(function() {$('.tooltip-wrap').tooltip();}, 0);
+				});
+			}
 		};
 		
 		
