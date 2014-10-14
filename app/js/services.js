@@ -467,25 +467,72 @@ analyticsServices.factory('EntrySvc',
 		 		
 		 		
 		 		/**
-		 		 * get aggregated stats data for this entry
+		 		 * get aggregated stats data for this entry as a dead-now entry
 		 		 * @param entryId
-		 		 * @param isLive	is this entry currently broadcasting
 		 		 * @returns KalturaEntryLiveStats 
 		 		 */
-		 		EntrySvc.getAggregates = function getAggregates(entryId, isLive) {
+		 		EntrySvc.getDeadAggregates = function getDeadAggregates(entryId) {
 		 			var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportInputFilter',
 						'filter:fromTime': '-129600',
 			            'filter:toTime': '-2',
 			            'filter:entryIds': entryId,
-			            'filter:live': isLive ? '1' : '0',
+			            'filter:live': '0',
 			            'reportType': 'ENTRY_TOTAL',
 			            'service': 'livereports',
 			            'action': 'getreport'
 			        };
-					
+		 			
 					return KApi.doRequest(postData);
+		 		};
+		 		
+		 		
+		 		/**
+		 		 * get aggregated stats data for this entry as a live-now entry
+		 		 * @param entryId
+		 		 * @returns KalturaEntryLiveStats 
+		 		 */
+		 		EntrySvc.getLiveAggregates = function getLiveAggregates(entryId) {
+		 			/* MR:
+		 			 * audience - 10 secs (now)
+		 			 * minutes viewed - 36 hours
+		 			 * buffertime - 1 minute
+		 			 * bitrate - 1 minute
+		 			 * */
+		 			var postData = {
+		 					'ignoreNull': '1',
+		 					'service': 'multirequest',
+		 					// 1 - audience - now
+		 					'1:filter:objectType': 'KalturaLiveReportInputFilter',
+		 					'1:filter:fromTime': '-60',
+		 					'1:filter:toTime': '-60',
+		 					'1:filter:live': '1',
+		 					'1:filter:entryIds': entryId,
+		 					'1:reportType': 'ENTRY_TOTAL',
+		 					'1:service': 'livereports',
+		 					'1:action': 'getreport',
+	 						// 2 - minutes viewed - 36 hours
+	 						'2:filter:objectType': 'KalturaLiveReportInputFilter',
+	 						'2:filter:fromTime': '-129600',
+	 						'2:filter:toTime': '-2',
+	 						'2:filter:live': '1',
+	 						'2:filter:entryIds': entryId,
+	 						'2:reportType': 'ENTRY_TOTAL',
+	 						'2:service': 'livereports',
+	 						'2:action': 'getreport',
+ 							// 3 - buffertime, bitrate - 1 minute
+ 							'3:filter:objectType': 'KalturaLiveReportInputFilter',
+ 							'3:filter:fromTime': '-60',
+ 							'3:filter:toTime': '-2',
+ 							'3:filter:live': '1',
+ 							'3:filter:entryIds': entryId,
+ 							'3:reportType': 'ENTRY_TOTAL',
+ 							'3:service': 'livereports',
+ 							'3:action': 'getreport'
+		 			};
+		 			
+		 			return KApi.doRequest(postData);
 		 		};
 		 		
 		 		

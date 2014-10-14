@@ -33,7 +33,6 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 		 * get data for the aggregates line
 		 */
 		var getAggregates = function getAggregates(liveOnly) {
-			
 			if (liveOnly) {
 				DashboardSvc.getLiveAggregates().then (function(data) {
 					/* 1 audience - 10 secs (now)
@@ -210,36 +209,72 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		 * @param isLive is the entry currently broadcasting
 		 */
 		var getAggregates = function getAggregates(isLive) {
-			EntrySvc.getAggregates($scope.entryId, isLive).then (function(data) {
-				var o;
-				if (data.objects && data.objects.length > 0) {
-					o = data.objects[0];
-				}
-				else {
-					// create empty dummy object
-					o = {'audience' : 0,
-						'plays' : 0,
-						'secondsViewed' : 0,
-						'bufferTime' : 0,
-						'avgBitrate' : 0
-					};
-				}
-				var results = [
-				           	{"title" : isLive ? "audience" : "plays", 
-				           		"value" : isLive ? o.audience : o.plays, 
-				           		"tooltip" : isLive ? "agg_audience_tt" : "agg_plays_tt"},
-				        	{"title": "seconds_viewed", "value": o.secondsViewed, "tooltip":"agg_secs_tt"},
-				        	{"title": "buffertime", "value": o.bufferTime, "tooltip":"agg_buffer_tt"},
-				        	{"title": "bitrate", "value": o.avgBitrate, "tooltip":"agg_bitrate_tt"}
-				        ]; 
-				
-				$scope.aggregates = results;
-				// reactivate tooltips
-				$timeout(function() {$('.tooltip-wrap').tooltip();}, 0);
-				
-				getReferrers(isLive, o.plays);
-				
-			});
+			if (isLive) {
+				EntrySvc.getLiveAggregates($scope.entryId).then (function(data) {
+					// data is MR
+					var o = {'audience' : 0,
+							'plays' : 0,
+							'secondsViewed' : 0,
+							'bufferTime' : 0,
+							'avgBitrate' : 0
+						};
+					// audience - now
+					if (data[0].objects && data[0].objects.length > 0) {
+						o.audience = data[0].objects[0].audience;
+					}
+					// seconds viewed - 36 hours
+					if (data[1].objects && data[1].objects.length > 0) {
+						o.secondsViewed = data[1].objects[0].secondsViewed;
+					}
+					// buffertime, bitrate - 1 minute
+					if (data[2].objects && data[2].objects.length > 0) {
+						o.bufferTime = data[2].objects[0].bufferTime;
+						o.avgBitrate = data[2].objects[0].avgBitrate;
+					}
+					
+					var results = [
+					           	{"title": "audience", "value": o.audience, "tooltip": "agg_audience_tt"},
+					        	{"title": "seconds_viewed", "value": o.secondsViewed, "tooltip":"agg_secs_tt"},
+					        	{"title": "buffertime", "value": o.bufferTime, "tooltip":"agg_buffer_tt"},
+					        	{"title": "bitrate", "value": o.avgBitrate, "tooltip":"agg_bitrate_tt"}
+					        ]; 
+					
+					$scope.aggregates = results;
+					// reactivate tooltips
+					$timeout(function() {$('.tooltip-wrap').tooltip();}, 0);
+					
+					getReferrers(true, 0); // totalplays value is ignored for live entries
+				});
+			}
+			else {
+				EntrySvc.getDeadAggregates($scope.entryId).then (function(data) {
+					var o;
+					if (data.objects && data.objects.length > 0) {
+						o = data.objects[0];
+					}
+					else {
+						// create empty dummy object
+						o = {'audience' : 0,
+							'plays' : 0,
+							'secondsViewed' : 0,
+							'bufferTime' : 0,
+							'avgBitrate' : 0
+						};
+					}
+					var results = [
+					           	{"title" : "plays", "value" : o.plays,"tooltip" : "agg_plays_tt"},
+					        	{"title": "seconds_viewed", "value": o.secondsViewed, "tooltip":"agg_secs_tt"},
+					        	{"title": "buffertime", "value": o.bufferTime, "tooltip":"agg_buffer_tt"},
+					        	{"title": "bitrate", "value": o.avgBitrate, "tooltip":"agg_bitrate_tt"}
+					        ]; 
+					
+					$scope.aggregates = results;
+					// reactivate tooltips
+					$timeout(function() {$('.tooltip-wrap').tooltip();}, 0);
+					
+					getReferrers(false, o.plays);
+				});
+			}
 		};
 		
 		
@@ -251,7 +286,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		var getReferrers = function getReferrers(isLive, totalPlays) {
 			if (isLive) {
 				// need to get the non-live entry stats and use the totalplays from there
-				EntrySvc.getAggregates($scope.entryId, false).then (function(data) {
+				EntrySvc.getDeadAggregates($scope.entryId).then (function(data) {
 					var o;
 					if (data.objects && data.objects.length > 0) {
 						o = data.objects[0];
