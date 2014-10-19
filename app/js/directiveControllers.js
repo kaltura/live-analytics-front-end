@@ -533,8 +533,8 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 				}
 
 				// add points after lastPoint
-				curx = lastPoint;
-				while (curx < toDate) {
+				curx = lastPoint + 10;
+				while (curx <= toDate) {
 					data.push({'x':curx, 'timestamp':curx, 'y':0});
 					curx += 10;
 				}
@@ -612,35 +612,37 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		
 		/**
 		 * add new data and purge oldest so we keep only 36 hrs
-		 * @param value
+		 * @param value points to add tot he graph
 		 */
 		var updateGraphContent = function updateGraphContent(value) {
-			var ar = series[0].data; // already in the graph
-			var lastArX = ar[ar.length-1].x;
+			var graphData = series[0].data; // already in the graph
+			var lastGraphDataX = graphData[graphData.length-1].x;
 			// first see if any existing values need to be updated
 			for (var i = 0; i<value.length; i++) {
 				var valX = value[i].x;
-				if (valX <= lastArX) {
-					for (var j = ar.length-1; j>0; j--) {
-						if (ar[j].x == valX) {
-							ar[j].y = value[i].y;
+				if (valX <= lastGraphDataX) {
+					// this x value is already in the graph
+					for (var j = graphData.length-1; j>=0; j--) {
+						if (graphData[j].x == valX) {
+							graphData[j].y = value[i].y;
 							break;
 						}
-						else if (ar[j].x < valX) {
+						else if (graphData[j].x < valX) {
 							// j will only become smaller
 							break;
 						}
 					}
 				}
 				else {
-					// valX is out of ar bounds, will be so for any larger i
+					// valX is out of graphData bounds, will be so for any larger i
 					break;
 				}
 			}
+			
 			// then shift/push for new ones
 			while(i < value.length) {
-				ar.shift();
-				ar.push(value[i]);
+				graphData.shift();
+				graphData.push(value[i]);
 				i++;
 			}
 			
