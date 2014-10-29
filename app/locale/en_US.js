@@ -46,6 +46,6 @@ var en_US_trans = {
 		"Storage_Reports": "Bandwidth & Storage Reports",
 		"System_Reports": "System Reports",
 		"Live_Reports": "Live Reports",
-		"Real_Time_Reports": "Live Real-Time Reports"
+		"Real_Time_Reports": "Live Real-Time Dashboard"
 	}
 };
