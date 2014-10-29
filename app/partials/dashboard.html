@@ -42,23 +42,23 @@
 					<table>
 						<tr>
 							<td>{{(boardType == "liveOnly" ? 'dashboard.Audience' : 'dashboard.Plays') | translate}}:</td>
-							<td>{{boardType == "liveOnly" ? entry.audience : entry.plays}}</td>
+							<td>{{(boardType == "liveOnly" ? entry.audience : entry.plays) | number:0}}</td>
 						</tr>
 						<tr>
 							<td>{{'dashboard.Peak_Audience' | translate}}:</td>
-							<td>{{entry.peakAudience}}</td>
+							<td>{{entry.peakAudience | number:0}}</td>
 						</tr>
 						<tr>
 							<td>{{'dashboard.Minutes_Viewed' | translate}}:</td>
-							<td>{{entry.secondsViewed | minutes}}</td>
+							<td>{{entry.secondsViewed | minutes | number:0}}</td>
 						</tr>
 						<tr>
 							<td>{{'dashboard.Buffer_Time' | translate}}:</td>
-							<td>{{entry.bufferTime}}</td>
+							<td>{{entry.bufferTime | number:2}}</td>
 						</tr>
 						<tr>
 							<td>{{'dashboard.Avg_Bitrate' | translate}}:</td>
-							<td>{{entry.avgBitrate | avgBitrate}}</td>
+							<td>{{entry.avgBitrate | avgBitrate | number:0}}</td>
 						</tr>
 					</table>
 					
