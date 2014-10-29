@@ -4,7 +4,7 @@
 			<h1>
 				<a ng-if="!nonav" href="#">{{'entry.Live_Content' | translate }}</a>
 				<span ng-if="nonav">{{'entry.Live_Content' | translate }}</span>
-				 > {{'entry.Investigate' | translate}}
+				 > {{entry.name}}
 			</h1>
 		</div>
 		<div class="clear-both" ></div>
@@ -34,7 +34,7 @@
 	
 	<div class="row">
 		<div class="col-md-6">
-			<h2 class="section-title">{{entry.name}}</h2>
+			<h2 class="section-title">{{'entry.ID' | translate}}: {{entry.id}}</h2>
 			<hr class="section-title" />
 			<!-- player -->
 			<div style="width:470px; height:265px;">

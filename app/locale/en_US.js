@@ -27,8 +27,8 @@ var en_US_trans = {
 	},
 	
 	"entry" : {
+		"ID": "Entry ID",
 		"Live_Content": "Live Content",
-		"Investigate": "Details",
 		"Audience": "Audience",
 		"Location": "Location",
 		"Location_tt": "audience change based on geography and time",
