@@ -56,13 +56,13 @@ analyticsFilters.filter('formatAgg', [ '$filter', function($filter) {
 			result = $filter('number')(agg.value, 0);
 			break;
 		case 'seconds_viewed':
-			result = Math.floor(agg.value/60); // actually returns minutes
-			result = $filter('number')(result, 0);
+			result = $filter('number')(agg.value/60, 0); // actually returns minutes
 			break;
 		case 'buffertime':
+			result = $filter('number')(agg.value, 2);
+			break;
 		case 'bitrate':
-			result = parseInt(agg.value, 10);
-			result = $filter('number')(result, 0);
+			result = $filter('number')(agg.value, 0);
 			break;
 		}
 		return result;
