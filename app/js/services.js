@@ -321,23 +321,23 @@ analyticsServices.factory('DashboardSvc',
 					var postData = {
 						'ignoreNull': '1',
 						'service': 'multirequest',
-						// 1 - audience - now
-						'1:filter:objectType': 'KalturaLiveReportInputFilter',
+						// 1 - minutes viewed - 36 hours - will have most results (entries)
+			            '1:filter:objectType': 'KalturaLiveReportInputFilter',
 			            '1:filter:orderBy': '-createdAt',
 			            '1:filter:entryIds': entryIds,
 			            '1:filter:live': 1,
-			            '1:filter:fromTime': '-60',
-			            '1:filter:toTime': '-60',
+			            '1:filter:fromTime': '-129600',
+			            '1:filter:toTime': '-2',
 			            '1:reportType': 'ENTRY_TOTAL',
 			            '1:service': 'livereports',
 			            '1:action': 'getreport',
-			            // 2 - minutes viewed - 36 hours
-			            '2:filter:objectType': 'KalturaLiveReportInputFilter',
+						// 2 - audience - now
+						'2:filter:objectType': 'KalturaLiveReportInputFilter',
 			            '2:filter:orderBy': '-createdAt',
 			            '2:filter:entryIds': entryIds,
 			            '2:filter:live': 1,
-			            '2:filter:fromTime': '-129600',
-			            '2:filter:toTime': '-2',
+			            '2:filter:fromTime': '-60',
+			            '2:filter:toTime': '-60',
 			            '2:reportType': 'ENTRY_TOTAL',
 			            '2:service': 'livereports',
 			            '2:action': 'getreport',
@@ -377,15 +377,18 @@ analyticsServices.factory('DashboardSvc',
 								// entryStats is MR with KalturaLiveStatsListResponse
 								// take the 1st set of results, override with the results from the other sets, then add entry info
 								if (entryStatsMR[0].objects) {
-									var now = entryStatsMR[0].objects;
-									var hours = entryStatsMR[1].objects; 
+									var hours = entryStatsMR[0].objects;
+									var now = entryStatsMR[1].objects; 
 									var minute = entryStatsMR[2].objects;
-									now.forEach(function (entryStat) {
-										// secondsViewed - in 36 hours
-										hours.every(function (entryStat2) {
+									hours.forEach(function (entryStat) {
+										// reset incorrect info that should be overriden by other results
+										entryStat.audience = 0;
+										entryStat.bufferTime = 0;
+										entryStat.avgBitrate = 0;
+										// audience - now
+										now.every(function (entryStat2) {
 											if (entryStat.entryId == entryStat2.entryId) {
-												entryStat.secondsViewed = entryStat2.secondsViewed;
-												entryStat.peakAudience = entryStat2.peakAudience;
+												entryStat.audience = entryStat2.audience;
 												return false;
 											}
 											return true;
