@@ -386,13 +386,15 @@ analyticsServices.factory('DashboardSvc',
 										entryStat.bufferTime = 0;
 										entryStat.avgBitrate = 0;
 										// audience - now
-										now.every(function (entryStat2) {
-											if (entryStat.entryId == entryStat2.entryId) {
-												entryStat.audience = entryStat2.audience;
-												return false;
-											}
-											return true;
-										});
+										if (now) {
+											now.every(function (entryStat2) {
+												if (entryStat.entryId == entryStat2.entryId) {
+													entryStat.audience = entryStat2.audience;
+													return false;
+												}
+												return true;
+											});
+										}
 
 										// buffertime, bitrate - 1 minute
 										minute.every(function (entryStat3) {
