@@ -54,14 +54,15 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 			else {
 				
 				DashboardSvc.getDeadAggregates().then (function(data) {
-					var o = data.objects[0];
+					var o;
+					if (data.objects) o = data.objects[0];
 					var results = [
 					           	{"title" : "plays", 
-					           		"value" : o.plays, 
+					           		"value" : o ? o.plays : 0, 
 					           		"tooltip" : "agg_plays_tt"},
-					        	{"title": "seconds_viewed", "value": o.secondsViewed, "tooltip":"agg_secs_tt"},
-					        	{"title": "buffertime", "value": o.bufferTime, "tooltip":"agg_buffer_tt"},
-					        	{"title": "bitrate", "value": o.avgBitrate, "tooltip":"agg_bitrate_tt"}
+					        	{"title": "seconds_viewed", "value": o ? o.secondsViewed : 0, "tooltip":"agg_secs_tt"},
+					        	{"title": "buffertime", "value": o ? o.bufferTime : 0, "tooltip":"agg_buffer_tt"},
+					        	{"title": "bitrate", "value": o ? o.avgBitrate : 0, "tooltip":"agg_bitrate_tt"}
 					        ]; 
 					
 					$scope.aggregates = results;
