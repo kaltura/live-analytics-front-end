@@ -243,6 +243,13 @@ hr.section-title {
 	font-family: Arial,sans-serif;
 }	
 
+.table {
+	table-layout: fixed;
+}
+
+td {
+	overflow: hidden; white-space:nowrap; text-overflow: ellipsis; word-wrap: break-word;
+}
 
 
 

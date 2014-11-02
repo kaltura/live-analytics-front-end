@@ -53,27 +53,25 @@
 
 	<!-- referals -->
 	<div class="row">
-		<div class="col-md-12">
 			<h2 class="section-title tooltip-wrap" data-placement="right" title="{{'entry.Top_referals_tt' | translate}}">{{'entry.Top_referals' | translate}}</h2>
 			<hr class="section-title" />
-			<table class="table table-striped">
+			<table class="table table-striped" >
 				<thead>
 					<tr>
-						<th>#</th>
-						<th>{{'entry.Domain' | translate}}</th>
-						<th>{{'entry.Visits' | translate}}</th>
-						<th style="width:10%">{{'entry.of_total' | translate}}</th>
+						<th class="col-md-1">#</th>
+						<th class="col-md-9">{{'entry.Domain' | translate}}</th>
+						<th class="col-md-1">{{'entry.Visits' | translate}}</th>
+						<th class="col-md-1">{{'entry.of_total' | translate}}</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="ref in referals">
-						<td>{{$index + 1}}.</td>
-						<td>{{ref.domain}}</td>
-						<td>{{ref.visits}}</td>
-						<td>{{ref.percents | percents}} %</td>
+					<tr ng-repeat="ref in referals" >
+						<td >{{$index + 1}}.</td>
+						<td >{{ref.domain}}</td>
+						<td >{{ref.visits}}</td>
+						<td >{{ref.percents | percents}} %</td>
 					</tr>
 				</tbody>
 			</table>
-		</div>
 	</div>
 </div>
