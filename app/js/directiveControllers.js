@@ -182,7 +182,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 		 * @param max the largest data point value
 		 */
 		this.createStyleMap = function createStyleMap(min, max) {
-			var sRadius = 2;
+			var sRadius = 4;
 			var lRadius = 10;
 			// style
 			var style = new OpenLayers.Style({
