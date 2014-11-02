@@ -17,7 +17,7 @@ body {
     padding-left: 10px;
     background-color: #FFFFFF;
     position:fixed;
-    z-index:2;
+    z-index:1005;
 }
 .kmcSubNav a {
     background: none repeat scroll 0 0 #FFFFFF;
