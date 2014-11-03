@@ -155,6 +155,7 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 		    
 		    $scope.boardType = "liveOnly";
 			$scope.$watch("boardType", function(newValue, oldValue) {
+				$scope.entries = new Array();
 				getAggregates(newValue == "liveOnly");
 	    		getEntries(newValue == "liveOnly", 1);
 				updatePagingControlRequired = true;
