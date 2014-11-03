@@ -397,14 +397,16 @@ analyticsServices.factory('DashboardSvc',
 										}
 
 										// buffertime, bitrate - 1 minute
-										minute.every(function (entryStat3) {
-											if (entryStat.entryId == entryStat3.entryId) {
-												entryStat.bufferTime = entryStat3.bufferTime;
-												entryStat.avgBitrate = entryStat3.avgBitrate;
-												return false;
-											}
-											return true;
-										});
+										if (minute) {
+											minute.every(function (entryStat3) {
+												if (entryStat.entryId == entryStat3.entryId) {
+													entryStat.bufferTime = entryStat3.bufferTime;
+													entryStat.avgBitrate = entryStat3.avgBitrate;
+													return false;
+												}
+												return true;
+											});
+										}
 										// entry info
 										entries.objects.every(function (entry) {
 											if (entryStat.entryId == entry.id) {
