@@ -31,9 +31,9 @@ var en_US_trans = {
 		"Live_Content": "Live Content",
 		"Audience": "Audience",
 		"Location": "Location",
-		"Location_tt": "audience change based on geography and time",
+		"Location_tt": "Audience change based on geography and time",
 		"Top_referals": "Top Referrers",
-		"Top_referals_tt": "top HTTP referrers that most viewers visited to view the live media",
+		"Top_referals_tt": "Top HTTP referrers that most viewers visited to view the live media",
 		"Domain": "Referrer",
 		"Visits": "Visits",
 		"of_total": "% of total"
