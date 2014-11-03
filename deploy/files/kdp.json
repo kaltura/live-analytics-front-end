@@ -39,8 +39,6 @@
 			"togglePlaybackKey": "32",
 			"shortSeekBackKey": "37",
 			"shortSeekForwardKey": "39",
-			"openFullscreenKey": "70",
-			"closeFullscreenkey": "27",
 			"gotoBeginingKey": "36",
 			"gotoEndKey": "35",
 			"longSeekForwardKey": "ctrl+39",
@@ -55,9 +53,6 @@
 			"plugin": true
 		},
 		"liveBackBtn": {
-			"plugin": true
-		},
-		"fullScreenBtn": {
 			"plugin": true
 		},
 		"logo": {
