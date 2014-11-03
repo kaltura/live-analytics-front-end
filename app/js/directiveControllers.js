@@ -256,6 +256,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 				var max = 0;
 				for ( var i = 0; i < value.length; i++) {
 					var val = parseInt(value[i].audience, 10); // convert string to int
+					if (val == 0) continue; // leave out points where audience is zero - we got them because they have plays)
 					// accumulate data for country-level layer
 					if (!countriesData[value[i].country.name]) { 
 						// init - keep whole value for lat/long
