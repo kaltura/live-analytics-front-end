@@ -39,6 +39,8 @@
 			"togglePlaybackKey": "32",
 			"shortSeekBackKey": "37",
 			"shortSeekForwardKey": "39",
+			"openFullscreenKey": null,
+			"closeFullscreenkey": null,
 			"gotoBeginingKey": "36",
 			"gotoEndKey": "35",
 			"longSeekForwardKey": "ctrl+39",
