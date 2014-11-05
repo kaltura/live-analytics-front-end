@@ -72,8 +72,8 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$inte
 /**
  * controller for map on entry page
  */
-analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntrySvc',
-    function($scope, $attrs, EntrySvc) {
+analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$location', 'EntrySvc',
+    function($scope, $attrs, $location, EntrySvc) {
 		var self = this;
 		this.mapElement = null;
 		this.slider = null;
@@ -92,6 +92,11 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  'EntryS
 			var osm = new OpenLayers.Layer.OSM();
 			// add target so we won't try to open in frame
 			osm.attribution = "&copy; <a href='http://www.openstreetmap.org/copyright' target='_blank'>OpenStreetMap</a> contributors";
+			osm.url = [
+			           $location.protocol() + '://a.tile.openstreetmap.org/${z}/${x}/${y}.png',
+			           $location.protocol() + '://b.tile.openstreetmap.org/${z}/${x}/${y}.png',
+			           $location.protocol() + '://c.tile.openstreetmap.org/${z}/${x}/${y}.png'
+			           ];
 			
 			self.map.addLayer(osm);
 			self.map.zoomToMaxExtent();
