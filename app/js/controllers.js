@@ -271,8 +271,6 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 					        ]; 
 					
 					$scope.aggregates = results;
-					// reactivate tooltips
-					$timeout(function() {$('.tooltip-wrap').tooltip();}, 0);
 					
 					getReferrers(false, o.plays);
 				});
@@ -325,6 +323,8 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 						results.push(o);
 					}
 					$scope.referals = results;
+					// reactivate tooltips
+					$timeout(function() {$('.tooltip-wrap').tooltip();}, 0);
 				});
 			}
 		};

@@ -253,6 +253,8 @@ td {
 }
 
 
-
+.tooltip.top .tooltip-inner {
+	max-width:80%;
+}
 
 
