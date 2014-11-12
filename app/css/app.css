@@ -77,13 +77,10 @@ hr.section-title {
 }
 
 .date-range {
-	float: right;	
-	margin-top: -32px;
+	float: right;
+	top:22px;	
 }
 
-.header {
-	
-}
 
 .page {
 	margin-right: auto;
