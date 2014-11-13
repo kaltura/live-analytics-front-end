@@ -388,6 +388,7 @@ analyticsServices.factory('DashboardSvc',
 									entry.avgBitrate = "0";
 									entry.peakAudience = "0";
 									entry.secondsViewed = "0";
+									entry.entryId = entry.id; // for consistancy with dead entries variables
 									// seconds viewed, peak audience - hours
 									if (hours) {
 										hours.every(function (entryStat) {
