@@ -374,58 +374,61 @@ analyticsServices.factory('DashboardSvc',
 							}); 
 							ids = ids.substr(0, ids.length - 1);
 							DashboardSvc._getLiveEntriesStats(ids).then(function(entryStatsMR) {
-								// entryStats is MR with KalturaLiveStatsListResponse
-								// take the 1st set of results, override with the results from the other sets, then add entry info
-								if (entryStatsMR[0].objects) {
-									var hours = entryStatsMR[0].objects;
-									var now = entryStatsMR[1].objects; 
-									var minute = entryStatsMR[2].objects;
-									hours.forEach(function (entryStat) {
-										// reset incorrect info that should be overriden by other results
-										entryStat.audience = 0;
-										entryStat.bufferTime = 0;
-										entryStat.avgBitrate = 0;
-										// audience - now
-										if (now) {
-											now.every(function (entryStat2) {
-												if (entryStat.entryId == entryStat2.entryId) {
-													entryStat.audience = entryStat2.audience;
-													return false;
-												}
-												return true;
-											});
-										}
-
-										// buffertime, bitrate - 1 minute
-										if (minute) {
-											minute.every(function (entryStat3) {
-												if (entryStat.entryId == entryStat3.entryId) {
-													entryStat.bufferTime = entryStat3.bufferTime;
-													entryStat.avgBitrate = entryStat3.avgBitrate;
-													return false;
-												}
-												return true;
-											});
-										}
-										// entry info
-										entries.objects.every(function (entry) {
-											if (entryStat.entryId == entry.id) {
-												entryStat.name = entry.name;
-												entryStat.thumbnailUrl = entry.thumbnailUrl;
-												entryStat.startTime = entry.firstBroadcast * 1000; // API returns secs, we need ms
+								// entryStatsMR is MR with KalturaLiveStatsListResponse
+								var hours = entryStatsMR[0].objects;
+								var now = entryStatsMR[1].objects; 
+								var minute = entryStatsMR[2].objects;
+								// -------------------------------------------------------------------------------
+								// entry info (name, thumbnailUrl, firstBroadcast*1000)
+								entries.objects.forEach(function (entry) {
+									entry.startTime = entry.firstBroadcast * 1000; // API returns secs, we need ms
+									// add params with default value
+									entry.audience = "0";
+									entry.bufferTime = "0";
+									entry.avgBitrate = "0";
+									entry.peakAudience = "0";
+									entry.secondsViewed = "0";
+									// seconds viewed, peak audience - hours
+									if (hours) {
+										hours.every(function (entryStat) {
+											if (entry.id == entryStat.entryId) {
+												entry.secondsViewed = entryStat.secondsViewed;
+												entry.peakAudience = entryStat.peakAudience;
 												return false;
 											}
 											return true;
 										});
-									});
-								}
-								deferred.resolve(entryStatsMR[0]);
+									}
+									// audience - now (1 minute ago)
+									if (now) {
+										now.every(function (entryStat) {
+											if (entry.id == entryStat.entryId) {
+												entry.audience = entryStat.audience;
+												return false;
+											}
+											return true;
+										});
+									}
+									// buffertime, bitrate - 1 minute
+									if (minute) {
+										minute.every(function (entryStat) {
+											if (entry.id == entryStat.entryId) {
+												entry.bufferTime = entryStat.bufferTime;
+												entry.avgBitrate = entryStat.avgBitrate;
+												return false;
+											}
+											return true;
+										});
+									}
+								});
+								
+								deferred.resolve(entries);
 							});
 						}
 						else {
 							// no currently live entries, resolve with empty data
 							deferred.resolve({
-		                        "objectType" : "KalturaLiveStatsListResponse",
+		                        "objectType" : "LiveStreamListResponse",
 		                        "objects" : null,
 		                        "totalCount" : '0'
 		                    });
