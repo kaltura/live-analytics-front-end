@@ -13,21 +13,31 @@
 	<hr class="section-title" />
 	
 	<!-- Aggregates -->
-	<div class="row aggregates clear-both">
-		<div class="aggregate-item col-md-2" ng-repeat="agg in aggregates" >
-			<div class="tooltip-wrap" title="{{agg.tooltip | translate}}">
-				<div class="agg-data" >{{agg | formatAgg}}</div>
-				<div class="agg-info">{{agg.title | translate}}</div>
-			</div>
-		</div>
-	</div>
+	<div class="circles row">
+       	<div ng-repeat="agg in aggregates" class="col-md-2" >
+         		<div>
+           		<div>
+           			<div>
+		                <!-- BEG Content -->
+              			<div class="tooltip-wrap" title="{{agg.tooltip | translate}}" data-container="body">
+							<div class="agg-data" >{{agg | formatAgg}}</div>
+							<div class="agg-info">{{agg.title | translate}}</div>
+						</div>
+		                <!-- END Content -->
+             			</div>
+           		</div>
+         		</div>
+       	</div>
+   	</div>
 	
 	<h2 class="section-title">{{'entry.Audience' | translate}}</h2>
 	<hr class="section-title" />
 	
 	<!-- Graph -->
-	<div class="row graphic-content graphi">
-		<div rgraph class="full-width full-height" ></div>
+	<div class="row">
+		<div class="col-md-12 graphic-content graphi">
+			<div rgraph class="full-width full-height" ></div>
+		</div>
 	</div>
 	
 	<div class="row">
@@ -51,6 +61,7 @@
 
 	<!-- referals -->
 	<div class="row">
+		<div class="col-md-12">
 			<h2 class="section-title tooltip-wrap" data-placement="right" title="{{'entry.Top_referals_tt' | translate}}">{{'entry.Top_referals' | translate}}</h2>
 			<hr class="section-title" />
 			<table class="table table-striped" >
@@ -71,5 +82,6 @@
 					</tr>
 				</tbody>
 			</table>
+		</div>
 	</div>
 </div>
