@@ -448,7 +448,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		var createGraph = function createGraph(series, element) {
 			var graph = new Rickshaw.Graph({
 				element : element[0].children[0],
-				width : element.width(),
+				width : element.width() - 16,
 				height : element.height() - 20,
 				renderer : 'line',
 				interpolation: 'linear',
