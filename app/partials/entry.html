@@ -1,4 +1,4 @@
-<div class="entry-details page container">
+<div class="entry-details page-inner ">
 	<div class="row" >
 		<div class="page-title col-md-9">
 			<h1>
@@ -45,7 +45,7 @@
 			<h2 class="section-title">{{'entry.ID' | translate}}: {{entry.id}}</h2>
 			<hr class="section-title" />
 			<!-- player -->
-			<div style="width:470px; height:265px;">
+			<div class="inline-component">
 				<div kplayer class="full-width full-height"></div>
 			</div>
 		</div>
@@ -53,7 +53,7 @@
 			<h2 class="section-title tooltip-wrap" title="{{'entry.Location_tt' | translate}}">{{'entry.Location' | translate}}</h2>
 			<hr class="section-title" />
 			<!-- map -->
-			<div style="width:470px; height:265px;">
+			<div class="inline-component">
 				<div olmap class="full-width full-height" ></div>
 			</div>
 		</div>
@@ -62,7 +62,7 @@
 	<!-- referals -->
 	<div class="row">
 		<div class="col-md-12">
-			<h2 class="section-title tooltip-wrap" data-placement="right" title="{{'entry.Top_referals_tt' | translate}}">{{'entry.Top_referals' | translate}}</h2>
+			<h2 class="section-title tooltip-wrap" data-placement="bottom" title="{{'entry.Top_referals_tt' | translate}}">{{'entry.Top_referals' | translate}}</h2>
 			<hr class="section-title" />
 			<table class="table table-striped" >
 				<thead>

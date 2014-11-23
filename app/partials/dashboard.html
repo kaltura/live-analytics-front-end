@@ -1,4 +1,4 @@
-<div class="dashboard page container">
+<div class="dashboard page-inner ">
 	<div class="header">
 		<div class="page-title">
 			<h1>{{'dashboard.Live_Content_36' | translate}}</h1>
@@ -38,7 +38,7 @@
 	<!-- Entries List -->
 	<div class="entries-list row">
 		<!-- Entry -->
-		<div class="entry panel panel-default col-md-6" ng-class-odd="'agg-odd'" ng-repeat="entry in entries">
+		<div class="entry panel panel-default col-md-6" ng-class-even="'agg-even'" ng-repeat="entry in entries">
 			<div class="panel-heading">
 		    	<h2 class="panel-title">{{entry.name}}</h2>
 		  	</div>

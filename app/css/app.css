@@ -79,21 +79,25 @@ hr.section-title {
 .date-range {
 	float: right;
 	top:22px;	
+	text-align:right;
 }
 
-
 .page {
-	margin-right: auto;
+	max-width:970px;
+}
+
+.page-inner {
+	/*margin-right: auto;
   	margin-left: auto;
-  	width: 980px; 
+  	width: 980px; */
   	padding-top:20px;
 }
 
 /* **************************** dashboard *************************** */
 
 .dashboard {
-	padding-left: 0px;
-	padding-right: 0px;
+	/*padding-left: 0px;
+	padding-right: 0px;*/
 }
 
 .row.aggregates {
@@ -131,11 +135,11 @@ hr.section-title {
 	margin-right:0px;
 }
 
-.entry.agg-odd {
-	margin-right: 40px;
+.entry.agg-even {
+	float:right;
 }
 .entry {
- 	width: 470px; 
+ 	width: 450px; 
 	height: 265px;
 	padding: 0px;
 	border-radius: 5px;
@@ -194,8 +198,14 @@ hr.section-title {
 
 
 .entry-details {
-	padding-left: 0px;
-	padding-right: 0px;
+	/*padding-left: 0px;
+	padding-right: 0px;*/
+}
+
+.inline-component {
+	width:470px; 
+	height:265px; 
+	margin: 0px auto;
 }
 
 
