@@ -58,7 +58,7 @@
 						</tr>
 						<tr>
 							<td>{{'dashboard.Minutes_Viewed' | translate}}:</td>
-							<td>{{entry.secondsViewed | minutes | number:0}}</td>
+							<td>{{entry.secondsViewed/60 | number:0}}</td>
 						</tr>
 						<tr>
 							<td>{{'dashboard.Buffer_Time' | translate}}:</td>

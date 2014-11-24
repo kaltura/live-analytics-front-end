@@ -79,14 +79,6 @@ analyticsFilters.filter('time', [function() {
 	return time;
 }]);
 
-analyticsFilters.filter('minutes', [function() {
-	var minutes = function minutes(val) {
-		return Math.floor(val/60);
-	}; 
-	
-	return minutes;
-}]);
-
 analyticsFilters.filter('percents', [function() {
 	// val is expected to be 0-1, return value has 2 digits after dec. (65.44)
 	var percents = function percents(val) {
