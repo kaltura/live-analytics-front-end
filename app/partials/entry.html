@@ -1,13 +1,13 @@
 <div class="entry-details page-inner ">
 	<div class="row" >
-		<div class="page-title col-md-9">
+		<div class="page-title col-md-8">
 			<h1>
 				<a ng-if="!nonav" href="#">{{'entry.Live_Content' | translate }}</a>
 				<span ng-if="nonav">{{'entry.Live_Content' | translate }}</span>
 				 > {{entry.name}}
 			</h1>
 		</div>
-		<div class="date-range col-md-3">{{reportStartTime | date : 'd MMM H:mm:ss'}} - {{nowTime | date : 'd MMM H:mm:ss'}}</div>
+		<div class="date-range col-md-4">{{reportStartTime | date : 'd MMM H:mm:ss'}} - {{nowTime | date : 'd MMM H:mm:ss'}}</div>
 	</div>
 	
 	<hr class="section-title" />
