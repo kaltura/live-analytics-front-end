@@ -7,19 +7,16 @@
 				 > {{entry.name}}
 			</h1>
 		</div>
-		<div class="date-range col-md-4">{{reportStartTime | date : 'd MMM H:mm:ss'}} - {{nowTime | date : 'd MMM H:mm:ss'}}</div>
-	</div>
-	<div class="row">
-		<div class="col-md-10"></div>
-		<div class="col-md-2">
-			<select ng-model="exportReportType" >
-				<option value="default" disabled="disabled">{{'export_to_csv' | translate}}</option>
-				<option value="timeline">{{'entry.report_timeline' | translate}}</option>
+		<div class="date-range col-md-4">{{reportStartTime | date : 'd MMM H:mm:ss'}} - {{nowTime | date : 'd MMM H:mm:ss'}}
+		<select ng-model="exportReportType" >
+				<option value="default">{{'export_to_csv' | translate}}</option>
+				<option value="audience">{{'entry.report_timeline' | translate}}</option>
 				<option value="location">{{'entry.report_location' | translate}}</option>
 				<option value="syndication">{{'entry.report_syndication' | translate}}</option>
 			</select>
 		</div>
 	</div>
+	
 	
 	<hr class="section-title" />
 	
