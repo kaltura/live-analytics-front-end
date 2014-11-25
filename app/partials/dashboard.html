@@ -1,16 +1,19 @@
 <div class="dashboard page-inner ">
-	<div class="header">
-		<div class="page-title">
+	<div class="row" >
+		<div class="page-title col-md-8">
 			<h1>{{'dashboard.Live_Content_36' | translate}}</h1>
 		</div>
-		<div class="clear-both" ></div>
-		<div class="date-range">{{reportStartTime | date : 'd MMM H:mm:ss'}} - {{nowTime | date : 'd MMM H:mm:ss'}}</div>
-		<div class="clear-both" >
+		<div class="date-range col-md-4">{{reportStartTime | date : 'd MMM H:mm:ss'}} - {{nowTime | date : 'd MMM H:mm:ss'}}</div>
+	</div>
+
+	<div class="row" >
+		<div class="col-md-12">
 			<select ng-model="boardType" >
 				<option value="liveOnly">{{'dashboard.Show_Kaltura' | translate}}</option>
 				<option value="all">{{'dashboard.Show_All_Entries' | translate}}</option>
 			</select>
 		</div>
+		
 	</div>
 	
 	<hr />
