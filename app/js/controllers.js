@@ -7,8 +7,8 @@ var analyticsControllers = angular.module('analyticsControllers', []);
 /**
  * Dashboard Controller 
  */
-analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeout', 'DashboardSvc', 
-    function($scope, $interval, $timeout, DashboardSvc) {
+analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeout', '$translate', 'DashboardSvc', 
+    function($scope, $interval, $timeout, $translate, DashboardSvc) {
 		
 		/**
 		 * entries currently on display
@@ -130,14 +130,20 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 			var result = DashboardSvc.export2csv($scope.boardType == "liveOnly"); 
 			result.then(function(data) {
 				if (true) { //TODO verify call success
-					bootbox.alert('success - your email awaits');
+					$translate('dashboard.export_success').then(function (msg) {
+						bootbox.alert(msg);
+					});
 				}
 				else {
-					bootbox.alert('oops, this didn\'t play out well');
+					$translate('dashboard.export_fail').then(function (msg) {
+						bootbox.alert(msg);
+					});
 				}
 			}, 
 			function (error) {
-				bootbox.alert('oops, this didn\'t play out well: <br>' + error);
+				$translate('dashboard.export_fail').then(function (msg) {
+					bootbox.alert(msg + "<br>" + error);
+				});
 			});
 		};
 		

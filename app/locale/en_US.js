@@ -23,7 +23,9 @@ var en_US_trans = {
 		"Buffer_Time": "Buffering Time",
 		"Avg_Bitrate": "Average Bitrate",
 		"Investigate": "Details",
-		"first_broadcast_tt": "First broadcast start time"
+		"first_broadcast_tt": "First broadcast start time",
+		"export_success": "Success - check your inbox",
+		"export_fail": "Ooops, this didn\'t play out well"
 	},
 	
 	"entry" : {
