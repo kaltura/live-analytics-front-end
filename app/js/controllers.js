@@ -224,8 +224,8 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 /**
  * General controller for the entry drill-down page
  */
-analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routeParams', '$interval', '$timeout', 'SessionInfo', 'EntrySvc',  
-    function($scope, $rootScope, $routeParams, $interval, $timeout, SessionInfo, EntrySvc) {
+analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routeParams', '$interval', '$timeout', '$translate', 'SessionInfo', 'EntrySvc',  
+    function($scope, $rootScope, $routeParams, $interval, $timeout, $translate, SessionInfo, EntrySvc) {
 		$scope.intervalPromise = null; 			// use this to hold update interval
 		$scope.entryId = $routeParams.entryid;	// current entry
 		$scope.pid = SessionInfo.pid;
@@ -391,8 +391,70 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		};
 		
 		
+		/**
+		 * trigger export to csv based on live/dead and required kind
+		 * @param reportKind audience/location/syndication
+		 */
+		var export2csv = function export2csv(reportKind) {
+			var reportType;
+			if ($scope.entry.isLive) {
+				switch (reportKind) {
+				case "audience":
+					reportType = 12;
+					break;
+				case "location":
+					reportType = 22;
+					break;
+				case "syndication":
+					reportType = 32;
+					break;
+				}
+			}
+			else {
+				switch (reportKind) {
+				case "audience":
+					reportType = 11;
+					break;
+				case "location":
+					reportType = 21;
+					break;
+				case "syndication":
+					reportType = 31;
+					break;
+				}
+			}
+			
+			var result = EntrySvc.export2csv(reportType); 
+			result.then(function(data) {
+				if (true) { //TODO verify call success
+					$translate('entry.export_success').then(function (msg) {
+						bootbox.alert(msg);
+					});
+				}
+				else {
+					$translate('entry.export_fail').then(function (msg) {
+						bootbox.alert(msg);
+					});
+				}
+			}, 
+			function (error) {
+				$translate('entry.export_fail').then(function (msg) {
+					bootbox.alert(msg + "<br>" + error);
+				});
+			});
+		};
+		
+		
 		
 		var screenSetup = function screenSetup() {
+			
+			$scope.exportReportType = "default";
+			$scope.$watch("exportReportType", function(newValue, oldValue) {
+				if (newValue != "default") {
+					export2csv(newValue);
+				}
+				$scope.exportReportType = "default";
+			 });
 			// report data:
 			getEntry();
 		};

@@ -632,6 +632,20 @@ analyticsServices.factory('EntrySvc',
 		 		};
 		 		
 		 		
+		 		/**
+		 		 * trigger entry export to csv
+		 		 * @param reportType as enumerated in KalturaLiveReportExportType
+		 		 */
+		 		EntrySvc.export2csv = function export2csv(reportType) {
+		 			var postData = {
+						'ignoreNull': '1',
+			            'service': 'livereports',
+			            'action': 'exporttocsv',
+			            'reporttype': reportType
+			        };
+					return KApi.doRequest(postData);
+		 		};
+		 		
 		 		return EntrySvc;
 		 	} 
 	 	]);

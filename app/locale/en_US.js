@@ -10,6 +10,7 @@ var en_US_trans = {
 	"agg_secs_tt":"Sum of minutes viewed by all viewers so far",
 	"agg_buffer_tt":"Average time per minute that viewers experienced buffering",
 	"agg_bitrate_tt":"The average bitrate viewers are consuming",
+	"export_to_csv": "Export To CSV",
 	
 	
 	"dashboard" : {
@@ -38,7 +39,12 @@ var en_US_trans = {
 		"Top_referals_tt": "Top HTTP referrers that most viewers visited to view the live media",
 		"Domain": "Referrer",
 		"Visits": "Visits",
-		"of_total": "% of total"
+		"of_total": "% of total",
+		"export_success": "Success - check your inbox",
+		"export_fail": "Ooops, this didn\'t play out well",
+		"report_timeline": "Audience",
+		"report_location": "Location",
+		"report_syndication": "Top Referrers"
 	},
 	
 	"main" : {
