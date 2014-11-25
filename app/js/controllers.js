@@ -124,6 +124,25 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 		
 		
 		/**
+		 * trigger export to csv
+		 */
+		var export2csv = function export2csv() {
+			var result = DashboardSvc.export2csv($scope.boardType == "liveOnly"); 
+			result.then(function(data) {
+				if (true) { //TODO verify call success
+					bootbox.alert('success - your email awaits');
+				}
+				else {
+					bootbox.alert('oops, this didn\'t play out well');
+				}
+			}, 
+			function (error) {
+				bootbox.alert('oops, this didn\'t play out well: <br>' + error);
+			});
+		};
+		
+		
+		/**
 		 * initial screen set up
 		 */
 		var screenSetup = function screenSetup() {
@@ -160,6 +179,9 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 	    		getEntries(newValue == "liveOnly", 1);
 				updatePagingControlRequired = true;
 			 });
+			
+			$scope.export2csv = export2csv;
+			
 			// set 30 secs update interval
 			$scope.intervalPromise = $interval(function() {screenUpdate();}, 30000);
 		};

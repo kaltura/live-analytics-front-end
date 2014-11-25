@@ -7,13 +7,15 @@
 	</div>
 
 	<div class="row" >
-		<div class="col-md-12">
+		<div class="col-md-10">
 			<select ng-model="boardType" >
 				<option value="liveOnly">{{'dashboard.Show_Kaltura' | translate}}</option>
 				<option value="all">{{'dashboard.Show_All_Entries' | translate}}</option>
 			</select>
 		</div>
-		
+		<div class="col-md-2 text-right">
+			<button type="button" class="btn btn-link" ng-click="export2csv()">Export to CSV</button>
+		</div>
 	</div>
 	
 	<hr />

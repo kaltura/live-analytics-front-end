@@ -440,6 +440,19 @@ analyticsServices.factory('DashboardSvc',
 		            return deferred.promise;
 				};
 		 		
+				
+				/**
+		 		 * trigger dashboard export to csv
+		 		 */
+		 		DashboardSvc.export2csv = function export2csv(liveOnly) {
+		 			var postData = {
+						'ignoreNull': '1',
+			            'service': 'livereports',
+			            'action': 'exporttocsv',
+			            'reporttype': liveOnly ? '2' : '1' // KalturaLiveReportExportType.PARTNER_TOTAL_LIVE/PARTNER_TOTAL_ALL
+			        };
+					return KApi.doRequest(postData);
+		 		};
 		 		
 		 		return DashboardSvc;
 		 	} 
