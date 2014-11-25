@@ -48,6 +48,7 @@ module.exports = function(grunt) {
               'app/lib/kaltura/KHoverDetail.js',
               'app/lib/kaltura/KTime_Local.js',
               'app/lib/OpenLayers-2.13.1/OpenLayers.js',
+              'app/lib/bootbox/bootbox.min.js',
               'app/locale/en_US.js'
           ],
           dest: '_dist/js/libs.js'
