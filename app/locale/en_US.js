@@ -25,8 +25,8 @@ var en_US_trans = {
 		"Avg_Bitrate": "Average Bitrate",
 		"Investigate": "Details",
 		"first_broadcast_tt": "First broadcast start time",
-		"export_success": "Success - check your inbox",
-		"export_fail": "Ooops, this didn\'t play out well"
+		"export_success": "Your download request is being processed. A download link will be sent to {0} once processing is completed.",
+		"export_fail": "Oooops, this didn\'t play out well. Please try again later."
 	},
 	
 	"entry" : {
@@ -40,8 +40,8 @@ var en_US_trans = {
 		"Domain": "Referrer",
 		"Visits": "Visits",
 		"of_total": "% of total",
-		"export_success": "Success - check your inbox",
-		"export_fail": "Ooops, this didn\'t play out well",
+		"export_success": "Your download request is being processed. A download link will be sent to {0} once processing is completed.",
+		"export_fail": "Oooops, this didn\'t play out well. Please try again later.",
 		"report_timeline": "Audience",
 		"report_location": "Location",
 		"report_syndication": "Top Referrers"
