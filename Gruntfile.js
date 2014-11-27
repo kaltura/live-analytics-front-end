@@ -9,6 +9,9 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    options: {
+    	targetDir: "v<%= pkg.version %>"
+    },
     meta: {
       banner: '/*! KMC Live Analytics - v<%= pkg.version %> - ' +
         '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
@@ -29,7 +32,7 @@ module.exports = function(grunt) {
           'app/js/filters.js', 
           'app/js/services.js' 
         ],
-        dest: '_dist/js/livea.js'
+        dest: '<%= options.targetDir %>/js/livea.js'
       },
       libs: {
           src: [
@@ -51,7 +54,7 @@ module.exports = function(grunt) {
               'app/lib/bootbox/bootbox.min.js',
               'app/locale/en_US.js'
           ],
-          dest: '_dist/js/libs.js'
+          dest: '<%= options.targetDir %>/js/libs.js'
       }
     },
     uglify: {
@@ -60,14 +63,14 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          '_dist/js/livea.min.js': ['<%= concat.dist.dest %>']
+          '<%= options.targetDir %>/js/livea.min.js': ['<%= concat.dist.dest %>']
         }
       }
     },
     cssmin: {
         combine: {
             files: {
-                '_dist/css/vendor.css': [
+                '<%= options.targetDir %>/css/vendor.css': [
                                          'app/lib/bootstrap/bootstrap-3.1.1-dist/css/bootstrap.css',
                                          'app/lib/jquery-ui/jquery-ui-1.10.4/themes/base/jquery-ui.css', 
                                          'app/lib/rickshaw/css/rickshaw.css',
@@ -78,7 +81,7 @@ module.exports = function(grunt) {
         }
     },
     clean: {
-        build: ["_dist", "_dist/js", "_dist/css"]
+        build: ["<%= options.targetDir %>", "<%= options.targetDir %>/js", "<%= options.targetDir %>/css"]
     },
     copy: {
         main: {
@@ -87,73 +90,73 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'app/dist_src',
                     src: '**',
-                    dest: '_dist/'
+                    dest: '<%= options.targetDir %>/'
                 },
                 { // partials
                     expand: true,
                     cwd: 'app/partials/',
                     src: '**',
-                    dest: '_dist/partials/'
+                    dest: '<%= options.targetDir %>/partials/'
                 },
                 { // locale
                 	expand: true,
                 	cwd: 'app/locale/',
                 	src: '**',
-                	dest: '_dist/locale/'
+                	dest: '<%= options.targetDir %>/locale/'
                 },
                 // js app + vendor are created directly in place
                 { // css - app (vendor is created directly in place)
                     src: 'app/css/app.css',
-                    dest: '_dist/css/app.css'
+                    dest: '<%= options.targetDir %>/css/app.css'
                 },
                 { // fonts
                 	 expand: true,
                      cwd: 'app/lib/bootstrap/bootstrap-3.1.1-dist/fonts',
                      src: '*',
-                     dest: '_dist/fonts'
+                     dest: '<%= options.targetDir %>/fonts'
                 },
                 { // open layers images
                 	expand: true,
                 	cwd: 'app/lib/OpenLayers-2.13.1/theme/default/img',
                 	src: '*',
-                	dest: '_dist/css/images/ol'
+                	dest: '<%= options.targetDir %>/css/images/ol'
                 },
                 { // jquery ui images
                 	expand: true,
                 	cwd: 'app/lib/jquery-ui/jquery-ui-1.10.4/themes/base/minified/images',
                 	src: '*',
-                	dest: '_dist/css/images'
+                	dest: '<%= options.targetDir %>/css/images'
                 },
                 { // angualr map files
                 	src: 'app/lib/angular/angular-route.min.js.map',
-                	dest: '_dist/js/angular-route.min.js.map'
+                	dest: '<%= options.targetDir %>/js/angular-route.min.js.map'
                 },
                 { // angualr map files
                 	src: 'app/lib/angular/angular-resource.min.js.map',
-                	dest: '_dist/js/angular-resource.min.js.map'
+                	dest: '<%= options.targetDir %>/js/angular-resource.min.js.map'
                 },
                 { // angualr map files
                 	src: 'app/lib/angular/angular.min.js.map',
-                	dest: '_dist/js/angular.min.js.map'
+                	dest: '<%= options.targetDir %>/js/angular.min.js.map'
                 },
                 { // deployment
                 	expand: true,
                 	cwd: 'deploy/files',
                 	src: '**',
-                	dest: '_dist/deploy/files'
+                	dest: '<%= options.targetDir %>/deploy/files'
                 },
                 
             ]
         }
     },
     clean: {
-    	before: ['_dist/**'],
+    	before: ['<%= options.targetDir %>/**'],
     	after: ['app/js/livea.tmp.js']
     },
 	'string-replace': {
     	deploy: {
     		files: {
-    			'_dist/deploy/config.ini': 'deploy/config.ini'
+    			'<%= options.targetDir %>/deploy/config.ini': 'deploy/config.ini'
     	    },
     	    options: {
     	    	replacements: [{
