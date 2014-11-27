@@ -449,7 +449,7 @@ analyticsServices.factory('DashboardSvc',
 						'ignoreNull': '1',
 			            'service': 'livereports',
 			            'action': 'exporttocsv',
-			            'reporttype': liveOnly ? '2' : '1' // KalturaLiveReportExportType.PARTNER_TOTAL_LIVE/PARTNER_TOTAL_ALL
+			            'reportType': liveOnly ? '2' : '1' // KalturaLiveReportExportType.PARTNER_TOTAL_LIVE/PARTNER_TOTAL_ALL
 			        };
 					return KApi.doRequest(postData);
 		 		};
@@ -641,7 +641,7 @@ analyticsServices.factory('EntrySvc',
 						'ignoreNull': '1',
 			            'service': 'livereports',
 			            'action': 'exporttocsv',
-			            'reporttype': reportType
+			            'reportType': reportType
 			        };
 					return KApi.doRequest(postData);
 		 		};

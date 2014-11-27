@@ -43,3 +43,12 @@ liveAnalytics.config(['$routeProvider', '$translateProvider', function($routePro
 function navigateToFlashAnalytics(subtabName) {
 	$("#kcms",parent.document)[0].gotoPage({moduleName: "analytics",subtab: subtabName});
 }
+
+String.prototype.formatArgs = function() {
+    var args = arguments;
+
+    return this.replace(/\{(\d+)\}/g, function() {
+        return args[arguments[1]];
+    });
+};
+

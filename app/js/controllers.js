@@ -129,9 +129,9 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 		var export2csv = function export2csv() {
 			var result = DashboardSvc.export2csv($scope.boardType == "liveOnly"); 
 			result.then(function(data) {
-				if (true) { //TODO verify call success
+				if (data.referenceJobId) {
 					$translate('dashboard.export_success').then(function (msg) {
-						bootbox.alert(msg);
+						bootbox.alert(msg.formatArgs([data.reportEmail]));
 					});
 				}
 				else {
@@ -426,9 +426,9 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 			
 			var result = EntrySvc.export2csv(reportType); 
 			result.then(function(data) {
-				if (true) { //TODO verify call success
-					$translate('entry.export_success').then(function (msg) {
-						bootbox.alert(msg);
+				if (data.referenceJobId) { 
+					$translate('dashboard.export_success').then(function (msg) {
+						bootbox.alert(msg.formatArgs([data.reportEmail]));
 					});
 				}
 				else {
