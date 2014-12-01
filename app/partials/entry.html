@@ -8,12 +8,16 @@
 			</h1>
 		</div>
 		<div class="date-range col-md-4">{{reportStartTime | date : 'd MMM H:mm:ss'}} - {{nowTime | date : 'd MMM H:mm:ss'}}
-		<select ng-model="exportReportType" >
-				<option value="default">{{'export_to_csv' | translate}}</option>
-				<option value="audience">{{'entry.report_timeline' | translate}}</option>
-				<option value="location">{{'entry.report_location' | translate}}</option>
-				<option value="syndication">{{'entry.report_syndication' | translate}}</option>
-			</select>
+			<div class="btn-group">
+				<button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					{{'export_to_csv' | translate}} <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" role="menu">
+					<li><a ng-click="exportReportType='audience'">{{'entry.report_timeline' | translate}}</a></li>
+				    <li><a ng-click="exportReportType='location'">{{'entry.report_location' | translate}}</a></li>
+				    <li><a ng-click="exportReportType='syndication'">{{'entry.report_syndication' | translate}}</a></li>
+				</ul>
+			</div>
 		</div>
 	</div>
 	
