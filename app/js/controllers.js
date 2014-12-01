@@ -424,7 +424,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 				}
 			}
 			
-			var result = EntrySvc.export2csv(reportType); 
+			var result = EntrySvc.export2csv(reportType, $scope.entry.id); 
 			result.then(function(data) {
 				if (data.referenceJobId) { 
 					$translate('dashboard.export_success').then(function (msg) {

@@ -635,13 +635,15 @@ analyticsServices.factory('EntrySvc',
 		 		/**
 		 		 * trigger entry export to csv
 		 		 * @param reportType as enumerated in KalturaLiveReportExportType
+		 		 * @param entryId 
 		 		 */
-		 		EntrySvc.export2csv = function export2csv(reportType) {
+		 		EntrySvc.export2csv = function export2csv(reportType, entryId) {
 		 			var postData = {
 						'ignoreNull': '1',
 			            'service': 'livereports',
 			            'action': 'exporttocsv',
-			            'reportType': reportType
+			            'reportType': reportType,
+			            'entryIds': entryId
 			        };
 					return KApi.doRequest(postData);
 		 		};
