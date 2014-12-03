@@ -85,6 +85,10 @@ hr.section-title {
 	text-align:right;
 }
 
+.date-range li {
+	text-align:left;
+}
+
 .page {
 	max-width:970px;
 }
