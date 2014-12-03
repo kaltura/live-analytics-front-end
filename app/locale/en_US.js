@@ -44,7 +44,7 @@ var en_US_trans = {
 		"export_fail": "Oooops, this didn\'t play out well. Please try again later.",
 		"report_timeline": "Audience",
 		"report_location": "Location",
-		"report_syndication": "Top Referrers"
+		"report_syndication": "Referrers"
 	},
 	
 	"main" : {
