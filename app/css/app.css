@@ -68,6 +68,10 @@ hr.section-title {
 	height: 100%;
 }
 
+.stick-right {
+	padding-right: 0;
+}
+
 .page-title {
 	float:left;
 }
