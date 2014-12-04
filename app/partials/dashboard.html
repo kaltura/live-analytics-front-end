@@ -44,8 +44,8 @@
 	<div class="entries-list row">
 		<!-- Entry -->
 		<div class="entry panel panel-default col-md-6" ng-class-even="'agg-even'" ng-repeat="entry in entries">
-			<div class="panel-heading">
-		    	<h2 class="panel-title">{{entry.name}}</h2>
+			<div class="panel-heading" >
+		    	<h2 class="panel-title" ellipsis>{{entry.name}}</h2>
 		  	</div>
 			<div class="panel-body">
 				<div class="entry-img">
@@ -84,7 +84,7 @@
 				<div class="col-md-6 entry-time" >
 					<span class="tooltip-wrap" title="{{'dashboard.first_broadcast_tt' | translate }}">{{entry.startTime | date : 'd MMM H:mm:ss'}}</span>
 					<script type="text/javascript">
-					$('.tooltip-wrap').tooltip();
+						$('.tooltip-wrap').tooltip();
 					</script> 
 				</div>
 			</div>

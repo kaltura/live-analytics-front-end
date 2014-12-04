@@ -39,6 +39,7 @@ h1 {
 h2.panel-title  {
 	font-weight: bold;
 	font-size: 150%;
+	white-space: nowrap;
 }
 
 h2.section-title  {
@@ -98,6 +99,13 @@ hr.section-title {
   	margin-left: auto;
   	width: 980px; */
   	padding-top:20px;
+}
+
+.ellipsis {
+	overflow: hidden; 
+	white-space: nowrap; 
+	text-overflow: ellipsis; 
+	word-wrap: break-word;
 }
 
 /* **************************** dashboard *************************** */
@@ -257,10 +265,6 @@ hr.section-title {
 
 .table {
 	table-layout: fixed;
-}
-
-td {
-	overflow: hidden; white-space:nowrap; text-overflow: ellipsis; word-wrap: break-word;
 }
 
 

@@ -42,3 +42,19 @@ analyticsDirectives.directive('olmap', function() {
 		}
 	};
 });
+
+analyticsDirectives.directive('ellipsis', ['$timeout', function($timeout) {
+	return {
+		restrict : 'A',
+		link : function(scope, element, attrs) {
+			var func = function() {
+				if (element[0].offsetWidth < element[0].scrollWidth) {
+					element.attr('title', element[0].innerHTML);
+					element.addClass('ellipsis');
+					element.tooltip();
+				} 
+			};
+			$timeout(func, 0);
+		}
+	};
+}]);
