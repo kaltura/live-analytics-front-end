@@ -95,9 +95,7 @@ hr.section-title {
 }
 
 .page-inner {
-	/*margin-right: auto;
-  	margin-left: auto;
-  	width: 980px; */
+
   	padding-top:20px;
 }
 
@@ -111,8 +109,7 @@ hr.section-title {
 /* **************************** dashboard *************************** */
 
 .dashboard {
-	/*padding-left: 0px;
-	padding-right: 0px;*/
+	
 }
 
 .row.aggregates {
@@ -122,18 +119,23 @@ hr.section-title {
 
 .aggregate-item {
 	border: 1px solid #019cfd;
-	margin-right: 40px;
 	text-align:center;
+	margin-right: 26px;
 	padding: 5px 10px 5px 10px;
 	height: 215px;
 	width: 215px;
 	border-radius: 50%;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    -khtml-border-radius: 50%;
 }
 
 .agg-data {
 	font-size: 400%;
 	font-weight: bold;
 	color: #019cfd;
+	margin-top: 54px;
+	margin-bottom: -16px;
 }
 .agg-info {
 	font-weight: bold;
@@ -273,7 +275,7 @@ hr.section-title {
 }
 
 
-/* ============================================================== */
+/* ============================================================== 
 .circles{
     margin:0px auto;
     
@@ -317,3 +319,4 @@ hr.section-title {
     
     
 }
+*/

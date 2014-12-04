@@ -25,22 +25,14 @@
 	<hr class="section-title" />
 	
 	<!-- Aggregates -->
-	<div class="circles row">
-       	<div ng-repeat="agg in aggregates" class="col-md-2" >
-         	<div>
-           		<div>
-           			<div>
-		                <!-- BEG Content -->
-              			<div class="tooltip-wrap" title="{{agg.tooltip | translate}}" data-container="body">
-							<div class="agg-data" >{{agg | formatAgg}}</div>
-							<div class="agg-info">{{agg.title | translate}}</div>
-						</div>
-		                <!-- END Content -->
-             			</div>
-           		</div>
-         	</div>
-       	</div>
-   	</div>
+	<div class="row aggregates">
+		<div class="aggregate-item col-md-3" ng-repeat="agg in aggregates">
+			<div class="tooltip-wrap" title="{{agg.tooltip | translate}}">
+				<div class="agg-data">{{agg | formatAgg}}</div>
+				<div class="agg-info">{{agg.title | translate}}</div>
+			</div>
+		</div>
+	</div>
 	
 	<h2 class="section-title">{{'entry.Audience' | translate}}</h2>
 	<hr class="section-title" />
