@@ -52,7 +52,6 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 				});
 			}
 			else {
-				
 				DashboardSvc.getDeadAggregates().then (function(data) {
 					var o;
 					if (data.objects) o = data.objects[0];
@@ -193,6 +192,10 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 		};
 		
 		var screenUpdate = function screenUpdate() {
+			
+			$('.tooltip-wrap').tooltip('destroy');
+			$('.panel-title').tooltip('destroy');
+			
 			var d = new Date();
 			var t = d.getTime()/1000;
 			
@@ -212,6 +215,9 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 				$interval.cancel($scope.intervalPromise);
 				$scope.intervalPromise = undefined;
 			}
+			// and tooltips
+			$('.tooltip-wrap').tooltip('destroy');
+			$('.panel-title').tooltip('destroy');
 		});
 		
 		
@@ -460,6 +466,8 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		};
 		
 		var screenUpdate = function screenUpdate() {
+			$('.tooltip-wrap').tooltip('destroy');
+			
 			var d = new Date();
 			var t = d.getTime()/1000;
 			
@@ -478,6 +486,8 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 				$interval.cancel($scope.intervalPromise);
 				$scope.intervalPromise = undefined;
 			}
+			// and tooltips
+			$('.tooltip-wrap').tooltip('destroy');
 		});
 		
 		screenSetup();
