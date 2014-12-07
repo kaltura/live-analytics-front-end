@@ -6,7 +6,7 @@ var KHoverDetail = Rickshaw.Class.create(Rickshaw.Graph.HoverDetail, {
 
 					this.xFormatter = args.xFormatter || function(x) {
 						// https://github.com/mbostock/d3/wiki/Time-Formatting
-						return d3.time.format('%A, %b %e, %Y, %X')(new Date(x * 1000));
+						return d3.time.format('%a %b %d %Y %X')(new Date(x * 1000));
 					};
 
 					this.yFormatter = args.yFormatter || function(y) {
