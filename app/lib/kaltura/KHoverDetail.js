@@ -5,7 +5,8 @@ var KHoverDetail = Rickshaw.Class.create(Rickshaw.Graph.HoverDetail, {
 					var graph = this.graph = args.graph;
 
 					this.xFormatter = args.xFormatter || function(x) {
-						return new Date(x * 1000).toString();
+						// https://github.com/mbostock/d3/wiki/Time-Formatting
+						return d3.time.format('%A, %b %e, %Y, %X')(new Date(x * 1000));
 					};
 
 					this.yFormatter = args.yFormatter || function(y) {
@@ -47,8 +48,8 @@ var KHoverDetail = Rickshaw.Class.create(Rickshaw.Graph.HoverDetail, {
 
 					var xLabel = document.createElement('div');
 
-					xLabel.className = 'x_label';
-					xLabel.innerHTML = formattedXValue;
+					//xLabel.className = 'x_label';
+					//xLabel.innerHTML = formattedXValue;
 					this.element.appendChild(xLabel);
 
 					var item = document.createElement('div');
