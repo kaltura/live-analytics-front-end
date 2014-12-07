@@ -445,10 +445,14 @@ analyticsServices.factory('DashboardSvc',
 		 		 * trigger dashboard export to csv
 		 		 */
 		 		DashboardSvc.export2csv = function export2csv(liveOnly) {
+		 			var d = new Date();
+		 			
 		 			var postData = {
 						'ignoreNull': '1',
 			            'service': 'livereports',
 			            'action': 'exporttocsv',
+			            'params:objectType': 'KalturaLiveReportExportParams',
+			            'params:timeZoneOffset': d.getTimezoneOffset(),
 			            'reportType': liveOnly ? '2' : '1' // KalturaLiveReportExportType.PARTNER_TOTAL_LIVE/PARTNER_TOTAL_ALL
 			        };
 					return KApi.doRequest(postData);
@@ -638,12 +642,15 @@ analyticsServices.factory('EntrySvc',
 		 		 * @param entryId 
 		 		 */
 		 		EntrySvc.export2csv = function export2csv(reportType, entryId) {
+		 			var d = new Date();
 		 			var postData = {
 						'ignoreNull': '1',
 			            'service': 'livereports',
 			            'action': 'exporttocsv',
-			            'reportType': reportType,
-			            'entryIds': entryId
+			            'params:objectType': 'KalturaLiveReportExportParams',
+			            'params:timeZoneOffset': d.getTimezoneOffset(),
+			            'params:entryIds': entryId,
+			            'reportType': reportType
 			        };
 					return KApi.doRequest(postData);
 		 		};
