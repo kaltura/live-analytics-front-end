@@ -62,7 +62,7 @@ analyticsFilters.filter('formatAgg', [ '$filter', function($filter) {
 			result = $filter('number')(agg.value, 2);
 			break;
 		case 'bitrate':
-			result = $filter('number')(agg.value, 0);
+			result = $filter('number')(agg.value, 2);
 			break;
 		}
 		return result;
