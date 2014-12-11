@@ -232,6 +232,10 @@ hr.section-title {
 	margin-right: 8px;
 }
 
+.rickshaw_graph .detail {
+	z-index:3;
+}
+
 .olControlAttribution {
 	top:3px;
 	bottom:auto;
