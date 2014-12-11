@@ -10,6 +10,8 @@ var analyticsControllers = angular.module('analyticsControllers', []);
 analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeout', '$translate', 'DashboardSvc', 
     function($scope, $interval, $timeout, $translate, DashboardSvc) {
 		
+		$scope.Math = window.Math;
+		
 		/**
 		 * entries currently on display
 		 */

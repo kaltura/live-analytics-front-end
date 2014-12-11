@@ -24,7 +24,10 @@ var en_US_trans = {
 		"Buffer_Time": "Buffering Time",
 		"Avg_Bitrate": "Average Bitrate",
 		"Investigate": "Details",
+		"first_broadcast": "First broadcast",
 		"first_broadcast_tt": "First broadcast start time",
+		"last_broadcast": "Last broadcast",
+		"last_broadcast_tt": "Last broadcast start time",
 		"export_success": "Your download request is being processed. A download link will be sent to {0} once processing is completed.",
 		"export_fail": "Oooops, this didn\'t play out well. Please try again later."
 	},

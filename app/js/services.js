@@ -273,7 +273,8 @@ analyticsServices.factory('DashboardSvc',
 										if (entryStat.entryId == entry.id) {
 											entryStat.name = entry.name;
 											entryStat.thumbnailUrl = entry.thumbnailUrl;
-											entryStat.startTime = entry.firstBroadcast * 1000; // API returns secs, we need ms
+											entryStat.firstBroadcast = entry.firstBroadcast; // API returns secs
+											entryStat.lastBroadcast = entry.lastBroadcast; // API returns secs
 											return false;
 										}
 										return true;
@@ -381,7 +382,6 @@ analyticsServices.factory('DashboardSvc',
 								// -------------------------------------------------------------------------------
 								// entry info (name, thumbnailUrl, firstBroadcast*1000)
 								entries.objects.forEach(function (entry) {
-									entry.startTime = entry.firstBroadcast * 1000; // API returns secs, we need ms
 									// add params with default value
 									entry.audience = "0";
 									entry.bufferTime = "0";

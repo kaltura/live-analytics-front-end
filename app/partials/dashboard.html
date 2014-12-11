@@ -70,11 +70,12 @@
 				</div>
 			</div>
 			<div class="panel-footer col-md-12">
-				<div class="col-md-6">
+				<div class="col-md-4">
 					<a class="btn btn-primary" href="#/entry/{{entry.entryId}}"><span class="glyphicon glyphicon-import"></span> {{'dashboard.Investigate' | translate}}</a>
 				</div>
-				<div class="col-md-6 entry-time" >
-					<span class="tooltip-wrap" title="{{'dashboard.first_broadcast_tt' | translate }}">{{entry.startTime | date : 'd MMM H:mm:ss'}}</span>
+				<div class="col-md-8 entry-time" >
+					<div class="tooltip-wrap" title="{{'dashboard.first_broadcast_tt' | translate }}">{{'dashboard.first_broadcast' | translate}}: {{entry.firstBroadcast*1000 | date : 'd MMM H:mm:ss'}}</div>
+					<div ng-show="Math.abs(entry.lastBroadcast - entry.firstBroadcast) > 10" class="tooltip-wrap" title="{{'dashboard.last_broadcast_tt' | translate }}">{{'dashboard.last_broadcast' | translate}}: {{entry.lastBroadcast*1000 | date : 'd MMM H:mm:ss'}}</div>
 					<script type="text/javascript">
 						$('.tooltip-wrap').tooltip();
 					</script> 
