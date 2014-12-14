@@ -258,10 +258,21 @@ hr.section-title {
 	top: 18px;
 }
 
+#maptip {
+	bottom: 0;
+}
+
+.slider-tip {
+    opacity:1;
+    bottom:120%;
+    margin-left: -1.36em;
+}
+
 .slidertick {
 	position: absolute;
 	border-left: 1px solid rgba(0, 0, 0, 0.2);
 }
+
 
 .slidertick .title {
 	opacity: 0.5;
@@ -276,6 +287,14 @@ hr.section-title {
 
 .tooltip.top .tooltip-inner {
 	max-width:80%;
+}
+
+/* map slider tooltip */
+.tooltip.top.slider-tip .tooltip-inner {
+	max-width:100%;
+}
+.tooltip.top.slider-tip .tooltip-arrow {
+	left:40%;
 }
 
 .dropdown-menu.csv {

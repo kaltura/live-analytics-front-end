@@ -127,9 +127,21 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 				min: t - 129600, // 36 hrs
 				value: t, 
 				step: 10,
-				change: self.sliderChangeHandler
+				change: self.sliderChangeHandler,
+				slide: function (event, ui) {
+					d = new Date(ui.value*1000);
+					angular.element('#maptip .tooltip-inner').text(self.formatTime(d));
+					angular.element('#maptip').css('left', $(ui.handle).css('left'));
+					angular.element('#maptip').removeClass('hidden');
+			    }
 			});
-			
+
+			angular.element('#mapslider .ui-slider-handle').mouseleave(function() {
+				angular.element('#maptip').addClass('hidden');
+				angular.element('#maptip .tooltip-inner').text("");
+				angular.element('#maptip').css('left', $(this).css('left'));
+			});
+		
 			// create ticks
 			self.sliderTicks = angular.element('#sliderticks');
 			self.createSliderTicks(t-12960, t);
@@ -141,6 +153,8 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 		 * event handler for the slider drag
 		 */
 		this.sliderChangeHandler = function sliderChangeHandler(event, ui) {
+			angular.element('#maptip').addClass('hidden');
+			angular.element('#maptip .tooltip-inner').text("");
 			self.getMapData(ui.value);
 		};
 		
