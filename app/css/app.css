@@ -278,6 +278,9 @@ hr.section-title {
 	max-width:80%;
 }
 
+.dropdown-menu.csv {
+	left:-40px;
+}
 
 /* ============================================================== 
 .circles{
