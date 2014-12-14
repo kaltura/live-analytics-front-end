@@ -80,7 +80,7 @@
 				<tbody>
 					<tr ng-repeat="ref in referals" >
 						<td >{{$index + 1}}.</td>
-						<td title="{{ref.domain}}" class="tooltip-wrap ellipsis" data-container="body"><a href="{{ref.domain}}" target="_blank">{{ref.domain}}</a></td>
+						<td title="{{ref.domain}}" class="tooltip-wrap ellipsis" data-container="body" data-animation="false"><a href="{{ref.domain}}" target="_blank">{{ref.domain}}</a></td>
 						<td >{{ref.visits}}</td>
 						<td >{{ref.percents | percents}} %</td>
 					</tr>
