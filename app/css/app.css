@@ -164,7 +164,7 @@ hr.section-title {
 
 .entry .panel-footer {
 	background-color: #ffffff;
-	padding: 10px 0;
+	padding: 18px 0;
 }
 	
 
@@ -201,7 +201,7 @@ hr.section-title {
 
 .entry-time {
 	text-align: right;
-	margin-top: 8px;
+	margin-top: -4px;
 	color: #bbb;
 }
 
