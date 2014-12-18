@@ -457,7 +457,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 * create graph and its parts
 		 * @param series
 		 * @param element
-		 * @return rickshaw graph 
+		 * @return rickshaw graph
 		 */
 		var createGraph = function createGraph(series, element) {
 			var graph = new Rickshaw.Graph({
@@ -503,7 +503,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		
 		/**
 		 * @param str	info string
-		 * @return array [{x, y}, ..]
+		 * @return Array [{x, y}, ..]
 		 */
 		var parseData = function parseData(str) {
 			var os = str.split(';');
@@ -528,10 +528,14 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 * @return array without "holes"
 		 */
 		var balanceData = function balanceData(data, fromDate, toDate, fillAll) {
-			var firstPoint = data[0].x;
-			var lastPoint = data[data.length-1].x;
+			var firstPoint = Math.floor(fromDate);	// init like this for when no data
+			var lastPoint = firstPoint;
 			var curx, nextx, i = 1;
-			
+			if (data.length) {
+				firstPoint = data[0].x;
+				lastPoint = data[data.length-1].x;
+			}
+
 			// add points between lastPoint and firstPoint
 			curx = firstPoint + 10;
 			while (curx < lastPoint) {
@@ -568,7 +572,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 */
 		var getGraph36Hrs = function getGraph36Hrs(toDate) {
 			var fromDate = toDate - 129600; // 60 sec per minute * 60 minutes per hour * 36 hrs 
-			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
+			EntrySvc.getGraph($scope.entryId, -129600, -2).then(function(data) {
 				if (data[0] && data[0].data && graph != null) {
 					// parse string into objects
 					var objects = parseData(data[0].data);
