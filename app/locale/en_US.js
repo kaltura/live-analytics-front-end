@@ -15,8 +15,8 @@ var en_US_trans = {
 	
 	"dashboard" : {
 		"Live_Content_36": "Live Content (in past 36 hours)",
-		"Show_All_Entries": "Show All Viewed Entries",
-		"Show_Kaltura": "Show Kaltura Live Now Only",
+		"Show_All_Entries": "All Viewed Live Entries",
+		"Show_Kaltura": "Kaltura Live Now Only",
 		"Audience": "Audience",
 		"Plays": "Plays",
 		"Peak_Audience": "Peak Audience",
