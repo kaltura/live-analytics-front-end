@@ -62,7 +62,11 @@
 		},
 		"skipBtn": {
 			"plugin": true
-		}
+		},
+	    "liveAnalytics": {
+			"plugin": false
+	  	}
+
 	},
 	"uiVars": [
 		{
