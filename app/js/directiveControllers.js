@@ -573,7 +573,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		var getGraph36Hrs = function getGraph36Hrs(toDate) {
 			var fromDate = toDate - 129600; // 60 sec per minute * 60 minutes per hour * 36 hrs 
 			EntrySvc.getGraph($scope.entryId, -129600, -2).then(function(data) {
-				if (data[0] && data[0].data && graph != null) {
+				if (data[0] && graph != null) {
 					// parse string into objects
 					var objects = parseData(data[0].data);
 					// add 0 points where no data received
