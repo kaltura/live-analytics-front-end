@@ -68,9 +68,7 @@ module.exports = function(grunt) {
 
         }
     },
-    clean: {
-        build: ["<%= options.targetDir %>", "<%= options.targetDir %>/js", "<%= options.targetDir %>/css"]
-    },
+
     copy: {
         vendor : {
             files: [
@@ -211,6 +209,7 @@ module.exports = function(grunt) {
         }
     },
     clean: {
+        build: ["<%= options.targetDir %>", "<%= options.targetDir %>/js", "<%= options.targetDir %>/css"],
     	before: ['<%= options.targetDir %>/**'],
     	after: ['app/js/livea.tmp.js']
     },
