@@ -28,7 +28,9 @@ module.exports = function(grunt) {
           'app/js/app.js',
           'app/js/controllers.js', 
           'app/js/directiveControllers.js', 
-          'app/js/directives.js', 
+          'app/js/RGraphController.js',
+          'app/js/OLMapController.js',
+          'app/js/directives.js',
           'app/js/filters.js', 
           'app/js/services.js',
             'app/locale/en_US.js'
