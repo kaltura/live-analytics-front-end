@@ -94,7 +94,7 @@ module.exports = function(grunt) {
                     dest: '<%= options.targetDir %>/js/bootstrap.min.js'
                 },
                 {
-                    src: 'app/lib/bootstrap/bootstrap-paginator.js',
+                    src: 'app/lib/bootstrap/paginator/bootstrap-paginator.js',
                     dest: '<%= options.targetDir %>/js/bootstrap-paginator.js'
                 },
                 {
