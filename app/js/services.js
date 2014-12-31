@@ -629,7 +629,7 @@ analyticsServices.factory('EntrySvc',
 			            'filter:entryIds': entryId,
 						'pager:objectType': 'KalturaFilterPager',
 						'pager:pageIndex': '1',
-						'pager:pageSize': '1200',
+						'pager:pageSize': '1000',
 			            'reportType': 'ENTRY_GEO_TIME_LINE',
 			            'service': 'livereports',
 			            'action': 'getreport'
