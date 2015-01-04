@@ -627,6 +627,7 @@ analyticsServices.factory('EntrySvc',
 						'filter:fromTime': time,
 			            'filter:toTime': time,
 			            'filter:entryIds': entryId,
+						'filter:orderBy' : '-plays', //KalturaLiveReportOrderBy.PLAYS_DESC
 						'pager:objectType': 'KalturaFilterPager',
 						'pager:pageIndex': '1',
 						'pager:pageSize': '1000',
