@@ -14,7 +14,7 @@ var liveAnalytics = angular.module('liveAnalytics', [
 
 liveAnalytics.config(['$routeProvider', '$translateProvider', function($routeProvider, $translateProvider) {
 	// routes
-	$routeProvider.when('/dashboard', {
+	$routeProvider.when('/dashboard/:extra?',{	// "extra" is only used in dev to pass params on url
 		templateUrl: 'partials/dashboard.html', 
 		controller: 'DashboardCtrl'
 	});
