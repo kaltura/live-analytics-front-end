@@ -13,9 +13,9 @@ This can be done for dev purposes - it uses un-minimized code, etc.
 Edit app/index.html with relevant values (partner id, ks, etc), then navigate on your local host to this file
 
 ##### Option 2:
-Navigate to the project's dashboard route in your localhost with the relevant params, ie
-http://localhost/app/#/dashboard/player=your_player_id|pid=your_partner_id|ks=your_ks|svc=service_url_no_protocol|cdn=cdn_host_no_protocol
-(note the pipes vs slashes)
+Navigate to the project's dashboard route on your localhost with the relevant params, ie <br>
+http://localhost/app/#/dashboard/player=your_player_id|pid=your_partner_id|ks=your_ks|svc=service_url_no_protocol|cdn=cdn_host_no_protocol <br>
+(note the pipes vs slashes) <br>
 The provided values will override values hardcoded in app/index.html
 
 
