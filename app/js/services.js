@@ -22,7 +22,10 @@ analyticsServices.factory('SessionInfo',
 		 		sessionInfo.setUiconfId = function setUiconfId(value) {
 		 			sessionInfo.uiconfid = value;
 		 		};
-		 		
+				sessionInfo.setServiceUrl = function setServiceUrl(value) {
+		 			sessionInfo.service_url = value;
+		 		};
+
 		 		try {
 	                var kmc = window.parent.kmc;
 	                if (kmc && kmc.vars) {
