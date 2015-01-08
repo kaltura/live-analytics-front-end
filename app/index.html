@@ -59,6 +59,35 @@
 	<!-- player -->
 	<script>
 		window.playerLibLoaded = false;
+		var hash = location.hash; // /dashboard/player=your_player_id|pid=your_partner_id|ks=your_ks|svc=service_url_no_protocol|cdn=cdn_host_no_protocol
+		ar = hash.split("#")[1].split("/");
+		if (ar.length > 2) {
+			ar = ar[2].split("|");
+			for (var i = 0; i < ar.length; i++) {
+				var ar2 = ar[i].split('=');
+				var key = ar2[0];
+				switch (key) {
+					case 'player':
+						window.parent.kmc.vars.liveanalytics.player_id = ar2[1];
+						break;
+					case 'pid':
+						window.parent.kmc.vars.partner_id = ar2[1];
+						break;
+					case 'ks':
+						window.parent.kmc.vars.ks = ar2[1];
+						break;
+					case 'svc':
+						window.parent.kmc.vars.service_url = window.location.protocol + "//" + ar2[1];
+						break;
+					case 'cdn':
+						window.parent.kmc.vars.cdn_host = ar2[1];
+						break;
+
+				}
+
+			}
+		}
+
 		
 		var oHead = document.getElementsByTagName('head').item(0);
 		var oScript= document.createElement("script");
@@ -70,7 +99,6 @@
 		oHead.appendChild( oScript);
 		
 		function plrCallback() {
-			console.log('player loaded');
 			window.playerLibLoaded = true; // only embed when true
 		}
 		
