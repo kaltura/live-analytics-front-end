@@ -7,6 +7,8 @@ The project is based on AngularJS + Bootstrap, and uses a number of 3rd-party li
 Unzip tag distributables to /opt/kaltura/apps/liveanalytics
 
 ## Running the project not through Kaltura KMC
+This can be done for dev purposes - it uses un-minimized code, etc.
+
 ##### Option 1:
 Edit app/index.html with relevant values (partner id, ks, etc), then navigate on your local host to this file
 
