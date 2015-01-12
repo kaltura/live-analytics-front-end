@@ -60,9 +60,17 @@ analyticsFilters.filter('formatAgg', [ '$filter', function($filter) {
 			break;
 		case 'buffertime':
 			result = $filter('number')(agg.value, 2);
+			if (result.indexOf('.') > 4) {
+				// if we have 4 digits number, we only want a single digit after the dec point
+				result = $filter('number')(agg.value, 1);
+			}
 			break;
 		case 'bitrate':
 			result = $filter('number')(agg.value, 2);
+			if (result.indexOf('.') > 4) {
+				// if we have 4 digits number, we only want a single digit after the dec point
+				result = $filter('number')(agg.value, 1);
+			}
 			break;
 		}
 		return result;
