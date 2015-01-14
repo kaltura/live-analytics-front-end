@@ -189,7 +189,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 */
 		var getGraph30Secs = function getGraph30Secs(endTime) {
 			var toDate = -2;	//endTime;
-			var fromDate = -120; 
+			var fromDate = -122;
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
 				var objects = parseData(data[0].data);
 				objects = balanceData(objects, endTime-122, endTime-2, $scope.entry.isLive);
