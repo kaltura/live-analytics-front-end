@@ -230,7 +230,9 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 					// this x value is already in the graph
 					for (var j = graphData.length-1; j>=0; j--) {
 						if (graphData[j].x == valX) {
-							graphData[j].y = value[i].y;
+							if ( value[i].y != 0) {
+								graphData[j].y = value[i].y;
+							}
 							break;
 						}
 						else if (graphData[j].x < valX) {
