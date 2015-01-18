@@ -243,7 +243,7 @@ analyticsServices.factory('DashboardSvc',
 		 			var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveStreamEntryFilter',
-						'filter:entryIdsIn': entryIds,
+						'filter:idIn': entryIds,
 			            'filter:orderBy': '-createdAt',
 			            'service': 'livestream',
 			            'action': 'list'
