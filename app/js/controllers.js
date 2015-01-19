@@ -389,7 +389,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 				// set report dates:
 				var d = new Date();
 				$scope.nowTime = d;
-				$rootScope.$broadcast('setupScreen', Math.floor(d.getTime()/1000));
+				$rootScope.$broadcast('setupScreen', Math.floor(d.getTime()/10000)*10);
 				d = new Date();
 				d.setHours(d.getHours() - 36);
 				$scope.reportStartTime = d;
@@ -471,7 +471,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 			$('.tooltip-wrap').tooltip('destroy');
 			
 			var d = new Date();
-			var t = d.getTime()/1000;
+			var t = Math.floor(d.getTime()/10000) * 10;
 			
 			$scope.nowTime = d;
 			var d = new Date();

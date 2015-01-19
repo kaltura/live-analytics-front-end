@@ -110,7 +110,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 * @return array without "holes"
 		 */
 		var balanceData = function balanceData(data, fromDate, toDate, fillAll) {
-			var firstPoint = Math.floor(fromDate);	// init like this for when no data
+			var firstPoint = Math.floor(fromDate/10)*10;	// init like this for when no data
 			var lastPoint = firstPoint;
 			var curx, nextx, i = 1;
 			if (data.length) {
@@ -153,8 +153,9 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 * @param end of 36 hrs term (timestamp sec)
 		 */
 		var getGraph36Hrs = function getGraph36Hrs(toDate) {
-			var fromDate = toDate - 129600; // 60 sec per minute * 60 minutes per hour * 36 hrs 
-			EntrySvc.getGraph($scope.entryId, -129600, -2).then(function(data) {
+			toDate = toDate - 60;
+			var fromDate = toDate - 12960; // 60 sec per minute * 60 minutes per hour * 36 hrs
+			EntrySvc.getGraph($scope.entryId, -129660, -60).then(function(data) {
 				if (data[0] && graph != null) {
 					// parse string into objects
 					var objects = parseData(data[0].data);
@@ -188,11 +189,11 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 * @param endTime (timestamp sec) get graph data for 30 secs up to this time
 		 */
 		var getGraph30Secs = function getGraph30Secs(endTime) {
-			var toDate = -2;	//endTime;
+			var toDate = -60;	//endTime;
 			var fromDate = -122;
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
 				var objects = parseData(data[0].data);
-				objects = balanceData(objects, endTime-122, endTime-2, $scope.entry.isLive);
+				objects = balanceData(objects, endTime-122, endTime-60, $scope.entry.isLive);
 				if (graph != null) {
 					updateGraphContent(objects);
 				}
