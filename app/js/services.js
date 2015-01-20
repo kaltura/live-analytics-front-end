@@ -484,13 +484,39 @@ analyticsServices.factory('EntrySvc',
 				            '1:action': 'get',
 				            '2:service': 'liveStream',
 				            '2:action': 'islive',
-				            '2:id': '{1:result:id}',
-				            '2:protocol': 'hds'
+				            '2:id': entryId,
+				            '2:protocol': 'hds',
+							'3:service': 'liveStream',
+				            '3:action': 'islive',
+				            '3:id': entryId,
+				            '3:protocol': 'hls',
+							'4:service': 'liveStream',
+				            '4:action': 'islive',
+				            '4:id': entryId,
+				            '4:protocol': 'hdnetworkmanifest'
 				        };
 					
 		 			KApi.doRequest(postData).then(function (mr) {
-		 				mr[0].isLive = mr[1];
-		 				mr[0].sessionStartTime = mr[0].createdAt + 60;
+						// the last 3 results are all current optional protocols.
+						if (mr[0].objectType != "KalturaAPIException") {
+							if (mr[0].sourceType == 31) {
+								// Kaltura_Client_Enum_SourceType.AKAMAI_UNIVERSAL_LIVE
+								mr[0].isLive = mr[3];
+							}
+							else if (mr[0].sourceType == 32) {
+								// Kaltura_Client_Enum_SourceType.LIVE_STREAM
+								var livehds = true;
+								if (!mr[1] || mr[1].objectType == "KalturaAPIException") {
+									livehds = false;
+								}
+
+								mr[0].isLive = livehds || mr[2];
+							}
+							else {
+								mr[0].isLive = false;
+							}
+						}
+
 		 				dfd.resolve(mr[0]);
 		 			});
 		 			
