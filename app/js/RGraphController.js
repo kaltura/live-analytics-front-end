@@ -163,10 +163,12 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 					objects = balanceData(objects, fromDate, toDate, $scope.entry.isLive);
 					if (!$scope.entry.isLive) {
 						var firstBroadcast = parseInt($scope.entry.firstBroadcast, 10);
-						// trim data edges: 
-						for (var i = 0; i<objects.length; i++) {
-							if (objects[i].timestamp >= firstBroadcast) {
-								break;
+						// trim data edges:
+						if (!isNaN(firstBroadcast)) {	// non-kaltura don't have firstBroadcast
+							for (var i = 0; i < objects.length; i++) {
+								if (objects[i].timestamp >= firstBroadcast) {
+									break;
+								}
 							}
 						}
 						for (var j = objects.length - 1; j>=0; j--) {
