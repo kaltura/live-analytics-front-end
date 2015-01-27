@@ -501,7 +501,11 @@ analyticsServices.factory('EntrySvc',
 						if (mr[0].objectType != "KalturaAPIException") {
 							if (mr[0].sourceType == 31) {
 								// Kaltura_Client_Enum_SourceType.AKAMAI_UNIVERSAL_LIVE
-								mr[0].isLive = mr[3];
+								var livehdnetwork = true;
+								if (!mr[3] || mr[3].objectType == "KalturaAPIException") {
+									livehdnetwork = false;
+								}
+								mr[0].isLive = livehdnetwork;
 							}
 							else if (mr[0].sourceType == 32) {
 								// Kaltura_Client_Enum_SourceType.LIVE_STREAM
@@ -509,8 +513,11 @@ analyticsServices.factory('EntrySvc',
 								if (!mr[1] || mr[1].objectType == "KalturaAPIException") {
 									livehds = false;
 								}
-
-								mr[0].isLive = livehds || mr[2];
+								var livehls = true;
+								if (!mr[2] || mr[2].objectType == "KalturaAPIException") {
+									livehls = false;
+								}
+								mr[0].isLive = livehds || livehls;
 							}
 							else {
 								mr[0].isLive = false;
