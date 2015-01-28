@@ -24,12 +24,9 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			graph = createGraph(series, element);
 		};
 		
-		var isRecordedEntry = function isRecordedEntry() {
-			return !$scope.entry.isLive && $scope.entry.recordedEntryId && $scope.entry.recordedEntryId != ''; 
-		};
-		
+
 		var graphClickHandler = function graphClickHandler(time) {
-			if (isRecordedEntry()) {
+			if (!$scope.entry.isLive) {
 				// click - only for recorded entries that are not currently live
 				$scope.$emit('gotoTime', time);
 			}
