@@ -20,7 +20,9 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$inte
   			// translate timestamp to entry time, go to correct time.
   			var playerTime = time - $scope.entry.firstBroadcast;
   			var kdp = angular.element('#kplayer')[0];
-  			kdp.sendNotification("doSeek", playerTime);
+			if (kdp) {
+				kdp.sendNotification("doSeek", playerTime);
+			}
 
   		});
 
@@ -33,7 +35,7 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$inte
   					"uiconf_id": $scope.uiconfId, 
   					"entry_id": value, 
   					"flashvars": { 
-  						"streamerType": "rtmp" //TODO should eventually be "auto"
+  						"streamerType": "auto"
   					} 
   				});
   			};
