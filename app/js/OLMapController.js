@@ -79,8 +79,15 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 			self.createSliderTicks(t-12960, t);
 			
 		};
-		
-		
+
+
+		$scope.$on('gotoTime', function (event, time) {
+			// show required time data on map
+			self.slider.slider("option", "value", time);
+		});
+
+
+
 		/**
 		 * event handler for the slider drag
 		 */
