@@ -694,8 +694,25 @@ analyticsServices.factory('EntrySvc',
 			        };
 					return KApi.doRequest(postData);
 		 		};
-		 		
-		 		return EntrySvc;
+
+
+				/**
+				 *
+				 * @param entryId
+				 */
+		 		EntrySvc.listEventCuepoints = function listEventCuepoints(entryId) {
+					var postData = {
+						'ignoreNull': '1',
+						'service': 'cuepoint_cuepoint',
+						'action': 'list',
+						'filter:objectType': 'KalturaEventCuePointFilter',
+						'filter:entryIdEqual': entryId,
+						'filter:orderBy': '%2BstartTime'
+					};
+					return KApi.doRequest(postData);
+				}
+
+				return EntrySvc;
 		 	} 
 	 	]);
 
