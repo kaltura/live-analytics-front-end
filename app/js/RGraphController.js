@@ -249,7 +249,8 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			
 			// then shift/push for new ones
 			while(i < value.length) {
-				graphData.shift();
+				if (graphData.length >= 12960)
+					graphData.shift();
 				graphData.push(value[i]);
 				i++;
 			}
