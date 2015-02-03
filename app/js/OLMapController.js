@@ -130,7 +130,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 		};
 		
 		this.formatTime = function formatTime(d) {
-			return d.toString().match(/(\d+:\d+):/)[1];
+			return d.toString().match(/(\d+:\d+:\d+)/)[1];
 		};
 		
 		
