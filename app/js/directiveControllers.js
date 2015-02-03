@@ -46,6 +46,10 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$inte
 					}
 				}
 			}
+			if (lastStopCp != null) {
+				// time is between stop/start, need to remove (time - lastStop)
+				targetTime -= (realTime - lastStopCp.startTime);
+			}
 			return targetTime;
 		}
 
