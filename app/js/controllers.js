@@ -175,7 +175,7 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 	
 		    $('#pagination').bootstrapPaginator(options);
 		    
-		    $scope.boardType = "liveOnly";
+		    $scope.boardType = "all";
 			$scope.$watch("boardType", function(newValue, oldValue) {
 				$scope.entries = [];
 				getAggregates(newValue == "liveOnly");
