@@ -35,42 +35,38 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 		 * get data for the aggregates line
 		 */
 		var getAggregates = function getAggregates(liveOnly) {
+			var results;
 			if (liveOnly) {
 				DashboardSvc.getLiveAggregates().then (function(data) {
 					/* 1 audience - 10 secs (now)
 		 			 * 2 minutes viewed - 36 hours
 		 			 * 3 buffertime, bitrate - 1 minute
 		 			 * */
-					var results = [
+					results = [
 					           	{"title": "audience", "value": data[0].objects[0].audience, "tooltip": "agg_audience_tt"},
 					        	{"title": "seconds_viewed", "value": data[1].objects[0].secondsViewed, "tooltip":"agg_secs_tt"},
 					        	{"title": "buffertime", "value": data[2].objects[0].bufferTime, "tooltip":"agg_buffer_tt"},
 					        	{"title": "bitrate", "value": data[2].objects[0].avgBitrate, "tooltip":"agg_bitrate_tt"}
-					        ]; 
-					
-					$scope.aggregates = results;
-					// reactivate tooltips
-					$timeout(function() {$('.tooltip-wrap').tooltip();}, 0);
+					    ];
 				});
 			}
 			else {
 				DashboardSvc.getDeadAggregates().then (function(data) {
 					var o;
 					if (data.objects) o = data.objects[0];
-					var results = [
+					results = [
 					           	{"title" : "plays", 
 					           		"value" : o ? o.plays : 0, 
 					           		"tooltip" : "agg_plays_tt"},
 					        	{"title": "seconds_viewed", "value": o ? o.secondsViewed : 0, "tooltip":"agg_secs_tt"},
 					        	{"title": "buffertime", "value": o ? o.bufferTime : 0, "tooltip":"agg_buffer_tt"},
 					        	{"title": "bitrate", "value": o ? o.avgBitrate : 0, "tooltip":"agg_bitrate_tt"}
-					        ]; 
-					
-					$scope.aggregates = results;
-					// reactivate tooltips
-					$timeout(function() {$('.tooltip-wrap').tooltip();}, 0);
+						];
 				});
 			}
+			$scope.aggregates = results;
+			// reactivate tooltips
+			$timeout(function() {$('.tooltip-wrap').tooltip();}, 0);
 		};
 		
 		
@@ -181,7 +177,7 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 		    
 		    $scope.boardType = "liveOnly";
 			$scope.$watch("boardType", function(newValue, oldValue) {
-				$scope.entries = new Array();
+				$scope.entries = [];
 				getAggregates(newValue == "liveOnly");
 	    		getEntries(newValue == "liveOnly", 1);
 				updatePagingControlRequired = true;
@@ -202,7 +198,7 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 			var t = d.getTime()/1000;
 			
 			$scope.nowTime = d;
-			var d = new Date();
+			d = new Date();
 			d.setHours(d.getHours() - 36);
 			$scope.reportStartTime = d;
 			getAggregates($scope.boardType == "liveOnly");
@@ -318,6 +314,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		/**
 		 * get data for the top referrals table
 		 * @param totalPlays
+		 * @param isLive
 		 */
 		var getReferrers = function getReferrers(isLive, totalPlays) {
 			if (isLive) {
@@ -346,9 +343,9 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 						objects = data.objects;
 					}
 					else {
-						objects = new Array();
+						objects = [];
 					}
-					var results = new Array();
+					var results = [];
 					var o;
 					for (var i = 0; i<objects.length; i++) {
 						o = {
@@ -474,7 +471,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 			var t = Math.floor(d.getTime()/10000) * 10;
 			
 			$scope.nowTime = d;
-			var d = new Date();
+			d = new Date();
 			d.setHours(d.getHours() - 36);
 			$scope.reportStartTime = d;
 			getAggregates($scope.entry.isLive);
