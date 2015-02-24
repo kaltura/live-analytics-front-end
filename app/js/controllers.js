@@ -7,8 +7,8 @@ var analyticsControllers = angular.module('analyticsControllers', []);
 /**
  * Dashboard Controller 
  */
-analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeout', '$translate', 'DashboardSvc', 
-    function($scope, $interval, $timeout, $translate, DashboardSvc) {
+analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$interval', '$timeout', '$translate', 'DashboardSvc',
+    function($rootScope, $scope, $interval, $timeout, $translate, DashboardSvc) {
 		
 		$scope.Math = window.Math;
 		
@@ -174,9 +174,15 @@ analyticsControllers.controller('DashboardCtrl', ['$scope', '$interval', '$timeo
 		    };
 	
 		    $('#pagination').bootstrapPaginator(options);
-		    
-		    $scope.boardType = "all";
+
+			if ($rootScope.selectedBoard) {
+				$scope.boardType = $rootScope.selectedBoard;
+			}
+			else {
+				$scope.boardType = "all";
+			}
 			$scope.$watch("boardType", function(newValue, oldValue) {
+				$rootScope.selectedBoard = newValue;
 				$scope.entries = [];
 				getAggregates(newValue == "liveOnly");
 	    		getEntries(newValue == "liveOnly", 1);
@@ -452,7 +458,6 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		
 		
 		var screenSetup = function screenSetup() {
-			
 			$scope.exportReportType = "default";
 			$scope.$watch("exportReportType", function(newValue, oldValue) {
 				if (newValue != "default") {
