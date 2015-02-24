@@ -58,3 +58,26 @@ analyticsDirectives.directive('ellipsis', ['$timeout', function($timeout) {
 		}
 	};
 }]);
+
+analyticsDirectives.directive('fitfontsize', function() {
+	return {
+		restrict : 'A',
+		link : function(scope, element, attrs) {
+			var update = function(value) {
+				element.text(value);
+				var fontSize = element.css('font-size');
+				fontSize = fontSize.substr(0, fontSize.length - 2);
+				var maxWidth = 200;
+				var textWidth;
+				do {
+					element.css('font-size', fontSize + "px");
+					textWidth = element.width();
+					fontSize -= 1;
+				} while ((textWidth > maxWidth) && fontSize > 3);
+			}
+			attrs.$observe('fitfontsize', function(value){
+				update(value);
+			});
+		}
+	}
+});

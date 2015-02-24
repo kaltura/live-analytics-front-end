@@ -136,6 +136,8 @@ hr.section-title {
 	color: #019cfd;
 	margin-top: 54px;
 	margin-bottom: -16px;
+	width:100%;
+	resize: none;
 }
 .agg-info {
 	font-weight: bold;
