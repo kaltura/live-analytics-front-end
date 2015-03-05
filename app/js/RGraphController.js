@@ -76,7 +76,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			var hoverDetail = new KHoverDetail( {
 			    graph: graph,
 			    formatter: function(series, x, y, formattedXValue, formattedYValue, point) {
-			    	return formattedXValue + '<br>' + y + ' views'; 
+			    	return formattedXValue + '<br>' + series.name + ': ' + y ;
 			    },
 				onClick : graphClickHandler
 			} );
