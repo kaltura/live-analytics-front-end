@@ -18,7 +18,12 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			series = [{
 					color : 'steelblue',
 					data : [ {x:t, y:0} ],
-					name : "Line 1"
+					name : "Audience"
+				},
+				{
+					color : 'green',
+					data : [ {x:t,y:0} ],
+					name : "DVR"
 				}];
 
 			graph = createGraph(series, element);
@@ -82,20 +87,30 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		
 		/**
 		 * @param str	info string
-		 * @return Array [{x, y}, ..]
+		 * @return Object {audience: [{x, y}, ..], dvr: [{x, y}, ..]}
 		 */
 		var parseData = function parseData(str) {
 			var os = str.split(';');
-			var objects = new Array();
+			var audienceObjects = new Array();
+			var dvrObjects = new Array();
 			os.forEach(function (sLine) {
 				if (sLine) {
 					var vals = sLine.split(',');
-					objects.push({'x':parseInt(vals[0], 10), 'timestamp':parseInt(vals[0], 10), 'y':parseInt(vals[1], 10)});
+					audienceObjects.push({'x':parseInt(vals[0], 10), 'timestamp':parseInt(vals[0], 10), 'y':parseInt(vals[1], 10)});
+					dvrObjects.push({'x':parseInt(vals[0], 10), 'timestamp':parseInt(vals[0], 10), 'y':parseInt(vals[2], 10)});
 				}
 			});
-			return objects;
+			return {"audience" : audienceObjects, "dvr" : dvrObjects };
 		};
-		
+
+
+		var balanceBoth = function balanceBoth(data, fromDate, toDate, fillAll) {
+			var audience = balanceData (data.audience, fromDate, toDate, fillAll);
+			var dvr = balanceData(data.dvr, fromDate, toDate, fillAll);
+			return {"audience":audience, "dvr":dvr};
+		}
+
+
 		/**
 		 * add 0 points where no data received
 		 * for live - all the way
@@ -157,25 +172,26 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 					// parse string into objects
 					var objects = parseData(data[0].data);
 					// add 0 points where no data received
-					objects = balanceData(objects, fromDate, toDate, $scope.entry.isLive);
+					objects = balanceBoth(objects, fromDate, toDate, $scope.entry.isLive);
 					if (!$scope.entry.isLive) {
 						var firstBroadcast = parseInt($scope.entry.firstBroadcast, 10);
 						// trim data edges:
 						if (!isNaN(firstBroadcast)) {	// non-kaltura don't have firstBroadcast
-							for (var i = 0; i < objects.length; i++) {
-								if (objects[i].timestamp >= firstBroadcast) {
+							for (var i = 0; i < objects.audience.length; i++) {
+								if (objects.audience[i].timestamp >= firstBroadcast) {
 									break;
 								}
 							}
 						}
-						for (var j = objects.length - 1; j>=0; j--) {
-							if (objects[j].value != 0) {
+						for (var j = objects.audience.length - 1; j>=0; j--) {
+							if (objects.audience[j].value != 0) {
 								j++;
 								break;
 							}
 						}
-						objects = objects.slice(i, j);
-						$scope.$emit('TimeBoundsSet', objects[0].timestamp, objects[objects.length - 1].timestamp);
+						objects.audience = objects.audience.slice(i, j);
+						objects.dvr = objects.dvr.slice(i, j);
+						$scope.$emit('TimeBoundsSet', objects.audience[0].timestamp, objects.audience[objects.audience.length - 1].timestamp);
 					}
 					resetGraphContent(objects);
 				};
@@ -192,7 +208,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			var fromDate = -122;
 			EntrySvc.getGraph($scope.entryId, fromDate, toDate).then(function(data) {
 				var objects = parseData(data[0].data);
-				objects = balanceData(objects, endTime-122, endTime-60, $scope.entry.isLive);
+				objects = balanceBoth(objects, endTime-122, endTime-60, $scope.entry.isLive);
 				if (graph != null) {
 					updateGraphContent(objects);
 				}
@@ -202,25 +218,46 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		
 		/**
 		 * remove all previous data and set new 
-		 * @param value
+		 * @param value {audience:array, dvr:array}
 		 */
 		var resetGraphContent = function resetGraphContent(value) {
+			// empty audience
 			var ar = series[0].data;
 			while (ar.length > 0) {
 				ar.pop();
 			}
-			for ( var i = 0; i < value.length; i++) {
-				ar.push(value[i]);
+			// empty dvr
+			ar = series[1].data;
+			while (ar.length > 0) {
+				ar.pop();
+			}
+			// fill new
+			for ( var i = 0; i < value.audience.length; i++) {
+				series[0].data.push(value.audience[i]);
+			}
+			for ( var i = 0; i < value.dvr.length; i++) {
+				series[1].data.push(value.dvr[i]);
 			}
 			graph.update();
 		};
-		
-		
+
+
 		/**
-		 * add new data and purge oldest so we keep only 36 hrs
-		 * @param value points to add tot he graph
+		 * update both graph kines with new content
+		 * @param value {audience:array, dvr:array} points to add to the graph
 		 */
 		var updateGraphContent = function updateGraphContent(value) {
+			updateSingleGraphContent(value.audience);
+			updateSingleGraphContent(value.dvr);
+			graph.update();
+		}
+
+
+		/**
+		 * add new data and purge oldest so we keep only 36 hrs
+		 * @param value:array points to add to the graph
+		 */
+		var updateSingleGraphContent = function updateSingleGraphContent(value) {
 			var graphData = series[0].data; // already in the graph
 			var lastGraphDataX = graphData[graphData.length-1].x;
 			// first see if any existing values need to be updated
@@ -254,8 +291,6 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 				graphData.push(value[i]);
 				i++;
 			}
-			
-			graph.update();
 		};
 		
 		
