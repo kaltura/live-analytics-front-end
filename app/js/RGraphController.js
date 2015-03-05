@@ -247,18 +247,18 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 * @param value {audience:array, dvr:array} points to add to the graph
 		 */
 		var updateGraphContent = function updateGraphContent(value) {
-			updateSingleGraphContent(value.audience);
-			updateSingleGraphContent(value.dvr);
+			updateSingleGraphContent(series[0].data, value.audience);
+			updateSingleGraphContent(series[1].data, value.dvr);
 			graph.update();
 		}
 
 
 		/**
 		 * add new data and purge oldest so we keep only 36 hrs
+		 * @param graphData:array points already in the graph
 		 * @param value:array points to add to the graph
 		 */
-		var updateSingleGraphContent = function updateSingleGraphContent(value) {
-			var graphData = series[0].data; // already in the graph
+		var updateSingleGraphContent = function updateSingleGraphContent(graphData, value) {
 			var lastGraphDataX = graphData[graphData.length-1].x;
 			// first see if any existing values need to be updated
 			for (var i = 0; i<value.length; i++) {
