@@ -98,7 +98,7 @@ analyticsFilters.filter('percents', [function() {
 
 analyticsFilters.filter('avgBitrate', [function() {
 	var avgBitrate = function avgBitrate(val) {
-		return parseInt(val, 10);
+		return parseFloat(val);
 	}; 
 	
 	return avgBitrate;
