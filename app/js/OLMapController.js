@@ -142,12 +142,14 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 		this.createStyleMap = function createStyleMap(min, max) {
 			var sRadius = 4;
 			var lRadius = 10;
+			var green = parseInt("0x008000", 16);
+			var steelBlue = parseInt("0x4682B4", 16);
 			// style
 			var style = new OpenLayers.Style({
 				pointRadius: "${radius}",
-				fillColor: "#ffcc66",
+				fillColor: "${fillColor}",
 				fillOpacity: 0.8,
-				strokeColor: "#cc6633",
+				strokeColor: "green",
 				strokeWidth: 2,
 				strokeOpacity: 0.8,
 				title : "${tooltip}"
@@ -160,7 +162,16 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 						return lRadius - ((max - feature.attributes.data) * (lRadius - sRadius) / (max - min));
 					},
 					tooltip: function(feature) {
-						return feature.attributes.text+ " " + feature.attributes.data;
+						return feature.attributes.text+ ": " + feature.attributes.audience + "\nDVR: " + feature.attributes.dvr;
+					},
+					fillColor:function(feature) {
+						// data point color normalization
+						var clr = green + (feature.attributes.audience / (feature.attributes.dvr + feature.attributes.audience)) * (steelBlue - green);
+						clr = clr.toString(16);
+						while (clr.length < 6) {
+							clr = "0" + clr;
+						}
+						return "#" + clr;
 					}
 				}
 			}
@@ -213,22 +224,26 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 				var min = 0;
 				var max = 0;
 				for ( var i = 0; i < value.length; i++) {
-					var val = parseInt(value[i].audience, 10); // convert string to int
+					var val = parseInt(value[i].audience, 10) + parseInt(value[i].dvrAudience, 10); // convert string to int
 					if (val == 0) continue; // leave out points where audience is zero - we got them because they have plays)
 					// accumulate data for country-level layer
 					if (!countriesData[value[i].country.name]) { 
 						// init - keep whole value for lat/long
 						countriesData[value[i].country.name] = value[i];
-						countriesData[value[i].country.name]['audience'] = val; 
+						countriesData[value[i].country.name]['audience'] = parseInt(value[i].audience, 10);
+						countriesData[value[i].country.name]['dvrAudience'] = parseInt(value[i].dvrAudience, 10);
 					}
 					else {
 						// sum audience
-						countriesData[value[i].country.name]['audience'] += val;
+						countriesData[value[i].country.name]['audience'] += parseInt(value[i].audience, 10);
+						countriesData[value[i].country.name]['dvrAudience'] += parseInt(value[i].dvrAudience, 10);
 					}
 					point = new OpenLayers.Geometry.Point(value[i].city.longitude, value[i].city.latitude).transform('EPSG:4326', 'EPSG:3857');
 					features[i] = new OpenLayers.Feature.Vector(
 							point, 
 							{
+								"audience" : value[i].audience,
+								"dvr" : value[i].dvrAudience,
 								"data" : val,
 								"text" : value[i].city.name
 							}
@@ -256,11 +271,13 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 				min = max = 0;
 				features = new Array();
 				for (var key in countriesData) {
-					var val = parseInt(countriesData[key].audience, 10);
+					var val = countriesData[key].audience + countriesData[key].dvrAudience;
 					point = new OpenLayers.Geometry.Point(countriesData[key].country.longitude, countriesData[key].country.latitude).transform('EPSG:4326', 'EPSG:3857');
 					features.push(new OpenLayers.Feature.Vector(
 							point, 
 							{
+								"audience" : countriesData[key].audience,
+								"dvr" : countriesData[key].dvrAudience,
 								"data" : val,
 								"text" : countriesData[key].country.name
 							}
