@@ -387,6 +387,7 @@ analyticsServices.factory('DashboardSvc',
 								entries.objects.forEach(function (entry) {
 									// add params with default value
 									entry.audience = "0";
+									entry.dvrAudience = "0";
 									entry.bufferTime = "0";
 									entry.avgBitrate = "0";
 									entry.peakAudience = "0";
