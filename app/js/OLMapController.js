@@ -13,6 +13,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 		this.map = null;
 		this.citiesLayer = null;
 		this.countriesLayer = null;
+		this.dvrEnabledForEntry = false;
 		
 		this.init = function init (element) {
 			self.mapElement = element;
@@ -162,7 +163,11 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 						return lRadius - ((max - feature.attributes.data) * (lRadius - sRadius) / (max - min));
 					},
 					tooltip: function(feature) {
-						return feature.attributes.text+ ": " + feature.attributes.audience + "\nDVR: " + feature.attributes.dvr;
+						var str = feature.attributes.text+ ": " + feature.attributes.audience;
+						if (self.dvrEnabledForEntry) {
+							str += "\nDVR: " + feature.attributes.dvr;
+						}
+						return str;
 					},
 					fillColor:function(feature) {
 						// data point color normalization
@@ -336,6 +341,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 				// update range 
 				self.adjustSlider(max, time);
 			}
+			self.dvrEnabledForEntry = $scope.entry.dvrStatus == 1 // KalturaDVRStatus.ENABLED
 		};
 		
 		this.timeBoundsSetHandler = function timeBoundsSetHandler(event, start, end) {
