@@ -27,10 +27,7 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 		 */
 		var totalPages = 1;
 		
-		
-		var updatePagingControlRequired = true;
-		
-		
+
 		/**
 		 * get data for the aggregates line
 		 */
@@ -90,10 +87,9 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 			result.then(function(data) {
 				$scope.entries = data.objects;
 				totalPages = Math.ceil(data.totalCount/pageSize);
-				if (updatePagingControlRequired) {
-					updatePagingControl(pageNumber, totalPages);
-					updatePagingControlRequired = false;
-				}
+
+				updatePagingControl(pageNumber, totalPages);
+
 			});
 		};
 		
@@ -190,7 +186,6 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 				$scope.entries = [];
 				getAggregates(newValue == "liveOnly");
 	    		getEntries(newValue == "liveOnly", 1);
-				updatePagingControlRequired = true;
 			 });
 			
 			$scope.export2csv = export2csv;
