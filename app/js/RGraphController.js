@@ -10,6 +10,7 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		var graphElement = null; 	// HTML element showing the graph
 		var graph = null;			// graph JS object
 		var series = null;			// data container
+		var dvrEnabledForEntry = false;
 		
 		this.init = function init (element) {
 			graphElement = element;
@@ -226,17 +227,21 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			while (ar.length > 0) {
 				ar.pop();
 			}
-			// empty dvr
-			ar = series[1].data;
-			while (ar.length > 0) {
-				ar.pop();
-			}
+
 			// fill new
 			for ( var i = 0; i < value.audience.length; i++) {
 				series[0].data.push(value.audience[i]);
 			}
-			for ( var i = 0; i < value.dvr.length; i++) {
-				series[1].data.push(value.dvr[i]);
+			if (dvrEnabledForEntry) {
+				// empty dvr
+				ar = series[1].data;
+				while (ar.length > 0) {
+					ar.pop();
+				}
+				// fill new
+				for (var i = 0; i < value.dvr.length; i++) {
+					series[1].data.push(value.dvr[i]);
+				}
 			}
 			graph.update();
 		};
@@ -248,7 +253,9 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 */
 		var updateGraphContent = function updateGraphContent(value) {
 			updateSingleGraphContent(series[0].data, value.audience);
-			updateSingleGraphContent(series[1].data, value.dvr);
+			if (dvrEnabledForEntry) {
+				updateSingleGraphContent(series[1].data, value.dvr);
+			}
 			graph.update();
 		}
 
@@ -300,6 +307,10 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 		 * @param time (timestamp sec)
 		 */
 		var setupScreenHandler = function setupScreenHandler(event, time) {
+			dvrEnabledForEntry = $scope.entry.dvrStatus == 1 // KalturaDVRStatus.ENABLED
+			if (!dvrEnabledForEntry) {
+				series.pop();
+			}
 			getGraph36Hrs(time);
 		};
 		
