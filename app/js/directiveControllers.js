@@ -59,7 +59,9 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$inte
 			if (self.canSeek && kdp) {
 				// translate timestamp to entry time, go to correct time.
 				var playerTime = self.getPlayerTime(time, $scope.entry.firstBroadcast);
-				kdp.sendNotification("doSeek", playerTime);
+				if (playerTime < $scope.entry.duration) {
+					kdp.sendNotification("doSeek", playerTime);
+				}
 			}
   		});
 
