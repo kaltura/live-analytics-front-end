@@ -143,14 +143,16 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 		this.createStyleMap = function createStyleMap(min, max) {
 			var sRadius = 4;
 			var lRadius = 10;
-			var green = parseInt("0x008000", 16);
-			var steelBlue = parseInt("0x4682B4", 16);
+			//var orange = parseInt("0xf2a457", 16);
+			//var blue = parseInt("0x61ccde", 16);
+			var orange = "f2a457";
+			var blue = "61ccde";
 			// style
 			var style = new OpenLayers.Style({
 				pointRadius: "${radius}",
 				fillColor: "${fillColor}",
 				fillOpacity: 0.8,
-				strokeColor: "green",
+				strokeColor: "0xf2a457",
 				strokeWidth: 2,
 				strokeOpacity: 0.8,
 				title : "${tooltip}"
@@ -171,12 +173,28 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 					},
 					fillColor:function(feature) {
 						// data point color normalization
-						var clr = green + (feature.attributes.audience / (feature.attributes.dvr + feature.attributes.audience)) * (steelBlue - green);
-						clr = clr.toString(16);
-						while (clr.length < 6) {
-							clr = "0" + clr;
-						}
-						return "#" + clr;
+						var ro = parseInt(orange.substring(0,2), 16);
+						var rb = parseInt(blue.substring(0,2), 16);
+						var r = ro + (feature.attributes.audience / (feature.attributes.dvr + feature.attributes.audience)) * (rb - ro);
+						r = Math.round(r);
+						r = r.toString(16);
+						if (r.length === 1) r = "0" + r;
+
+						var go = parseInt(orange.substring(2,4), 16);
+						var gb = parseInt(blue.substring(2,4), 16);
+						var g = go + (feature.attributes.audience / (feature.attributes.dvr + feature.attributes.audience)) * (gb - go);
+						g = Math.round(g);
+						g = g.toString(16);
+						if (g.length === 1) g = "0" + g;
+
+						var bo = parseInt(orange.substring(4, 6), 16);
+						var bb = parseInt(blue.substring(4, 6), 16);
+						var b = bo + (feature.attributes.audience / (feature.attributes.dvr + feature.attributes.audience)) * (bb - bo);
+						b = Math.round(b);
+						b = b.toString(16);
+						if (b.length === 1) b = "0" + b;
+
+						return "#" + r + g + b;
 					}
 				}
 			}
