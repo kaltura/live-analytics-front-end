@@ -523,7 +523,6 @@ analyticsControllers.controller('ExportCtrl', ['$scope', '$routeParams', '$trans
 					$translate('export.Report_Ready').then(function (msg) {
 						$scope.message = msg;
 					});
-					//TODO download
 					$scope.downloadLink = getDownloadLink();
 					$scope.downloadName = getDownloadName();
 					$translate('export.Download').then(function (msg) {

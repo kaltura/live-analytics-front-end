@@ -141,6 +141,14 @@ analyticsServices.factory('KApi',
 		 			}
 		 			return s;
 		 		};
+
+
+				KApi.getExportHandlerUrl = function getExportHandlerUrl() {
+					var url = $location.absUrl();
+					url = url.substring(0, url.indexOf('/#/'));
+					url += "/#/export/[id]/[ks]";
+					return url;
+				}
 		 		
 		 		return KApi;
 		 	}
@@ -475,6 +483,7 @@ analyticsServices.factory('DashboardSvc',
 			            'action': 'exporttocsv',
 			            'params:objectType': 'KalturaLiveReportExportParams',
 			            'params:timeZoneOffset': d.getTimezoneOffset(),
+						'params:applicationUrlTemplate': KApi.getExportHandlerUrl(),
 			            'reportType': liveOnly ? '2' : '1' // KalturaLiveReportExportType.PARTNER_TOTAL_LIVE/PARTNER_TOTAL_ALL
 			        };
 					return KApi.doRequest(postData);
@@ -709,10 +718,14 @@ analyticsServices.factory('EntrySvc',
 			            'params:objectType': 'KalturaLiveReportExportParams',
 			            'params:timeZoneOffset': d.getTimezoneOffset(),
 			            'params:entryIds': entryId,
-			            'reportType': reportType
+						'params:applicationUrlTemplate': KApi.getExportHandlerUrl(),
+						'reportType': reportType
+
 			        };
 					return KApi.doRequest(postData);
 		 		};
+
+
 
 
 				/**
