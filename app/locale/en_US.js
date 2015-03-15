@@ -58,5 +58,14 @@ var en_US_trans = {
 		"System_Reports": "System Reports",
 		"Live_Reports": "Live Reports",
 		"Real_Time_Reports": "Live Real-Time Dashboard"
+	},
+
+	"export" : {
+		"Header" : "Report Download",
+		"Verifying" : "Verifying your download..",
+		"Report_Ready" : "The report is ready for download.",
+		"Download" : "Click here to download your Report..",
+		"Expired" : "Download link has expired."
 	}
+
 };

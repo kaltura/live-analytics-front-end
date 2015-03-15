@@ -495,3 +495,67 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		
 		screenSetup();
 }]);
+
+/**
+ * General controller for report download page
+ */
+analyticsControllers.controller('ExportCtrl', ['$scope', '$routeParams', '$translate', 'SessionInfo', '$location', 'ReportSvc', 'KApi',
+	function($scope, $routeParams, $translate, SessionInfo, $location, ReportSvc, KApi ) {
+		SessionInfo.setServiceUrl($location.protocol() + "://" + $location.host());
+
+
+		KApi.setRedirectOnInvalidKS(false);
+
+		var reportId = $routeParams.id;
+
+
+		/**
+		 * test the given KS
+		 */
+		var getSession = function getSession(ks) {
+			return ReportSvc.getSession(ks).then(function(sessionInfo){
+				if (sessionInfo.code == 'INVALID_KS') {
+					$translate('export.Expired').then(function (msg) {
+						$scope.message = msg;
+					});
+				}
+				else {
+					$translate('export.Report_Ready').then(function (msg) {
+						$scope.message = msg;
+					});
+					//TODO download
+					$scope.downloadLink = getDownloadLink();
+					$scope.downloadName = getDownloadName();
+					$translate('export.Download').then(function (msg) {
+						$scope.downloadMsg = msg;
+					});
+				}
+			});
+		};
+
+		var getDownloadLink = function getDownloadLink() {
+			var url = KApi.getApiUrl();
+			url += "/service/liveReports/action/serveReport";
+			url += "/ks/" + SessionInfo.ks;
+			url += "/id/" + reportId;
+			url += "/" + getDownloadName();
+			return url;
+		}
+
+		var getDownloadName = function getDownloadName() {
+			var results = reportId.match(/^[\d+]_[\d]+_Export_[a-zA-Z0-9]+_([\w\-]+.csv)$/);
+			return results[1];
+		}
+
+
+		var screenSetup = function screenSetup() {
+			$scope.downloadMsg = '';
+			$translate('export.Verifying').then(function (msg) {
+				$scope.message = msg;
+			});
+			getSession($routeParams.ks);
+		};
+
+
+		screenSetup();
+	}]);

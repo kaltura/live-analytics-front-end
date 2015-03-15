@@ -56,9 +56,22 @@ analyticsServices.factory('KApi',
 		['$http', '$q', '$location', 'SessionInfo',
 		 	function KApiFactory ($http, $q, $location, SessionInfo) {
 		 		var KApi = {};
+
+				KApi.redirectToLoginOnInvalidKS = true;
+
+				KApi.setRedirectOnInvalidKS = function setRedirectOnInvalidKS(value) {
+					KApi.redirectToLoginOnInvalidKS = value;
+				}
 		 		
 		 		KApi.IE = (!!window.ActiveXObject && +(/msie\s(\d+)/i.exec(navigator.userAgent)[1])) || NaN;
-		 		/**
+
+
+				KApi.getApiUrl = function getApiUrl() {
+					return SessionInfo.service_url + "/api_v3/index.php";
+				}
+
+
+				/**
 		 		 * @param request 	request params
 		 		 * @returns	promise object
 		 		 */
@@ -88,18 +101,23 @@ analyticsServices.factory('KApi',
 			 			params: params,
 			 			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 		}).success(function (data, status) {
-			 			if (data.objectType === "KalturaAPIException") {
-			 				if (data.code == "INVALID_KS") {
-			 					console.log(data);
-			 					$location.path("/login");
-			 				}
-			 				else {
-			 					deferred.reject(data.message);
-			 				}
-			 			}
-			 			else {
-			 				deferred.resolve(data);
-			 			}
+						if (KApi.redirectToLoginOnInvalidKS) {
+							if (data.objectType === "KalturaAPIException") {
+								if (data.code == "INVALID_KS") {
+									console.log(data);
+									$location.path("/login");
+								}
+								else {
+									deferred.reject(data.message);
+								}
+							}
+							else {
+								deferred.resolve(data);
+							}
+						}
+						else {
+							deferred.resolve(data);
+						}
 			 		}).error(function(data, status) {
 			 			console.log(data);
 			 			$location.path("/login");
@@ -716,6 +734,33 @@ analyticsServices.factory('EntrySvc',
 				return EntrySvc;
 		 	} 
 	 	]);
+
+analyticsServices.factory('ReportSvc',
+	['KApi', 'SessionInfo',
+		function ReportSvcFactory(KApi, SessionInfo) {
+			var ReportSvc = {};
+
+
+			/**
+			 *
+			 * @param ks
+			 * @returns
+			 */
+			ReportSvc.getSession = function getSession(ks) {
+				SessionInfo.setKs(ks);
+				var postData = {
+					'ignoreNull': '1',
+					'service': 'session',
+					'action': 'get'
+				};
+
+				return KApi.doRequest(postData);
+			};
+
+
+			return ReportSvc;
+		}
+	]);
 
 
 
