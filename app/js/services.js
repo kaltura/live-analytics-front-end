@@ -42,9 +42,9 @@ analyticsServices.factory('SessionInfo',
 	                console.log('Could not locate parent.kmc: ' + e);
 	            }
 	            
-	            if (!sessionInfo.ks) { //navigate to login
+	       /*     if (!sessionInfo.ks) { //navigate to login
 	                $location.path("/login");
-	            } 
+	            } */
 	            
 		 		return sessionInfo;
 		 	} 
@@ -145,8 +145,8 @@ analyticsServices.factory('KApi',
 
 				KApi.getExportHandlerUrl = function getExportHandlerUrl() {
 					var url = $location.absUrl();
-					url = url.substring(0, url.indexOf('/#/'));
-					url += "/#/export/[id]/[ks]";
+					url = url.substring(0, url.indexOf('#/'));
+					url += "#/export/[id]/[ks]";
 					return url;
 				}
 		 		
