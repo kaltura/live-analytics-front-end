@@ -499,10 +499,11 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 /**
  * General controller for report download page
  */
-analyticsControllers.controller('ExportCtrl', ['$scope', '$routeParams', '$translate', 'SessionInfo', '$location', 'ReportSvc', 'KApi',
-	function($scope, $routeParams, $translate, SessionInfo, $location, ReportSvc, KApi ) {
-		SessionInfo.setServiceUrl($location.protocol() + "://" + $location.host());
+analyticsControllers.controller('ExportCtrl', ['$scope', '$rootScope', '$routeParams', '$translate', 'SessionInfo', '$location', 'ReportSvc', 'KApi',
+	function($scope, $rootScope, $routeParams, $translate, SessionInfo, $location, ReportSvc, KApi ) {
+		$rootScope.nonav = true;
 
+		SessionInfo.setServiceUrl($location.protocol() + "://" + $location.host());
 
 		KApi.setRedirectOnInvalidKS(false);
 
