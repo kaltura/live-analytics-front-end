@@ -11,6 +11,7 @@ var en_US_trans = {
 	"agg_buffer_tt":"Average time per minute that viewers experienced buffering",
 	"agg_bitrate_tt":"The average bitrate viewers are consuming",
 	"export_to_csv": "Export To CSV",
+
 	
 	
 	"dashboard" : {
@@ -20,6 +21,7 @@ var en_US_trans = {
 		"Audience": "Audience",
 		"Plays": "Plays",
 		"Peak_Audience": "Peak Audience",
+		"Peak_DVR_Audience": "Peak DVR",
 		"Minutes_Viewed": "Minutes Viewed",
 		"Buffer_Time": "Buffering Time",
 		"Avg_Bitrate": "Average Bitrate",
@@ -57,7 +59,8 @@ var en_US_trans = {
 		"Storage_Reports": "Bandwidth & Storage Reports",
 		"System_Reports": "System Reports",
 		"Live_Reports": "Live Reports",
-		"Real_Time_Reports": "Live Real-Time Dashboard"
+		"Real_Time_Reports": "Live Real-Time Dashboard",
+		"n_a" : "N/A"
 	},
 
 	"export" : {

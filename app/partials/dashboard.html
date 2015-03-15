@@ -54,6 +54,11 @@
 							<td>{{entry.peakAudience | number:0}}</td>
 						</tr>
 						<tr>
+							<td>{{'dashboard.Peak_DVR_Audience' | translate}}:</td>
+							<td ng-if="entry.dvrStatus">{{entry.peakDvrAudience | number:0}}</td>
+							<td ng-if="!entry.dvrStatus">{{'main.n_a' | translate}}</td>
+						</tr>
+						<tr>
 							<td>{{'dashboard.Minutes_Viewed' | translate}}:</td>
 							<td>{{entry.secondsViewed/60 | number:0}}</td>
 						</tr>

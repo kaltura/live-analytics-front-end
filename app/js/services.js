@@ -304,6 +304,7 @@ analyticsServices.factory('DashboardSvc',
 											entryStat.thumbnailUrl = entry.thumbnailUrl;
 											entryStat.firstBroadcast = entry.firstBroadcast; // API returns secs
 											entryStat.lastBroadcast = entry.lastBroadcast; // API returns secs
+											entryStat.dvrStatus = entry.dvrStatus;
 											return false;
 										}
 										return true;
@@ -417,6 +418,7 @@ analyticsServices.factory('DashboardSvc',
 									entry.bufferTime = "0";
 									entry.avgBitrate = "0";
 									entry.peakAudience = "0";
+									entry.peakDvrAudience = "0";
 									entry.secondsViewed = "0";
 									entry.entryId = entry.id; // for consistancy with dead entries variables
 									// seconds viewed, peak audience - hours
@@ -425,6 +427,7 @@ analyticsServices.factory('DashboardSvc',
 											if (entry.id == entryStat.entryId) {
 												entry.secondsViewed = entryStat.secondsViewed;
 												entry.peakAudience = entryStat.peakAudience;
+												entry.peakDvrAudience = entryStat.peakDvrAudience;
 												return false;
 											}
 											return true;

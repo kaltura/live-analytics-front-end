@@ -159,7 +159,7 @@ hr.section-title {
 }
 .entry {
  	width: 450px; 
-	height: 265px;
+	height: 285px;
 	padding: 0px;
 	border-radius: 5px;
 }
@@ -181,7 +181,7 @@ hr.section-title {
 
 .entry-img img {
 	width: 200px;
-	height: 115px;
+	height: 130px;
 }
 
 .entry-info {
