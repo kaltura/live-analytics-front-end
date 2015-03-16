@@ -39,7 +39,7 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 		 			 * 3 buffertime, bitrate - 1 minute
 		 			 * */
 					var results = [
-					           	{"title": "audience", "value": data[0].objects[0].audience + data[0].objects[0].dvrAudience, "tooltip": "agg_audience_tt"},
+					           	{"title": "audience", "value": parseInt(data[0].objects[0].audience, 10) + parseInt(data[0].objects[0].dvrAudience, 10), "tooltip": "agg_audience_tt"},
 					        	{"title": "seconds_viewed", "value": data[1].objects[0].secondsViewed, "tooltip":"agg_secs_tt"},
 					        	{"title": "buffertime", "value": data[2].objects[0].bufferTime, "tooltip":"agg_buffer_tt"},
 					        	{"title": "bitrate", "value": data[2].objects[0].avgBitrate, "tooltip":"agg_bitrate_tt"}
@@ -259,7 +259,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 						};
 					// audience - now
 					if (data[0].objects && data[0].objects.length > 0) {
-						o.audience = data[0].objects[0].audience + data[0].objects[0].dvrAudience;
+						o.audience = parseInt(data[0].objects[0].audience, 10) + parseInt(data[0].objects[0].dvrAudience, 10);
 					}
 					// seconds viewed - 36 hours
 					if (data[1].objects && data[1].objects.length > 0) {
