@@ -52,6 +52,7 @@ analyticsFilters.filter('formatAgg', [ '$filter', function($filter) {
 		var result = '';
 		switch (agg.title) {
 		case 'audience':
+		case 'audience_inc_dvr':
 		case 'plays':
 			result = $filter('number')(agg.value, 0);
 			break;

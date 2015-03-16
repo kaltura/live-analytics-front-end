@@ -276,7 +276,11 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 					        	{"title": "seconds_viewed", "value": o.secondsViewed, "tooltip":"agg_secs_tt"},
 					        	{"title": "buffertime", "value": o.bufferTime, "tooltip":"agg_buffer_tt"},
 					        	{"title": "bitrate", "value": o.avgBitrate, "tooltip":"agg_bitrate_tt"}
-					        ]; 
+					        ];
+
+					if ($scope.entry.dvrStatus) {
+						results[0].title = "audience_inc_dvr";
+					}
 					
 					$scope.aggregates = results;
 					// reactivate tooltips
