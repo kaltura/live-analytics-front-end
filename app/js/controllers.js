@@ -39,7 +39,7 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 		 			 * 3 buffertime, bitrate - 1 minute
 		 			 * */
 					var results = [
-					           	{"title": "audience", "value": parseInt(data[0].objects[0].audience, 10) + parseInt(data[0].objects[0].dvrAudience, 10), "tooltip": "agg_audience_tt"},
+					           	{"title": "audience_inc_dvr", "value": parseInt(data[0].objects[0].audience, 10) + parseInt(data[0].objects[0].dvrAudience, 10), "tooltip": "agg_audience_tt"},
 					        	{"title": "seconds_viewed", "value": data[1].objects[0].secondsViewed, "tooltip":"agg_secs_tt"},
 					        	{"title": "buffertime", "value": data[2].objects[0].bufferTime, "tooltip":"agg_buffer_tt"},
 					        	{"title": "bitrate", "value": data[2].objects[0].avgBitrate, "tooltip":"agg_bitrate_tt"}
