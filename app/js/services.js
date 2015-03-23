@@ -247,7 +247,7 @@ analyticsServices.factory('DashboardSvc',
 					var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportInputFilter',
-			            'filter:orderBy': '-eventTime',
+			            'filter:orderBy': '%2Bname',
 			            'filter:fromTime': '-129600',
 			            'filter:toTime': '-2',
 			            'pager:objectType': 'KalturaFilterPager',
@@ -330,7 +330,7 @@ analyticsServices.factory('DashboardSvc',
 				 */
 				DashboardSvc._getLiveEntriesEntries = function _getLiveEntriesEntries(pageNumber) {
 					var postData = {
-				            'filter:orderBy': '-createdAt',
+				            'filter:orderBy': '%2Bname',
 				            'filter:objectType': 'KalturaLiveStreamEntryFilter',
 				            'filter:isLive': '1',
 				            'ignoreNull': '1',
