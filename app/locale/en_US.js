@@ -20,6 +20,7 @@ var en_US_trans = {
 		"Show_All_Entries": "All Viewed Live Entries",
 		"Show_Kaltura": "Kaltura Live Now Only",
 		"Audience": "Audience",
+		"audience_inc_dvr" : "Audience & DVR",
 		"Plays": "Plays",
 		"Peak_Audience": "Peak Audience",
 		"Peak_DVR_Audience": "Peak DVR",

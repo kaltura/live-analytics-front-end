@@ -420,7 +420,7 @@ analyticsServices.factory('DashboardSvc',
 									entry.peakAudience = "0";
 									entry.peakDvrAudience = "0";
 									entry.secondsViewed = "0";
-									entry.entryId = entry.id; // for consistancy with dead entries variables
+									entry.entryId = entry.id; // for consistency with dead entries variables
 									// seconds viewed, peak audience - hours
 									if (hours) {
 										hours.every(function (entryStat) {
@@ -437,7 +437,7 @@ analyticsServices.factory('DashboardSvc',
 									if (now) {
 										now.every(function (entryStat) {
 											if (entry.id == entryStat.entryId) {
-												entry.audience = entryStat.audience;
+												entry.audience = parseInt(entryStat.audience) + parseInt(entryStat.dvrAudience);
 												return false;
 											}
 											return true;
