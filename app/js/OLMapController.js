@@ -153,8 +153,8 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 				pointRadius: "${radius}",
 				fillColor: "${fillColor}",
 				fillOpacity: 0.8,
-				strokeColor: this.color3,
-				strokeWidth: 2,
+				strokeColor: '#' + this.color3,
+				strokeWidth: 1,
 				strokeOpacity: 0.8,
 				title : "${tooltip}"
 			},
@@ -205,8 +205,8 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 			var styleMap = new OpenLayers.StyleMap({
 				"default": style,
 				"select": {
-					fillColor: this.color1,
-					strokeColor: this.color3
+					fillColor: '#' + this.color1,
+					strokeColor: '#' + this.color3
 				}
 			});
 			
