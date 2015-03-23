@@ -17,12 +17,12 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 			var d = new Date();
 			var t = d.getTime()/1000;
 			series = [{
-					color : '#61ccde',
+					color : '#8ecc00',
 					data : [ {x:t, y:0} ],
 					name : "Audience"
 				},
 				{
-					color : '#f2a457',
+					color : '#ff8a00',
 					data : [ {x:t,y:0} ],
 					name : "DVR"
 				}];

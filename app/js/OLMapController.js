@@ -14,7 +14,10 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 		this.citiesLayer = null;
 		this.countriesLayer = null;
 		this.dvrEnabledForEntry = false;
-		
+		this.color1 = '8ecc00';
+		this.color2 = 'ff8a00';
+		this.color3 = '4e4e4e';
+
 		this.init = function init (element) {
 			self.mapElement = element;
 			
@@ -143,16 +146,14 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 		this.createStyleMap = function createStyleMap(min, max) {
 			var sRadius = 4;
 			var lRadius = 10;
-			//var orange = parseInt("0xf2a457", 16);
-			//var blue = parseInt("0x61ccde", 16);
-			var orange = "f2a457";
-			var blue = "61ccde";
+			var blue = this.color1;
+			var orange = this.color2;
 			// style
 			var style = new OpenLayers.Style({
 				pointRadius: "${radius}",
 				fillColor: "${fillColor}",
 				fillOpacity: 0.8,
-				strokeColor: "0xf2a457",
+				strokeColor: this.color3,
 				strokeWidth: 2,
 				strokeOpacity: 0.8,
 				title : "${tooltip}"
@@ -204,8 +205,8 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 			var styleMap = new OpenLayers.StyleMap({
 				"default": style,
 				"select": {
-					fillColor: "#8aeeef",
-					strokeColor: "#32a8a9"
+					fillColor: this.color1,
+					strokeColor: this.color3
 				}
 			});
 			
