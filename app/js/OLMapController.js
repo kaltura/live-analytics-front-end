@@ -4,8 +4,8 @@
 /**
  * controller for map on entry page
  */
-analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$location', 'EntrySvc',
-    function($scope, $attrs, $location, EntrySvc) {
+analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$location', 'EntrySvc', 'SessionInfo',
+    function($scope, $attrs, $location, EntrySvc, SessionInfo) {
 		var self = this;
 		this.mapElement = null;
 		this.slider = null;
@@ -25,18 +25,14 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 			self.map = new OpenLayers.Map('map', {theme: null});
 	
 			// create OSM layer
-			var osm = new OpenLayers.Layer.OSM();
+			var osm = new OpenLayers.Layer.OSM('OpenStreetMap', [], {numZoomLevels:SessionInfo.map_zoom_levels});
 			// add target so we won't try to open in frame
 			osm.attribution = "&copy; <a href='http://www.openstreetmap.org/copyright' target='_blank'>OpenStreetMap</a> contributors";
-			osm.url = [
-			           $location.protocol() + '://a.tile.openstreetmap.org/${z}/${x}/${y}.png',
-			           $location.protocol() + '://b.tile.openstreetmap.org/${z}/${x}/${y}.png',
-			           $location.protocol() + '://c.tile.openstreetmap.org/${z}/${x}/${y}.png'
-			           ];
-			
+			if (SessionInfo.map_urls) {
+				osm.url = SessionInfo.map_urls;
+			}
 			self.map.addLayer(osm);
 			self.map.zoomToMaxExtent();
-			
 			self.map.events.register('zoomend', this, function (event) {
 				if (!self.citiesLayer) return; // if no layers no need to toggle.
 				
