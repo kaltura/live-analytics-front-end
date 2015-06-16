@@ -13,9 +13,9 @@ analyticsServices.factory('SessionInfo',
 		 		sessionInfo.pid = '';
 		 		sessionInfo.uiconfid = '';
 				sessionInfo.map_urls = [
-					      '//a.tile.openstreetmap.org/${z}/${x}/${y}.png',
-					      '//b.tile.openstreetmap.org/${z}/${x}/${y}.png',
-					      '//c.tile.openstreetmap.org/${z}/${x}/${y}.png'
+					      'a.tile.openstreetmap.org/${z}/${x}/${y}.png',
+					      'b.tile.openstreetmap.org/${z}/${x}/${y}.png',
+					      'c.tile.openstreetmap.org/${z}/${x}/${y}.png'
 					      ];
 				sessionInfo.map_zoom_levels = 10;
 		 		

@@ -29,7 +29,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 			// add target so we won't try to open in frame
 			osm.attribution = "&copy; <a href='http://www.openstreetmap.org/copyright' target='_blank'>OpenStreetMap</a> contributors";
 			if (SessionInfo.map_urls) {
-				osm.url = SessionInfo.map_urls;
+				osm.url = self.processMapUrls(SessionInfo.map_urls);
 			}
 			self.map.addLayer(osm);
 			self.map.zoomToMaxExtent();
@@ -86,7 +86,23 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 			self.slider.slider("option", "value", time);
 		});
 
-
+		/**
+		 * make sure the urls start with either protocol or '//'
+		 * @param urls Array
+		 * @return urls array with protocol
+		 */
+		this.processMapUrls = function processMapUrls(urls) {
+			var result = [];
+			for (var i = 0; i<urls.length; i++) {
+				if (urls[i].indexOf('http') == 0 && urls[i].indexOf('//') == 0) {
+					result.push(urls[i] + "/${z}/${x}/${y}.png");
+				}
+				else {
+					result.push('//' + urls[i] + "/${z}/${x}/${y}.png");
+				}
+			}
+			return result;
+		}
 
 		/**
 		 * event handler for the slider drag
