@@ -17,7 +17,7 @@ analyticsServices.factory('SessionInfo',
 					      'b.tile.openstreetmap.org/${z}/${x}/${y}.png',
 					      'c.tile.openstreetmap.org/${z}/${x}/${y}.png'
 					      ];
-				sessionInfo.map_zoom_levels = 10;
+				sessionInfo.map_zoom_levels = 12;
 		 		
 		 		sessionInfo.setKs = function setKs(value) {
 		 			sessionInfo.ks = value;
