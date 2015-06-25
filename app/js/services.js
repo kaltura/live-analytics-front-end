@@ -54,7 +54,7 @@ analyticsServices.factory('SessionInfo',
 								sessionInfo.map_urls = kmc.vars.liveanalytics.map_urls;
 							}
 							if (kmc.vars.liveanalytics.map_zoom_levels) {
-								sessionInfo.map_zoom_levels = kmc.vars.liveanalytics.map_zoom_levels;
+								sessionInfo.map_zoom_levels = parseInt(kmc.vars.liveanalytics.map_zoom_levels);
 							}
 						}
 
