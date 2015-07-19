@@ -183,6 +183,8 @@ analyticsServices.factory('DashboardSvc',
 		['KApi', '$resource', '$q',  
 		 	function DashboardSvcFactory(KApi, $resource, $q) {
 		 		var DashboardSvc = {};
+
+				DashboardSvc.HOURS_AGO_IN_SEC = -129600;
 		 		
 		 		/**
 		 		 * always use 10 items in page
@@ -197,7 +199,7 @@ analyticsServices.factory('DashboardSvc',
 		 			var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportInputFilter',
-			            'filter:fromTime': '-129600',
+			            'filter:fromTime': DashboardSvc.HOURS_AGO_IN_SEC,
 			            'filter:toTime': '-2',
 			            'filter:live': '0',
 			            'pager:objectType': 'KalturaFilterPager',
@@ -238,7 +240,7 @@ analyticsServices.factory('DashboardSvc',
 		 					'1:action': 'getreport',
 	 						// 2 - minutes viewed - 36 hours
 	 						'2:filter:objectType': 'KalturaLiveReportInputFilter',
-	 						'2:filter:fromTime': '-129600',
+	 						'2:filter:fromTime': DashboardSvc.HOURS_AGO_IN_SEC,
 	 						'2:filter:toTime': '-2',
 	 						'2:filter:live': '1',
 	 						'2:pager:objectType': 'KalturaFilterPager',
@@ -273,7 +275,7 @@ analyticsServices.factory('DashboardSvc',
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportInputFilter',
 			            'filter:orderBy': '%2Bname',
-			            'filter:fromTime': '-129600',
+			            'filter:fromTime': DashboardSvc.HOURS_AGO_IN_SEC,
 			            'filter:toTime': '-2',
 			            'pager:objectType': 'KalturaFilterPager',
 			            'pager:pageIndex': pageNumber,
@@ -382,7 +384,7 @@ analyticsServices.factory('DashboardSvc',
 			            '1:filter:orderBy': '-eventTime',
 			            '1:filter:entryIds': entryIds,
 			            '1:filter:live': 1,
-			            '1:filter:fromTime': '-129600',
+			            '1:filter:fromTime': DashboardSvc.HOURS_AGO_IN_SEC,
 			            '1:filter:toTime': '-2',
 			            '1:reportType': 'ENTRY_TOTAL',
 			            '1:service': 'livereports',
@@ -526,6 +528,8 @@ analyticsServices.factory('EntrySvc',
 		['KApi', '$resource', '$q', 
 		 	function EntrySvcFactory(KApi, $resource, $q) {
 		 		var EntrySvc = {};
+
+				EntrySvc.HOURS_AGO_IN_SEC = -129600;
 		 		
 		 		/**
 		 		 * get the entry, add isLive info
@@ -596,7 +600,7 @@ analyticsServices.factory('EntrySvc',
 		 			var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportInputFilter',
-						'filter:fromTime': '-129600',
+						'filter:fromTime': EntrySvc.HOURS_AGO_IN_SEC,
 			            'filter:toTime': '-2',
 			            'filter:entryIds': entryId,
 			            'filter:live': '0',
@@ -635,7 +639,7 @@ analyticsServices.factory('EntrySvc',
 		 					'1:action': 'getreport',
 	 						// 2 - minutes viewed - 36 hours
 	 						'2:filter:objectType': 'KalturaLiveReportInputFilter',
-	 						'2:filter:fromTime': '-129600',
+	 						'2:filter:fromTime': EntrySvc.HOURS_AGO_IN_SEC,
 	 						'2:filter:toTime': '-2',
 	 						'2:filter:live': '1',
 	 						'2:filter:entryIds': entryId,
@@ -666,7 +670,7 @@ analyticsServices.factory('EntrySvc',
 		 			var postData = {
 						'ignoreNull': '1',
 						'filter:objectType': 'KalturaLiveReportInputFilter',
-						'filter:fromTime': '-129600',
+						'filter:fromTime': EntrySvc.HOURS_AGO_IN_SEC,
 			            'filter:toTime': '-2',
 			            'filter:entryIds': entryId,
 			            'pager:objectType': 'KalturaFilterPager',
