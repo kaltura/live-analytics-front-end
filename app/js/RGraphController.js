@@ -192,7 +192,9 @@ analyticsControllers.controller('RGraphController', ['$scope', '$attrs', 'EntryS
 						}
 						objects.audience = objects.audience.slice(i, j);
 						objects.dvr = objects.dvr.slice(i, j);
-						$scope.$emit('TimeBoundsSet', objects.audience[0].timestamp, objects.audience[objects.audience.length - 1].timestamp);
+						if (objects.audience.length) {
+							$scope.$emit('TimeBoundsSet', objects.audience[0].timestamp, objects.audience[objects.audience.length - 1].timestamp);
+						}
 					}
 					resetGraphContent(objects);
 				};
