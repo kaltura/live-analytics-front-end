@@ -17,6 +17,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 		this.color1 = '8ecc00';
 		this.color2 = 'ff8a00';
 		this.color3 = '4e4e4e';
+		this.lastRequestedTime = null;
 
 		this.init = function init (element) {
 			self.mapElement = element;
@@ -231,8 +232,11 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 		 * @param time unix timestamp (seconds). if null, current time is used.
 		 */
 		this.getMapData = function getMapData(time) {
+			self.lastRequestedTime = time;
 			EntrySvc.getMap($scope.entryId, time).then(function(data) {
-				self.displayData(data.objects);
+				if (!data.objects || data.objects[0].timestamp == self.lastRequestedTime.toString()) {
+					self.displayData(data.objects);
+				}
 			});
 			
 		};
@@ -275,7 +279,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 						countriesData[value[i].country.name]['dvrAudience'] += parseInt(value[i].dvrAudience, 10);
 					}
 					point = new OpenLayers.Geometry.Point(value[i].city.longitude, value[i].city.latitude).transform('EPSG:4326', 'EPSG:3857');
-					features[i] = new OpenLayers.Feature.Vector(
+					features.push(new OpenLayers.Feature.Vector(
 							point, 
 							{
 								"audience" : value[i].audience,
@@ -283,8 +287,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 								"data" : val,
 								"text" : value[i].city.name
 							}
-							);
-					
+							));
 					// update cities min-max
 					if (min == 0 || val < min) {
 						min = val;
