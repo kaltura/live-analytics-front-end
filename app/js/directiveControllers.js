@@ -7,8 +7,8 @@ var analyticsControllers = angular.module('analyticsControllers'); // get, don't
 /**
  * controller for KDP on entry page
  */
-analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$interval', 'EntrySvc',
-    function($scope, $attrs, $interval, EntrySvc) {
+analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$interval', 'EntrySvc', 'SessionInfo',
+    function($scope, $attrs, $interval, EntrySvc, SessionInfo) {
 		var self = this;
 		this.playerElement = null;
 		this.eventCuePoints = new Array();
@@ -69,13 +69,14 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$inte
   		$scope.$watch('playerEntryId', function( value ) {
   			function embedNow() {
   				kWidget.embed({
-  					"targetId": "kplayer", 
-  					"wid": "_" + $scope.pid, 
-  					"uiconf_id": $scope.uiconfId, 
-  					"entry_id": value, 
-  					"flashvars": { 
+  					"targetId": "kplayer",
+  					"wid": "_" + $scope.pid,
+  					"uiconf_id": $scope.uiconfId,
+  					"entry_id": value,
+  					"flashvars": {
+						"ks": SessionInfo.ks,
   						"streamerType": "auto"
-  					} 
+  					}
   				});
   			};
   			if (value) {
@@ -95,7 +96,7 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$inte
   						$scope.playerIntervalPromise = $interval(function() {
   							if (window.playerLibLoaded) {
   								$interval.cancel($scope.playerIntervalPromise);
-  								$scope.playerIntervalPromise = undefined;		
+  								$scope.playerIntervalPromise = undefined;
   								embedNow();
   							}
   						}, 500);
@@ -106,7 +107,7 @@ analyticsControllers.controller('KPlayerController', ['$scope', '$attrs', '$inte
   				$scope.playerEntryId = null;
 	  		}
   		});
-  		
+
   		$scope.$on('$destroy', function() {
 			// Make sure that the interval is destroyed too
 			if (angular.isDefined($scope.playerIntervalPromise)) {
