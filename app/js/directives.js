@@ -25,7 +25,7 @@ analyticsDirectives.directive('rgraph', function() {
 		replace : false,
 		link : function(scope, element, attrs, RGraphController) {
 			RGraphController.init(element);
-			
+
 		}
 	};
 });
@@ -42,6 +42,16 @@ analyticsDirectives.directive('olmap', function() {
 		}
 	};
 });
+analyticsDirectives.directive('srcErr', ['SessionInfo', function(SessionInfo) {
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs) {
+			element.bind('error', function() {
+				attrs.$set('src', attrs.src += '/ks/' + SessionInfo.ks);
+			});
+		}
+	};
+}]);
 
 analyticsDirectives.directive('ellipsis', ['$timeout', function($timeout) {
 	return {
@@ -52,7 +62,7 @@ analyticsDirectives.directive('ellipsis', ['$timeout', function($timeout) {
 					element.attr('title', element[0].innerHTML);
 					element.addClass('ellipsis');
 					element.tooltip();
-				} 
+				}
 			};
 			$timeout(func, 0);
 		}

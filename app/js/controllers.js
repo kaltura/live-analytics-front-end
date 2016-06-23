@@ -5,28 +5,28 @@
 var analyticsControllers = angular.module('analyticsControllers', []);
 
 /**
- * Dashboard Controller 
+ * Dashboard Controller
  */
 analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$interval', '$timeout', '$translate', 'DashboardSvc',
     function($rootScope, $scope, $interval, $timeout, $translate, DashboardSvc) {
-		
+
 		$scope.Math = window.Math;
-		
+
 		/**
 		 * entries currently on display
 		 */
 		var entries = [];
-		
+
 		/**
 		 * number of entries in page
 		 */
 		var pageSize = DashboardSvc.pageSize;
-		
+
 		/**
 		 * total number of pages
 		 */
 		var totalPages = 1;
-		
+
 
 		/**
 		 * get data for the aggregates line
@@ -55,8 +55,8 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 					var o;
 					if (data.objects) o = data.objects[0];
 					var results = [
-					           	{"title" : "plays", 
-					           		"value" : o ? o.plays : 0, 
+					           	{"title" : "plays",
+					           		"value" : o ? o.plays : 0,
 					           		"tooltip" : "agg_plays_tt"},
 					        	{"title": "seconds_viewed", "value": o ? o.secondsViewed : 0, "tooltip":"agg_secs_tt"},
 					        	{"title": "buffertime", "value": o ? o.bufferTime : 0, "tooltip":"agg_buffer_tt"},
@@ -69,8 +69,8 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 				});
 			}
 		};
-		
-		
+
+
 		/**
 		 * @param liveOnly	fetch KalturaLive currently live (true) or all live entries (false)
 		 * @param pageNumber index of page to fetch
@@ -78,12 +78,12 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 		var getEntries = function getEntries(liveOnly, pageNumber) {
 			var result;
 			if (liveOnly) {
-				result = DashboardSvc.getLiveEntries(pageNumber); 
+				result = DashboardSvc.getLiveEntries(pageNumber);
 			}
 			else {
-				result = DashboardSvc.getAllEntries(pageNumber); 
+				result = DashboardSvc.getAllEntries(pageNumber);
 			}
-			 
+
 			result.then(function(data) {
 				$scope.entries = data.objects;
 				totalPages = Math.ceil(data.totalCount/pageSize);
@@ -92,8 +92,8 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 
 			});
 		};
-		
-		
+
+
 		/**
 		 * get entries data by page
 		 * @param e
@@ -103,8 +103,8 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 		var doPaging = function doPaging(e,oldPage,newPage) {
 			getEntries($scope.boardType == "liveOnly", newPage);
 		};
-		
-		
+
+
 		/**
 		 * update paging control
 		 * @param current	index of current page
@@ -118,13 +118,13 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 	            };
 	        $('#pagination').bootstrapPaginator(options);
 		};
-		
-		
+
+
 		/**
 		 * trigger export to csv
 		 */
 		var export2csv = function export2csv() {
-			var result = DashboardSvc.export2csv($scope.boardType == "liveOnly"); 
+			var result = DashboardSvc.export2csv($scope.boardType == "liveOnly");
 			result.then(function(data) {
 				if (data.referenceJobId) {
 					$translate('dashboard.export_success').then(function (msg) {
@@ -136,15 +136,15 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 						bootbox.alert(msg);
 					});
 				}
-			}, 
+			},
 			function (error) {
 				$translate('dashboard.export_fail').then(function (msg) {
 					bootbox.alert(msg + "<br>" + error);
 				});
 			});
 		};
-		
-		
+
+
 		/**
 		 * initial screen set up
 		 */
@@ -155,7 +155,7 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 			d = new Date();
 			d.setHours(d.getHours() - 36);
 			$scope.reportStartTime = d;
-			
+
 			var options = {
 					bootstrapMajorVersion: 3,
 					onPageChanged: doPaging,
@@ -172,7 +172,7 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 		            currentPage: 1,
 		            totalPages: totalPages
 		    };
-	
+
 		    $('#pagination').bootstrapPaginator(options);
 
 			if ($rootScope.selectedBoard) {
@@ -187,21 +187,21 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 				getAggregates(newValue == "liveOnly");
 	    		getEntries(newValue == "liveOnly", 1);
 			 });
-			
+
 			$scope.export2csv = export2csv;
-			
+
 			// set 30 secs update interval
 			$scope.intervalPromise = $interval(function() {screenUpdate();}, 30000);
 		};
-		
+
 		var screenUpdate = function screenUpdate() {
-			
+
 			$('.tooltip-wrap').tooltip('destroy');
 			$('.panel-title').tooltip('destroy');
-			
+
 			var d = new Date();
 			var t = d.getTime()/1000;
-			
+
 			$scope.nowTime = d;
 			d = new Date();
 			d.setHours(d.getHours() - 36);
@@ -210,8 +210,8 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 			var pages = $('#pagination').bootstrapPaginator('getPages');
 			getEntries($scope.boardType == "liveOnly", pages.current);
 		};
-		
-		
+
+
 		$scope.$on('$destroy', function() {
 			// Make sure that the interval is destroyed too
 			if (angular.isDefined($scope.intervalPromise)) {
@@ -222,18 +222,18 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 			$('.tooltip-wrap').tooltip('destroy');
 			$('.panel-title').tooltip('destroy');
 		});
-		
-		
-		
+
+
+
 		screenSetup();
-		
+
     }]);
 
 
 /**
  * General controller for the entry drill-down page
  */
-analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routeParams', '$interval', '$timeout', '$translate', 'SessionInfo', 'EntrySvc',  
+analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routeParams', '$interval', '$timeout', '$translate', 'SessionInfo', 'EntrySvc',
     function($scope, $rootScope, $routeParams, $interval, $timeout, $translate, SessionInfo, EntrySvc) {
 		$scope.intervalPromise = null; 			// use this to hold update interval
 		$scope.entryId = $routeParams.entryid;	// current entry
@@ -241,7 +241,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 		$scope.uiconfId = SessionInfo.uiconfid;
 		$scope.playerEntryId = '';				// entry that should be shown in player (live / vod)
 		$rootScope.nonav = $routeParams.nonav == 'nonav';
-		
+
 
 		/**
 		 * get data for the aggregates line
@@ -270,7 +270,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 						o.bufferTime = data[2].objects[0].bufferTime;
 						o.avgBitrate = data[2].objects[0].avgBitrate;
 					}
-					
+
 					var results = [
 					           	{"title": "audience", "value": o.audience, "tooltip": "agg_audience_tt"},
 					        	{"title": "seconds_viewed", "value": o.secondsViewed, "tooltip":"agg_secs_tt"},
@@ -281,11 +281,11 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 					if ($scope.entry.dvrStatus) {
 						results[0].title = "audience_inc_dvr";
 					}
-					
+
 					$scope.aggregates = results;
 					// reactivate tooltips
 					$timeout(function() {$('.tooltip-wrap').tooltip();}, 0);
-					
+
 					getReferrers(true, 0); // totalplays value is ignored for live entries
 				});
 			}
@@ -309,17 +309,17 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 					        	{"title": "seconds_viewed", "value": o.secondsViewed, "tooltip":"agg_secs_tt"},
 					        	{"title": "buffertime", "value": o.bufferTime, "tooltip":"agg_buffer_tt"},
 					        	{"title": "bitrate", "value": o.avgBitrate, "tooltip":"agg_bitrate_tt"}
-					        ]; 
-					
+					        ];
+
 					$scope.aggregates = results;
-					
+
 					getReferrers(false, o.plays);
 				});
 			}
 		};
-		
-		
-		
+
+
+
 		/**
 		 * get data for the top referrals table
 		 * @param totalPlays
@@ -358,10 +358,10 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 					var o;
 					for (var i = 0; i<objects.length; i++) {
 						o = {
-								'domain': objects[i].referrer, 
-								'visits': objects[i].plays, 
+								'domain': objects[i].referrer,
+								'visits': objects[i].plays,
 								'percents' : objects[i].plays / totalPlays
-							}; 
+							};
 						results.push(o);
 					}
 					$scope.referals = results;
@@ -370,14 +370,15 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 				});
 			}
 		};
-		
-		
+
+
 		/**
 		 * get the entry in question
 		 */
 		var getEntry = function getEntry() {
 			return EntrySvc.getEntry($scope.entryId).then(function(entry){
 				$scope.entry = entry;
+				$scope.entry.thumbnailUrl += '/ks/' + SessionInfo.ks;
 				if (entry.isLive) {
 					// live session - show live entry in player
 					$scope.playerEntryId = entry.id;
@@ -400,11 +401,11 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 				d.setHours(d.getHours() - 36);
 				$scope.reportStartTime = d;
 				getAggregates(entry.isLive);
-				
+
 			});
 		};
-		
-		
+
+
 		/**
 		 * trigger export to csv based on live/dead and required kind
 		 * @param reportKind audience/location/syndication
@@ -437,10 +438,10 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 					break;
 				}
 			}
-			
-			var result = EntrySvc.export2csv(reportType, $scope.entry.id); 
+
+			var result = EntrySvc.export2csv(reportType, $scope.entry.id);
 			result.then(function(data) {
-				if (data.referenceJobId) { 
+				if (data.referenceJobId) {
 					$translate('dashboard.export_success').then(function (msg) {
 						bootbox.alert(msg.formatArgs([data.reportEmail]));
 					});
@@ -450,16 +451,16 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 						bootbox.alert(msg);
 					});
 				}
-			}, 
+			},
 			function (error) {
 				$translate('entry.export_fail').then(function (msg) {
 					bootbox.alert(msg + "<br>" + error);
 				});
 			});
 		};
-		
-		
-		
+
+
+
 		var screenSetup = function screenSetup() {
 			$scope.exportReportType = "default";
 			$scope.$watch("exportReportType", function(newValue, oldValue) {
@@ -471,13 +472,13 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 			// report data:
 			getEntry();
 		};
-		
+
 		var screenUpdate = function screenUpdate() {
 			$('.tooltip-wrap').tooltip('destroy');
-			
+
 			var d = new Date();
 			var t = Math.floor(d.getTime()/10000) * 10;
-			
+
 			$scope.nowTime = d;
 			d = new Date();
 			d.setHours(d.getHours() - 36);
@@ -485,8 +486,8 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 			getAggregates($scope.entry.isLive);
 			$rootScope.$broadcast('updateScreen', t);
 		};
-		
-		
+
+
 		$scope.$on('$destroy', function() {
 			// Make sure that the interval is destroyed too
 			if (angular.isDefined($scope.intervalPromise)) {
@@ -496,7 +497,7 @@ analyticsControllers.controller('EntryCtrl', ['$scope', '$rootScope', '$routePar
 			// and tooltips
 			$('.tooltip-wrap').tooltip('destroy');
 		});
-		
+
 		screenSetup();
 }]);
 
