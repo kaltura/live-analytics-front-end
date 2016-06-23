@@ -17,9 +17,9 @@
 			<button type="button" class="btn btn-link" ng-click="export2csv()">{{'export_to_csv' | translate}}</button>
 		</div>
 	</div>
-	
+
 	<hr />
-	
+
 	<!-- Aggregates -->
 	<div class="row aggregates">
 		<div class="aggregate-item col-md-3" ng-repeat="agg in aggregates">
@@ -31,7 +31,7 @@
 	</div>
 
 	<hr />
-	
+
 	<!-- Entries List -->
 	<div class="entries-list row">
 		<!-- Entry -->
@@ -41,7 +41,7 @@
 		  	</div>
 			<div class="panel-body">
 				<div class="entry-img">
-					<img class="img" ng-src="{{entry.thumbnailUrl}}"/><br/>
+					<img class="img" src-err ng-src="{{entry.thumbnailUrl}}"/><br/>
 				</div>
 				<div class="entry-info" >
 					<table>
@@ -71,7 +71,7 @@
 							<td>{{entry.avgBitrate | avgBitrate | number:2}}</td>
 						</tr>
 					</table>
-					
+
 				</div>
 			</div>
 			<div class="panel-footer col-md-12">
@@ -83,17 +83,17 @@
 					<div ng-show="Math.abs(entry.lastBroadcast - entry.firstBroadcast) > 10" class="tooltip-wrap" title="{{'dashboard.last_broadcast_tt' | translate }}">{{'dashboard.last_broadcast' | translate}}: {{entry.lastBroadcast*1000 | date : 'd MMM H:mm:ss'}}</div>
 					<script type="text/javascript">
 						$('.tooltip-wrap').tooltip();
-					</script> 
+					</script>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<hr />
-	
+
 	<!-- paging -->
 	<div class="paging-wrapper">
 		<ul id="pagination" ></ul>
 	</div>
-	
+
 </div>

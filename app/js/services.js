@@ -18,7 +18,7 @@ analyticsServices.factory('SessionInfo',
 					      'c.tile.openstreetmap.org/${z}/${x}/${y}.png'
 					      ];
 				sessionInfo.map_zoom_levels = 10;
-		 		
+
 		 		sessionInfo.setKs = function setKs(value) {
 		 			sessionInfo.ks = value;
 		 		};
@@ -46,7 +46,7 @@ analyticsServices.factory('SessionInfo',
 	                        sessionInfo.ks = kmc.vars.ks;
 	                    if (kmc.vars.partner_id)
 	                    	sessionInfo.pid = kmc.vars.partner_id;
-	                    if (kmc.vars.service_url) 
+	                    if (kmc.vars.service_url)
 	                    	sessionInfo.service_url = kmc.vars.service_url;
 	                    if (kmc.vars.liveanalytics) {
 							sessionInfo.uiconfid = kmc.vars.liveanalytics.player_id;
@@ -66,17 +66,17 @@ analyticsServices.factory('SessionInfo',
 	            } catch (e) {
 	                console.log('Could not locate parent.kmc: ' + e);
 	            }
-	            
+
 	       /*     if (!sessionInfo.ks) { //navigate to login
 	                $location.path("/login");
 	            } */
-	            
+
 		 		return sessionInfo;
-		 	} 
+		 	}
 	 	]);
 
-		
-		
+
+
 analyticsServices.factory('KApi',
 		['$http', '$q', '$location', 'SessionInfo',
 		 	function KApiFactory ($http, $q, $location, SessionInfo) {
@@ -87,7 +87,7 @@ analyticsServices.factory('KApi',
 				KApi.setRedirectOnInvalidKS = function setRedirectOnInvalidKS(value) {
 					KApi.redirectToLoginOnInvalidKS = value;
 				}
-		 		
+
 		 		KApi.IE = (!!window.ActiveXObject && +(/msie\s(\d+)/i.exec(navigator.userAgent)[1])) || NaN;
 
 
@@ -118,7 +118,7 @@ analyticsServices.factory('KApi',
 			 			params = {'format' : '1'};
 			 			sParams = this.serializeParams(request);
 			 		}
-			 		
+
 			 		$http({
 			 			data: sParams,
 			 			url: SessionInfo.service_url + "/api_v3/index.php",
@@ -148,12 +148,12 @@ analyticsServices.factory('KApi',
 			 			$location.path("/login");
 			 			//deferred.reject(data.message);
 			 		});
-			 		
+
 			 		// Returning the promise object
 		            return deferred.promise;
 		 		};
-		 		
-		 		
+
+
 		 		/**
 		 		 * format params as &key1=val1&key2=val2
 		 		 * @param params
@@ -174,25 +174,25 @@ analyticsServices.factory('KApi',
 					url += "#/export/[id]/[ks]";
 					return url;
 				}
-		 		
+
 		 		return KApi;
 		 	}
 		]);
 
 analyticsServices.factory('DashboardSvc',
-		['KApi', '$resource', '$q',  
-		 	function DashboardSvcFactory(KApi, $resource, $q) {
+		['KApi', '$resource', '$q', 'SessionInfo',
+		 	function DashboardSvcFactory(KApi, $resource, $q, SessionInfo) {
 		 		var DashboardSvc = {};
 
 				DashboardSvc.HOURS_AGO_IN_SEC = -129600;
-		 		
+
 		 		/**
 		 		 * always use 10 items in page
-		 		 */ 
+		 		 */
 		 		DashboardSvc.pageSize = '10';
-		 		
+
 		 		/**
-		 		 * get info for dashboard aggregates line - for all entries (live + dead, as dead) 
+		 		 * get info for dashboard aggregates line - for all entries (live + dead, as dead)
 		 		 * @returns promise
 		 		 */
 		 		DashboardSvc.getDeadAggregates = function getDeadAggregates() {
@@ -209,12 +209,12 @@ analyticsServices.factory('DashboardSvc',
 			            'service': 'livereports',
 			            'action': 'getreport'
 			        };
-					
+
 					return KApi.doRequest(postData);
 		 		};
-		 		
+
 		 		/**
-		 		 * get info for dashboard aggregates line - for currently live Kaltura-live entries 
+		 		 * get info for dashboard aggregates line - for currently live Kaltura-live entries
 		 		 * @returns promise
 		 		 */
 		 		DashboardSvc.getLiveAggregates = function getLiveAggregates() {
@@ -261,11 +261,11 @@ analyticsServices.factory('DashboardSvc',
  							'3:service': 'livereports',
  							'3:action': 'getreport'
 		 			};
-		 			
+
 		 			return KApi.doRequest(postData);
 		 		};
-		 		
-		 		
+
+
 		 		/**
 		 		 * @private
 		 		 * for all live entries - get stats
@@ -284,10 +284,10 @@ analyticsServices.factory('DashboardSvc',
 			            'service': 'livereports',
 			            'action': 'getreport'
 			        };
-					
+
 					return KApi.doRequest(postData);
 		 		};
-		 		
+
 		 		/**
 		 		 * @private
 		 		 * for all live entries - get entry objects (by ids)
@@ -303,24 +303,24 @@ analyticsServices.factory('DashboardSvc',
 			        };
 					return KApi.doRequest(postData);
 		 		};
-		 		
+
 		 		/**
 				 * get the list of entries to show
 				 * @param pageNumber
 				 */
 		 		DashboardSvc.getAllEntries = function getAllEntries(pageNumber) {
 		 			// get page from reports API, then use entry ids to get entry names from API
-		 			
+
 		 			// Creating a deferred object
 		            var deferred = $q.defer();
-		            
+
 		            DashboardSvc._getAllEntriesStats(pageNumber).then(function (entryStats) {
 						// entryStats is KalturaLiveStatsListResponse
 						var ids = '';
 						if (entryStats.totalCount > 0) {
 							entryStats.objects.forEach(function(entry) {
-								ids += entry.entryId + ","; 
-							}); 
+								ids += entry.entryId + ",";
+							});
 							DashboardSvc._getAllEntriesEntries(ids).then(function(entries) {
 								// entries is LiveStreamListResponse
 								entryStats.objects.forEach(function (entryStat) {
@@ -328,6 +328,7 @@ analyticsServices.factory('DashboardSvc',
 									entries.objects.every(function (entry) {
 										if (entryStat.entryId == entry.id) {
 											entryStat.name = entry.name;
+											entry.thumbnailUrl += '/ks/' + SessionInfo.ks;
 											entryStat.thumbnailUrl = entry.thumbnailUrl;
 											entryStat.firstBroadcast = entry.firstBroadcast; // API returns secs
 											entryStat.lastBroadcast = entry.lastBroadcast; // API returns secs
@@ -345,12 +346,12 @@ analyticsServices.factory('DashboardSvc',
 							deferred.resolve(entryStats);
 						}
 					});
-			 		
+
 			 		// Returning the promise object
 		            return deferred.promise;
 				};
-				
-				
+
+
 				/**
 				 * @private
 				 * @param pageNumber
@@ -367,10 +368,10 @@ analyticsServices.factory('DashboardSvc',
 				            'service': 'livestream',
 				            'action': 'list'
 				        };
-					
+
 					return KApi.doRequest(postData);
 				};
-				
+
 				/**
 				 * @private
 				 * @param entryIds
@@ -410,31 +411,31 @@ analyticsServices.factory('DashboardSvc',
 			            '3:service': 'livereports',
 			            '3:action': 'getreport'
 			        };
-					
+
 					return KApi.doRequest(postData);
 				};
-				
+
 				/**
 				 * of the given list, get the entries that are currently live
 				 */
 				DashboardSvc.getLiveEntries = function getLiveEntries(pageNumber) {
 					// liveEntry.list by isLive to know which ones are currently live, then use entry ids in reports API
-					
+
 					// Creating a deferred object
 		            var deferred = $q.defer();
-		            
+
 		            DashboardSvc._getLiveEntriesEntries(pageNumber).then(function (entries) {
-						// entries is LiveStreamListResponse 
+						// entries is LiveStreamListResponse
 						var ids = '';
 						if (entries.totalCount > 0) {
 							entries.objects.forEach(function(entry) {
-								ids += entry.id + ","; 
-							}); 
+								ids += entry.id + ",";
+							});
 							ids = ids.substr(0, ids.length - 1);
 							DashboardSvc._getLiveEntriesStats(ids).then(function(entryStatsMR) {
 								// entryStatsMR is MR with KalturaLiveStatsListResponse
 								var hours = entryStatsMR[0].objects;
-								var now = entryStatsMR[1].objects; 
+								var now = entryStatsMR[1].objects;
 								var minute = entryStatsMR[2].objects;
 								// -------------------------------------------------------------------------------
 								// entry info (name, thumbnailUrl, firstBroadcast*1000)
@@ -482,7 +483,7 @@ analyticsServices.factory('DashboardSvc',
 										});
 									}
 								});
-								
+
 								deferred.resolve(entries);
 							});
 						}
@@ -495,18 +496,18 @@ analyticsServices.factory('DashboardSvc',
 		                    });
 						}
 					});
-			 		
+
 			 		// Returning the promise object
 		            return deferred.promise;
 				};
-		 		
-				
+
+
 				/**
 		 		 * trigger dashboard export to csv
 		 		 */
 		 		DashboardSvc.export2csv = function export2csv(liveOnly) {
 		 			var d = new Date();
-		 			
+
 		 			var postData = {
 						'ignoreNull': '1',
 			            'service': 'livereports',
@@ -518,19 +519,19 @@ analyticsServices.factory('DashboardSvc',
 			        };
 					return KApi.doRequest(postData);
 		 		};
-		 		
+
 		 		return DashboardSvc;
-		 	} 
+		 	}
 	 	]);
 
 
 analyticsServices.factory('EntrySvc',
-		['KApi', '$resource', '$q', 
+		['KApi', '$resource', '$q',
 		 	function EntrySvcFactory(KApi, $resource, $q) {
 		 		var EntrySvc = {};
 
 				EntrySvc.HOURS_AGO_IN_SEC = -129600;
-		 		
+
 		 		/**
 		 		 * get the entry, add isLive info
 		 		 * @param entryId
@@ -555,7 +556,7 @@ analyticsServices.factory('EntrySvc',
 				            '4:id': entryId,
 				            '4:protocol': 'hdnetworkmanifest'
 				        };
-					
+
 		 			KApi.doRequest(postData).then(function (mr) {
 						// the last 3 results are all current optional protocols.
 						if (mr[0].objectType != "KalturaAPIException") {
@@ -586,15 +587,15 @@ analyticsServices.factory('EntrySvc',
 
 		 				dfd.resolve(mr[0]);
 		 			});
-		 			
+
 					return dfd.promise;
 		 		};
-		 		
-		 		
+
+
 		 		/**
 		 		 * get aggregated stats data for this entry as a dead-now entry
 		 		 * @param entryId
-		 		 * @returns KalturaEntryLiveStats 
+		 		 * @returns KalturaEntryLiveStats
 		 		 */
 		 		EntrySvc.getDeadAggregates = function getDeadAggregates(entryId) {
 		 			var postData = {
@@ -608,15 +609,15 @@ analyticsServices.factory('EntrySvc',
 			            'service': 'livereports',
 			            'action': 'getreport'
 			        };
-		 			
+
 					return KApi.doRequest(postData);
 		 		};
-		 		
-		 		
+
+
 		 		/**
 		 		 * get aggregated stats data for this entry as a live-now entry
 		 		 * @param entryId
-		 		 * @returns KalturaEntryLiveStats 
+		 		 * @returns KalturaEntryLiveStats
 		 		 */
 		 		EntrySvc.getLiveAggregates = function getLiveAggregates(entryId) {
 		 			/* MR:
@@ -656,13 +657,13 @@ analyticsServices.factory('EntrySvc',
  							'3:service': 'livereports',
  							'3:action': 'getreport'
 		 			};
-		 			
+
 		 			return KApi.doRequest(postData);
 		 		};
-		 		
-		 		
+
+
 		 		/**
-		 		 * 
+		 		 *
 		 		 * @param entryId
 		 		 * @returns
 		 		 */
@@ -680,12 +681,12 @@ analyticsServices.factory('EntrySvc',
 			            'service': 'livereports',
 			            'action': 'getreport'
 			        };
-					
+
 					return KApi.doRequest(postData);
 		 		};
-		 		
-		 		
-		 		
+
+
+
 		 		/**
 		 		 * get graph data for base 36 hours
 		 		 * @param entryId
@@ -704,12 +705,12 @@ analyticsServices.factory('EntrySvc',
 			            'service': 'livereports',
 			            'action': 'getevents'
 			        };
-					
+
 					return KApi.doRequest(postData);
 		 		};
-		 		
-		 		
-		 		
+
+
+
 		 		/**
 		 		 * get map data for required time
 		 		 * @param entryId
@@ -731,15 +732,15 @@ analyticsServices.factory('EntrySvc',
 			            'service': 'livereports',
 			            'action': 'getreport'
 			        };
-					
+
 					return KApi.doRequest(postData);
 		 		};
-		 		
-		 		
+
+
 		 		/**
 		 		 * trigger entry export to csv
 		 		 * @param reportType as enumerated in KalturaLiveReportExportType
-		 		 * @param entryId 
+		 		 * @param entryId
 		 		 */
 		 		EntrySvc.export2csv = function export2csv(reportType, entryId) {
 		 			var d = new Date();
@@ -777,7 +778,7 @@ analyticsServices.factory('EntrySvc',
 				}
 
 				return EntrySvc;
-		 	} 
+		 	}
 	 	]);
 
 analyticsServices.factory('ReportSvc',
