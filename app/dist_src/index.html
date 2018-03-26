@@ -43,6 +43,13 @@
 			console.log('player loaded');
 			window.playerLibLoaded = true; // only embed when true
 		}
+
+        (function (window) {
+            if (window.parent.kmc.vars.liveanalytics && window.parent.kmc.vars.liveanalytics.hideSubNav) {
+                var kmcSubNav = document.getElementsByClassName('kmcSubNav')[0];
+                kmcSubNav.parentNode.removeChild(kmcSubNav);
+            }
+        })(window);
 		
 	</script>
 
