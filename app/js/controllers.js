@@ -7,12 +7,13 @@ var analyticsControllers = angular.module('analyticsControllers', []);
 /**
  * Dashboard Controller 
  */
-analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$interval', '$timeout', '$translate', 'DashboardSvc',
-    function($rootScope, $scope, $interval, $timeout, $translate, DashboardSvc) {
+analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$interval', '$timeout', '$translate', 'DashboardSvc', '$routeParams',
+    function($rootScope, $scope, $interval, $timeout, $translate, DashboardSvc, $routeParams) {
 		
 		$scope.Math = window.Math;
-		
-		/**
+        $rootScope.nonav = $routeParams.extra == 'nonav';
+
+        /**
 		 * entries currently on display
 		 */
 		var entries = [];
