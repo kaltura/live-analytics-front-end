@@ -35,15 +35,28 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 		var getAggregates = function getAggregates(liveOnly) {
 			if (liveOnly) {
 				DashboardSvc.getLiveAggregates().then (function(data) {
-					/* 1 audience - 10 secs (now)
-		 			 * 2 minutes viewed - 36 hours
-		 			 * 3 buffertime, bitrate - 1 minute
-		 			 * */
+					// 1 audience - 10 secs (now)
+					var audience = 0;
+					if (data[0].objects[0]) {
+						audience = parseInt(data[0].objects[0].audience, 10) + parseInt(data[0].objects[0].dvrAudience, 10);
+					}
+					// 2 seconds viewed - 36 hours
+					var viewed = 0;
+					if (data[1].objects[0]) {
+						viewed = data[1].objects[0].secondsViewed;
+					}
+		 			// 3 buffertime, bitrate - 1 minute
+					var buffertime = 0, bitrate = 0;
+					if (data[2].objects[0]) {
+						buffertime = data[2].objects[0].bufferTime;
+						bitrate = data[2].objects[0].avgBitrate;
+					}
+
 					var results = [
-					           	{"title": "audience_inc_dvr", "value": parseInt(data[0].objects[0].audience, 10) + parseInt(data[0].objects[0].dvrAudience, 10), "tooltip": "agg_audience_tt"},
-					        	{"title": "seconds_viewed", "value": data[1].objects[0].secondsViewed, "tooltip":"agg_secs_tt"},
-					        	{"title": "buffertime", "value": data[2].objects[0].bufferTime, "tooltip":"agg_buffer_tt"},
-					        	{"title": "bitrate", "value": data[2].objects[0].avgBitrate, "tooltip":"agg_bitrate_tt"}
+					           	{"title": "audience_inc_dvr", "value": audience, "tooltip": "agg_audience_tt"},
+					        	{"title": "seconds_viewed", "value": viewed, "tooltip":"agg_secs_tt"},
+					        	{"title": "buffertime", "value": buffertime, "tooltip":"agg_buffer_tt"},
+					        	{"title": "bitrate", "value": bitrate, "tooltip":"agg_bitrate_tt"}
 					    ];
 
 					$scope.aggregates = results;
