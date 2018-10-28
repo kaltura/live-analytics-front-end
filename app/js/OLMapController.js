@@ -234,7 +234,7 @@ analyticsControllers.controller('OLMapController', ['$scope', '$attrs',  '$locat
 		this.getMapData = function getMapData(time) {
 			self.lastRequestedTime = time;
 			EntrySvc.getMap($scope.entryId, time).then(function(data) {
-				if (!data.objects || !data.objects[0] || data.objects[0].timestamp === self.lastRequestedTime.toString()) {
+				if (!data.objects || !data.objects[0] || data.objects[0].timestamp.toString() === self.lastRequestedTime.toString()) {
 					self.displayData(data.objects);
 				}
 			});
