@@ -1,6 +1,6 @@
 {
-  "name": "LiveAnalytics",
-  "version": "2.7.1",
+  "name": "live-analytics",
+  "version": "2.7.2",
   "main": "Gruntfile.js",
   "dependencies": {},
   "devDependencies": {
