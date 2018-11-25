@@ -167,7 +167,7 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 			var d = new Date();
 			$scope.nowTime = d;
 			d = new Date();
-			d.setHours(d.getHours() - 36);
+			d.setTime(d.getTime() - 604800000);	// 1000*60*60*24*7
 			$scope.reportStartTime = d;
 			
 			var options = {
@@ -218,7 +218,7 @@ analyticsControllers.controller('DashboardCtrl', ['$rootScope', '$scope', '$inte
 			
 			$scope.nowTime = d;
 			d = new Date();
-			d.setHours(d.getHours() - 36);
+            d.setTime(d.getTime() - 604800000);	// 1000*60*60*24*7
 			$scope.reportStartTime = d;
 			getAggregates($scope.boardType == "liveOnly");
 			var pages = $('#pagination').bootstrapPaginator('getPages');

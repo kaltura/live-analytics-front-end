@@ -184,8 +184,9 @@ analyticsServices.factory('DashboardSvc',
 		 	function DashboardSvcFactory(KApi, $resource, $q) {
 		 		var DashboardSvc = {};
 
-				DashboardSvc.HOURS_AGO_IN_SEC = -129600;
-		 		
+				// 7 days in seconds
+				DashboardSvc.HOURS_AGO_IN_SEC = -604800;
+
 		 		/**
 		 		 * always use 10 items in page
 		 		 */ 
@@ -529,6 +530,7 @@ analyticsServices.factory('EntrySvc',
 		 	function EntrySvcFactory(KApi, $resource, $q) {
 		 		var EntrySvc = {};
 
+		 		// 36 hours
 				EntrySvc.HOURS_AGO_IN_SEC = -129600;
 		 		
 		 		/**
